@@ -1,0 +1,763 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TL内测版 - 抢先体验最新AI音乐分离技术</title>
+<meta name="description" content="TL内测版，抢先体验基于最新 HTDemucs v4.1 引擎的 AI 音乐分离技术，参与内测获取优先体验权，抢先使用未公开功能。">
+<meta name="keywords" content="内测版,测试版,抢先体验,AI音乐分离,TL内测,tlstudio,内测招募">
+<meta name="robots" content="index, follow">
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0e;
+  --panel: #101218;
+  --border: rgba(255,255,255,0.10);
+  --text: #f2f4f8;
+  --text-secondary: #8b93a5;
+  --accent: #57e6ff;
+  --accent-hover: #7a6bff;
+  --success: #34d399;
+  --error: #f87171;
+  --purple: #7a6bff;
+  --pink: #f472b6;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(16,18,24,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 1px 12px rgba(255,255,255,0.07); }
+.nav-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; padding: 0 24px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 1.05rem; color: var(--text);
+}
+.nav-logo {
+  width: 30px; height: 30px; background: var(--accent);
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;
+}
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  font-size: 0.9rem; color: var(--text-secondary);
+  transition: color 0.2s; position: relative;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--text); border-radius: 1px;
+  transition: all 0.3s;
+}
+
+/* ========== Hero ========== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden;
+  background: linear-gradient(170deg, #0a1220 0%, #0a0a0e 40%, #141026 70%, #0a0a0e 100%);
+}
+#heroCanvas {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 1;
+  max-width: 760px; padding: 120px 24px 80px;
+  opacity: 0; transform: translateY(32px);
+  animation: heroFadeIn 1s ease 0.3s forwards;
+}
+.hero-mask {
+  width: 72px; height: 72px; margin: 0 auto 20px;
+  filter: drop-shadow(0 4px 12px rgba(87,230,255,0.25));
+  animation: maskPulse 3s ease-in-out infinite;
+}
+@keyframes maskPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes heroFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-badge {
+  display: inline-block;
+  padding: 5px 14px; border-radius: 20px;
+  background: rgba(87,230,255,0.08); color: var(--accent);
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800; line-height: 1.2;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  color: var(--text-secondary); margin-bottom: 40px;
+  max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 40px; border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-size: 1.05rem; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 16px rgba(87,230,255,0.25);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(87,230,255,0.30);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary svg { width: 18px; height: 18px; }
+
+/* ========== Section Common ========== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-block; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800; margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 560px; margin: 0 auto 56px;
+}
+.text-center { text-align: center; }
+
+/* ========== Features ========== */
+.features { background: var(--bg); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.feature-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 16px; padding: 36px 28px;
+  text-align: center;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--accent);
+  transform: scaleX(0); transition: transform 0.35s;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(255,255,255,0.07);
+  border-color: rgba(87,230,255,0.20);
+}
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon {
+  font-size: 2.6rem; margin-bottom: 18px;
+  display: block;
+}
+.feature-card h3 {
+  font-size: 1.1rem; font-weight: 700; margin-bottom: 10px;
+}
+.feature-card p {
+  font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55;
+}
+
+/* ========== Highlights ========== */
+.highlights { background: var(--panel); }
+.highlights-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center;
+}
+.mockup-frame {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(255,255,255,0.07);
+  aspect-ratio: 4/3;
+  display: flex; flex-direction: column;
+}
+.mockup-titlebar {
+  height: 36px; background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px; gap: 7px;
+}
+.mockup-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.mockup-dot:nth-child(1) { background: var(--error); }
+.mockup-dot:nth-child(2) { background: #d29922; }
+.mockup-dot:nth-child(3) { background: var(--success); }
+.mockup-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  padding: 24px;
+}
+.mockup-body .mock-wave {
+  display: flex; align-items: center; gap: 3px;
+}
+.mockup-body .mock-bar {
+  width: 4px; border-radius: 2px; background: var(--accent);
+  opacity: 0.35;
+}
+.mockup-body .mock-label {
+  font-size: 0.75rem; color: var(--text-secondary);
+}
+.mockup-body .mock-btn {
+  padding: 8px 24px; border-radius: 8px;
+  background: var(--accent); color: #fff; font-size: 0.8rem;
+  border: none; opacity: 0.6;
+}
+.highlights-list { list-style: none; display: flex; flex-direction: column; gap: 24px; }
+.highlights-list li {
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.hl-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+  background: var(--bg); border: 1px solid var(--border);
+}
+.hl-text h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+.hl-text p { font-size: 0.88rem; color: var(--text-secondary); }
+
+/* ========== Tech Specs ========== */
+.tech-specs { background: var(--bg); }
+.tech-tags {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center; margin-bottom: 48px;
+}
+.tech-tag {
+  padding: 10px 20px; border-radius: 10px;
+  background: var(--panel); border: 1px solid var(--border);
+  font-size: 0.9rem; font-weight: 600;
+  transition: all 0.25s;
+}
+.tech-tag:hover {
+  border-color: var(--accent); color: var(--accent);
+  transform: translateY(-2px);
+}
+.tech-tag.accent { border-color: var(--accent); color: var(--accent); background: rgba(87,230,255,0.06); }
+.tech-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  max-width: 800px; margin: 0 auto;
+}
+.tech-item {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; text-align: center;
+}
+.tech-item h4 { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; }
+.tech-item p { font-size: 1.05rem; font-weight: 700; }
+
+/* ========== CTA Bottom ========== */
+.cta-bottom {
+  background: linear-gradient(170deg, #0a1220 0%, #141026 100%);
+  text-align: center; padding: 100px 0;
+}
+.cta-bottom h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800; margin-bottom: 12px;
+}
+.cta-bottom .cta-desc {
+  font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 36px;
+}
+.badge-row {
+  display: flex; gap: 10px; justify-content: center; margin-top: 20px;
+}
+.badge {
+  padding: 4px 12px; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 600;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+/* ========== Download Modal ========== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-dialog {
+  background: rgba(16,18,24,0.8);
+  border-radius: 28px;
+  padding: 40px 32px 32px;
+  max-width: 500px; width: 90%;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.08),
+    0 2px 8px rgba(0,0,0,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative;
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+}
+.modal-overlay.active .modal-dialog { transform: translateY(0) scale(1); }
+.modal-close {
+  position: absolute; top: 14px; right: 18px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 1.15rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); transition: all 0.25s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.12); color: var(--text); transform: scale(1.08); }
+.modal-title {
+  font-size: 1.35rem; font-weight: 800; text-align: center;
+  margin-bottom: 4px; letter-spacing: -0.3px;
+}
+.modal-subtitle {
+  font-size: 0.85rem; color: var(--text-secondary);
+  text-align: center; margin-bottom: 28px;
+}
+.download-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.download-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer; text-decoration: none; color: inherit;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.download-option:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(87,230,255,0.15);
+  box-shadow: 0 4px 16px rgba(255,255,255,0.07);
+  transform: translateY(-2px);
+}
+.download-option .dl-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; font-weight: 800;
+  color: #fff; flex-shrink: 0;
+}
+.download-option .dl-info { flex: 1; }
+.download-option .dl-name { font-weight: 700; font-size: 0.95rem; }
+.download-option .dl-code { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+.download-option .dl-icon svg { width: 22px; height: 22px; }
+.download-option .dl-arrow { color: var(--text-secondary); font-size: 0.9rem; }
+
+/* ========== Footer ========== */
+.footer {
+  padding: 40px 0; text-align: center;
+  border-top: 1px solid var(--border);
+}
+.footer p { font-size: 0.85rem; color: var(--text-secondary); }
+.footer-links { display: flex; gap: 24px; justify-content: center; margin-top: 12px; }
+.footer-links a { font-size: 0.82rem; color: var(--text-secondary); transition: color 0.2s; }
+.footer-links a:hover { color: var(--accent); }
+
+/* ========== Scroll Animations ========== */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .highlights-row { grid-template-columns: 1fr; gap: 40px; }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 56px; left: 0; right: 0;
+    background: rgba(10,10,14,0.96);
+    backdrop-filter: blur(16px);
+    padding: 16px 24px; gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-hamburger { display: flex; }
+  .features-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  section { padding: 64px 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">TL</div>
+      <span>TL内测版</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+         <a href="#features">内测新特性</a>
+      <a href="#highlights">参与方式</a>
+      <a href="#tech">测试规格</a>
+      <a href="./vip.html">会员入口</a>
+      <a href="http://tlstudio.cn/neice.html">测试版本入口</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content">
+      <span class="hero-badge">🧪 内测招募 · 抢先体验</span>
+    <h1>TL内测版<br>抢先体验全新分离引擎</h1>
+    <p>最新模型、未公开功能、优先体验权 — 加入内测，抢先一步感受下一代音乐分离技术</p>
+    <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      立即加入内测
+    </a>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="container text-center">
+    <span class="section-label reveal">内测新特性</span>
+    <h2 class="section-title reveal">全新引擎，更强分离能力</h2>
+    <p class="section-desc reveal">内测版搭载最新优化模型，带来更精准、更快速的音轨分离体验</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">⚡</span>
+        <h3>速度提升</h3>
+        <p>分离速度提升 40%，大文件也能秒级处理</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎯</span>
+        <h3>精度增强</h3>
+        <p>全新算法大幅减少人声残留，分离更干净</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎛️</span>
+        <h3>参数可调</h3>
+        <p>开放高级参数调节，自定义你的分离效果</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🔧</span>
+        <h3>实验功能</h3>
+        <p>抢先体验未公开的实验性音轨分离功能</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Highlights -->
+<section class="highlights" id="highlights">
+  <div class="container">
+    <div class="highlights-row">
+      <div class="mockup-frame reveal">
+        <div class="mockup-titlebar">
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+        </div>
+        <div class="mockup-body">
+          <div class="mock-wave" id="mockWave"></div>
+          <span class="mock-label">TL内测版 </span>
+          <a href="#" class="mock-btn" onclick="showDownloadModal();return false">获取内测</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">为什么参与内测</span>
+        <h2 class="section-title">你的反馈，驱动产品进化</h2>
+        <ul class="highlights-list">
+          <li>
+            <div class="hl-icon">🚀</div>
+            <div class="hl-text">
+              <h4>优先体验权</h4>
+              <p>比正式版提前数周体验最新功能，永远快人一步</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">💬</div>
+            <div class="hl-text">
+              <h4>直接反馈通道</h4>
+              <p>内测用户专属反馈入口，你的建议直达开发团队</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">🎁</div>
+            <div class="hl-text">
+              <h4>内测专属福利</h4>
+              <p>参与内测可获正式版会员折扣及限量纪念标识</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">🔬</div>
+            <div class="hl-text">
+              <h4>实验性功能</h4>
+              <p>解锁尚未公开的实验性音轨处理能力，尝鲜最新技术</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Specs -->
+<section class="tech-specs" id="tech">
+  <div class="container text-center">
+    <span class="section-label reveal">测试规格</span>
+    <h2 class="section-title reveal">内测版技术参数</h2>
+    <p class="section-desc reveal">搭载最新优化模型，内测版在精度与速度上均有显著提升</p>
+    <div class="tech-tags reveal">
+      <span class="tech-tag accent">HTDemucs v4.1+</span>
+      <span class="tech-tag accent">PyTorch 2.0</span>
+      <span class="tech-tag accent">FFmpeg</span>
+      <span class="tech-tag">MP3 输入</span>
+      <span class="tech-tag">WAV 输入</span>
+      <span class="tech-tag">FLAC 输入</span>
+      <span class="tech-tag">WAV 输出</span>
+    </div>
+    <div class="tech-grid reveal">
+      <div class="tech-item">
+        <h4>内测模型</h4>
+        <p>HTDemucs v4.1+</p>
+      </div>
+      <div class="tech-item">
+        <h4>速度提升</h4>
+        <p>较正式版 +40%</p>
+      </div>
+      <div class="tech-item">
+        <h4>内测名额</h4>
+        <p>限量开放</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Bottom -->
+<section class="cta-bottom">
+  <div class="container reveal">
+    <h2>立即加入，抢先体验</h2>
+    <p class="cta-desc">内测名额有限，即刻加入，成为最早体验下一代音乐分离技术的用户</p>
+    <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      立即获取内测版
+    </a>
+    <div class="badge-row">
+      <span class="badge">内测版 v3.0-beta</span>
+      <span class="badge">Windows</span>
+      <span class="badge">限量招募</span>
+    </div>
+  </div>
+</section>
+
+<!-- Download Modal -->
+<div class="modal-overlay" id="downloadModal">
+  <div class="modal-dialog">
+    <button class="modal-close" onclick="hideDownloadModal()">&times;</button>
+    <div class="modal-title">🧪 选择内测获取方式</div>
+    <div class="modal-subtitle">TL内测版 v3.0-beta · Windows 内测安装包</div>
+    <div class="download-options">
+      <a href="https://pan.baidu.com/s/5_sN_C1WK8djj3G6QOjS-cg" target="_blank" class="download-option">
+        <div class="dl-icon" style="background:linear-gradient(135deg,#3385ff,#2468e0)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 19"/><polyline points="9 16 12 19 15 16"/></svg></div>
+        <div class="dl-info">
+          <div class="dl-name">百度网盘</div>
+        </div>
+        <span class="dl-arrow"></span>
+      </a>
+      <a href="https://pan.quark.cn/s/402f89d504c8" target="_blank" class="download-option">
+        <div class="dl-icon" style="background:linear-gradient(135deg,#1677ff,#0958d9)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg></div>
+        <div class="dl-info">
+          <div class="dl-name">夸克网盘</div>
+        </div>
+        <span class="dl-arrow"></span>
+      </a>
+      <a href="https://pan.xunlei.com/s/VOzH6oVKNqtOqzD_9YNXGRtJA1?pwd=6739#" target="_blank" class="download-option">
+        <div class="dl-icon" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"><svg viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="dl-info">
+          <div class="dl-name">迅雷网盘</div>
+        </div>
+        <span class="dl-arrow"></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>TL 工作室 &copy; 2026版权所有 · 内测版仅供测试用途</p>
+    <div class="footer-links">
+      <a href="#features">新特性</a>
+      <a href="#highlights">参与方式</a>
+      <a href="#tech">测试规格</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ========== Nav Scroll Shadow ========== */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+/* ========== Mobile Nav Close ========== */
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+/* ========== Scroll Reveal ========== */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ========== Mock Waveform ========== */
+(function() {
+  const wave = document.getElementById('mockWave');
+  const count = 50;
+  for (let i = 0; i < count; i++) {
+    const bar = document.createElement('div');
+    bar.className = 'mock-bar';
+    const h = 8 + Math.abs(Math.sin(i / count * Math.PI * 2)) * 30 + Math.random() * 12;
+    bar.style.height = h + 'px';
+    wave.appendChild(bar);
+  }
+})();
+
+/* ========== Download Modal ========== */
+function showDownloadModal() {
+  document.getElementById('downloadModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function hideDownloadModal() {
+  document.getElementById('downloadModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('downloadModal').addEventListener('click', function(e) {
+  if (e.target === this) hideDownloadModal();
+});
+
+/* ========== Hero Canvas Particle Animation ========== */
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const PARTICLE_COUNT = 60;
+  const COLORS = ['rgba(87,230,255,0.18)', 'rgba(122,107,255,0.12)', 'rgba(244,114,182,0.10)', 'rgba(46,160,67,0.10)'];
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 2.5 + 0.8;
+      this.vx = (Math.random() - 0.5) * 0.35;
+      this.vy = (Math.random() - 0.5) * 0.35;
+      this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.opacity = Math.random() * 0.5 + 0.3;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.opacity;
+      ctx.fill();
+    }
+  }
+
+  function init() {
+    resize();
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+  }
+
+  function drawLines() {
+    ctx.globalAlpha = 0.04;
+    ctx.strokeStyle = '#57e6ff';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawLines();
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  init();
+  loop();
+})();
+</script>
+
+</body>
+</html>

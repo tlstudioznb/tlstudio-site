@@ -597,21 +597,19 @@ section { padding: 100px 0; }
   <div class="modal-dialog">
     <button class="modal-close" onclick="hideDownloadModal()">&times;</button>
     <div class="modal-title">🎫 VIP 激活</div>
-    <div class="modal-subtitle">输入激活密码，验证后解锁完整功能</div>
+    <div class="modal-subtitle">输入卡密，验证后解锁下载（一卡一机）</div>
     <div style="padding:22px;border:1.5px dashed var(--accent);border-radius:16px;background:rgba(255,255,255,0.08);">
-      <div style="font-size:0.78rem;color:var(--text-secondary);letter-spacing:1px;text-align:center;">你的序列号</div>
-      <div id="serialCode" style="font-size:1.3rem;font-weight:800;letter-spacing:1.5px;color:var(--accent);font-family:'Consolas','Courier New',monospace;text-align:center;margin-top:6px;">----------</div>
-      <div style="font-size:0.78rem;color:var(--text-secondary);letter-spacing:1px;margin-top:18px;">激活密码</div>
-      <input id="passwordInput" type="text" placeholder="请输入激活密码" autocomplete="off" style="width:100%;margin-top:6px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;font-family:'Consolas','Courier New',monospace;letter-spacing:1px;text-align:center;outline:none;" onkeydown="if(event.key==='Enter')verifyActivation()">
+      <div style="font-size:0.78rem;color:var(--text-secondary);letter-spacing:1px;text-align:center;">激活卡密</div>
+      <input id="cardInput" type="text" placeholder="请输入卡密，如 TL-XXXX-XXXX-XXXX" autocomplete="off" style="width:100%;margin-top:8px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;font-family:'Consolas','Courier New',monospace;letter-spacing:1px;text-align:center;outline:none;" onkeydown="if(event.key==='Enter')verifyActivation()">
       <div id="verifyResult" style="text-align:center;margin-top:10px;font-size:0.88rem;font-weight:600;min-height:1.3em;"></div>
       <button onclick="verifyActivation()" style="width:100%;margin-top:12px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#f0c000,#e6b800);color:#fff;font-size:0.95rem;font-weight:600;cursor:pointer;">🔓 验证激活</button>
     </div>
     <div style="margin-top:20px;text-align:center;padding:16px;border-radius:14px;background:rgba(200,160,0,0.06);border:1px solid rgba(230,184,0,0.15);">
-      <div style="font-size:0.85rem;color:var(--text-secondary);">没有激活密码？</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);">没有卡密？</div>
       <div style="font-size:1rem;font-weight:700;color:var(--text);margin-top:6px;">请联系微信：<span style="color:var(--accent);">tzr19127101909</span></div>
     </div>
     <div id="downloadBtn" style="margin-top:16px;display:none;">
-      <a href="https://yard-revolution-vermont-skirts.trycloudflare.com/TL_VIP_v1.zip" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:15px;border-radius:12px;background:linear-gradient(135deg,#f0c000,#e6b800);color:#fff;font-size:1rem;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(200,160,0,0.25);transition:all 0.25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(200,160,0,0.3)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(200,160,0,0.25)';">
+      <a id="downloadLink" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:15px;border-radius:12px;background:linear-gradient(135deg,#f0c000,#e6b800);color:#fff;font-size:1rem;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(200,160,0,0.25);transition:all 0.25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(200,160,0,0.3)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(200,160,0,0.25)';">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         立即下载 TL干声分离器 VIP
       </a>
@@ -633,11 +631,12 @@ section { padding: 100px 0; }
 
 <script>
 /* ===================== TL 干声分离器 VIP — 干净版脚本 ===================== */
-/* 元素：nav / navLinks / hamburger / heroCanvas / downloadModal / serialCode / passwordInput / verifyResult / downloadBtn */
+/* 元素：nav / navLinks / hamburger / heroCanvas / downloadModal / cardInput / verifyResult / downloadBtn / downloadLink */
 
-/* ---------- VIP 序列号 + 激活 ---------- */
-const SERIAL_KEY = 'tl_vip_serial';
-const CAESAR_SHIFT = 36; /* 与原始逻辑一致 */
+/* ---------- VIP 卡密激活（对接 Cloudflare Workers 服务端） ---------- */
+const API_BASE = 'https://api.tlstudio.cn'; /* 绑定到 Worker 的自定义域名 */
+const DEVICE_KEY = 'tl_vip_device';
+const ACTIVE_KEY = 'tl_vip_active_card';
 
 function randomString(len, chars) {
   const arr = new Uint32Array(len);
@@ -646,44 +645,71 @@ function randomString(len, chars) {
   for (let i = 0; i < len; i++) s += chars[arr[i] % chars.length];
   return s;
 }
-function randomSerial() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const part = () => randomString(4, chars);
-  return part() + '-' + part() + '-' + part();
+/* 生成并持久化本机设备标识（一卡一机里的“机”） */
+function getDeviceId() {
+  let id = null;
+  try { id = localStorage.getItem(DEVICE_KEY); } catch (e) {}
+  if (!id || id.length < 8) {
+    id = 'dev-' + randomString(24, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+    try { localStorage.setItem(DEVICE_KEY, id); } catch (e) {}
+  }
+  return id;
 }
-function loadSerial() {
-  let s = null;
-  try { s = localStorage.getItem(SERIAL_KEY); } catch (e) {}
-  if (!s) { s = randomSerial(); try { localStorage.setItem(SERIAL_KEY, s); } catch (e) {} }
-  return s;
+function setResult(el, text, type) {
+  el.textContent = text;
+  el.style.color = type === 'success' ? '#1a9e5a' : type === 'error' ? '#d23b3b' : 'var(--text-secondary)';
 }
-/* 与原始混淆版完全一致的变换：字母去掉非字母后 +8 位移 */
-function caesarSerial(text, shift) {
-  return text.replace(/[^A-Za-z]/g, '').toUpperCase().split('').map(function (c) {
-    return String.fromCharCode((c.charCodeAt(0) - 93 + shift) % 26 + 65);
-  }).join('');
-}
-function verifyActivation() {
-  const serialEl = document.getElementById('serialCode');
-  const pwdEl = document.getElementById('passwordInput');
+async function verifyActivation() {
+  const cardEl = document.getElementById('cardInput');
   const resultEl = document.getElementById('verifyResult');
   const dlBtn = document.getElementById('downloadBtn');
-  const serial = (serialEl.textContent || '').trim();
-  const pwd = (pwdEl.value || '').trim().toUpperCase();
-  const expected = caesarSerial(serial, CAESAR_SHIFT);
-  if (pwd && pwd === expected) {
-    resultEl.textContent = '✅ 激活成功，已解锁下载';
-    resultEl.style.color = '#1a9e5a';
-    dlBtn.style.display = 'block';
-  } else {
-    resultEl.textContent = '❌ 激活密码错误，请检查后重试';
-    resultEl.style.color = '#d23b3b';
-    dlBtn.style.display = 'none';
+  const dlLink = document.getElementById('downloadLink');
+  const card = (cardEl.value || '').trim().toUpperCase();
+
+  dlBtn.style.display = 'none';
+  if (!card) { setResult(resultEl, '❌ 请输入卡密', 'error'); return; }
+
+  setResult(resultEl, '⏳ 正在验证卡密…', 'text');
+  let data;
+  try {
+    const res = await fetch(API_BASE + '/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ card: card, device: getDeviceId() })
+    });
+    data = await res.json();
+  } catch (e) {
+    setResult(resultEl, '❌ 无法连接服务器，请检查网络', 'error');
+    return;
   }
+
+  if (data.ok) {
+    setResult(resultEl, '✅ 激活成功，已解锁下载', 'success');
+    if (data.download) dlLink.href = data.download;
+    try { localStorage.setItem(ACTIVE_KEY, card); } catch (e) {}
+    dlBtn.style.display = 'block';
+    return;
+  }
+
+  const msgs = {
+    INVALID_CARD: '❌ 卡密无效，请检查后重试',
+    CARD_BOUND: '❌ 该卡密已绑定其他设备',
+    MISSING_FIELDS: '❌ 请填写卡密',
+    BAD_DEVICE: '❌ 设备标识异常',
+    BAD_REQUEST: '❌ 请求格式错误',
+    NOT_FOUND: '❌ 接口不存在'
+  };
+  setResult(resultEl, msgs[data.code] || ('❌ 激活失败：' + (data.code || '未知错误')), 'error');
 }
-/* 显示本机序列号 */
-const _serialEl = document.getElementById('serialCode');
-if (_serialEl) _serialEl.textContent = loadSerial();
+/* 同设备已激活过则自动解锁（仍由后端校验，不做本地放行） */
+(function autoActivate() {
+  let card = null;
+  try { card = localStorage.getItem(ACTIVE_KEY); } catch (e) {}
+  if (!card) return;
+  const cardEl = document.getElementById('cardInput');
+  if (cardEl) cardEl.value = card;
+  verifyActivation();
+})();
 
 /* ---------- 下载 / VIP 弹窗 ---------- */
 function showDownloadModal() {

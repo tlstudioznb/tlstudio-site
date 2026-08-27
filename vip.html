@@ -604,6 +604,12 @@ section { padding: 100px 0; }
       <div id="verifyResult" style="text-align:center;margin-top:10px;font-size:0.88rem;font-weight:600;min-height:1.3em;"></div>
       <button onclick="verifyActivation()" style="width:100%;margin-top:12px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#f0c000,#e6b800);color:#fff;font-size:0.95rem;font-weight:600;cursor:pointer;">🔓 验证激活</button>
     </div>
+    <div id="pwdBox" style="display:none;margin-top:14px;padding:16px;border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;background:rgba(255,255,255,0.05);">
+      <div id="pwdHint" style="font-size:0.82rem;color:var(--text-secondary);text-align:center;margin-bottom:8px;">提取码已解锁，请输入下载提取码</div>
+      <input id="pwdInput" type="text" placeholder="请输入提取码" autocomplete="off" style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;text-align:center;letter-spacing:2px;outline:none;background:var(--panel);color:var(--text);" onkeydown="if(event.key==='Enter')unlockDownload()">
+      <button onclick="unlockDownload()" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#7a6bff,#f472b6);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;">🔑 获取下载链接</button>
+      <div id="pwdResult" style="text-align:center;margin-top:10px;font-size:0.85rem;font-weight:600;min-height:1.3em;"></div>
+    </div>
     <div style="margin-top:20px;text-align:center;padding:16px;border-radius:14px;background:rgba(200,160,0,0.06);border:1px solid rgba(230,184,0,0.15);">
       <div style="font-size:0.85rem;color:var(--text-secondary);">没有卡密？</div>
       <div style="font-size:1rem;font-weight:700;color:var(--text);margin-top:6px;">请联系微信：<span style="color:var(--accent);">tzr19127101909</span></div>
@@ -637,6 +643,7 @@ section { padding: 100px 0; }
 const API_BASE = 'https://api.tlstudio.cn'; /* 绑定到 Worker 的自定义域名 */
 const DEVICE_KEY = 'tl_vip_device';
 const ACTIVE_KEY = 'tl_vip_active_card';
+let _ticket = ''; /* 激活后持有的加密令牌，用其换取下载地址 */
 
 function randomString(len, chars) {
   const arr = new Uint32Array(len);
@@ -662,11 +669,10 @@ function setResult(el, text, type) {
 async function verifyActivation() {
   const cardEl = document.getElementById('cardInput');
   const resultEl = document.getElementById('verifyResult');
-  const dlBtn = document.getElementById('downloadBtn');
   const dlLink = document.getElementById('downloadLink');
   const card = (cardEl.value || '').trim().toUpperCase();
 
-  dlBtn.style.display = 'none';
+  hideDownload();
   if (!card) { setResult(resultEl, '❌ 请输入卡密', 'error'); return; }
 
   setResult(resultEl, '⏳ 正在验证卡密…', 'text');
@@ -683,23 +689,81 @@ async function verifyActivation() {
     return;
   }
 
-  if (data.ok) {
-    setResult(resultEl, '✅ 激活成功，已解锁下载', 'success');
-    if (data.download) dlLink.href = data.download;
-    try { localStorage.setItem(ACTIVE_KEY, card); } catch (e) {}
-    dlBtn.style.display = 'block';
+  if (!data.ok) {
+    const msgs = {
+      INVALID_CARD: '❌ 卡密无效，请检查后重试',
+      CARD_BOUND: '❌ 该卡密已绑定其他设备',
+      MISSING_FIELDS: '❌ 请填写卡密',
+      BAD_DEVICE: '❌ 设备标识异常',
+      BAD_REQUEST: '❌ 请求格式错误',
+      NOT_FOUND: '❌ 接口不存在'
+    };
+    setResult(resultEl, msgs[data.code] || ('❌ 激活失败：' + (data.code || '未知错误')), 'error');
     return;
   }
 
+  /* 激活成功：拿到加密令牌（不下发真实下载地址） */
+  _ticket = data.ticket || '';
+  try { localStorage.setItem(ACTIVE_KEY, card); } catch (e) {}
+
+  if (data.needsPwd) {
+    setResult(resultEl, '✅ 激活成功，请输入提取码', 'success');
+    document.getElementById('pwdBox').style.display = 'block';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdResult').textContent = '';
+    document.getElementById('pwdInput').focus();
+  } else {
+    /* 未设提取码：直接换取下载链接 */
+    setResult(resultEl, '⏳ 正在获取下载链接…', 'text');
+    await unlockDownload(true);
+  }
+}
+
+/* 用 ticket + 提取码 换取真实下载地址 */
+async function unlockDownload(silent) {
+  const ticket = _ticket;
+  const resultEl = document.getElementById('pwdResult');
+  if (!ticket) {
+    setResult(resultEl, '❌ 令牌无效，请重新激活', 'error');
+    return;
+  }
+  const code = document.getElementById('pwdInput') ? document.getElementById('pwdInput').value : '';
+  if (!silent) setResult(resultEl, '⏳ 正在校验提取码…', 'text');
+
+  let data;
+  try {
+    const res = await fetch(API_BASE + '/unlock', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticket: ticket, code: code })
+    });
+    data = await res.json();
+  } catch (e) {
+    setResult(resultEl, '❌ 无法连接服务器，请检查网络', 'error');
+    return;
+  }
+
+  if (data.ok && data.download) {
+    document.getElementById('downloadLink').href = data.download;
+    setResult(resultEl, '✅ 下载链接已解锁', 'success');
+    showDownload();
+    return;
+  }
   const msgs = {
-    INVALID_CARD: '❌ 卡密无效，请检查后重试',
-    CARD_BOUND: '❌ 该卡密已绑定其他设备',
-    MISSING_FIELDS: '❌ 请填写卡密',
-    BAD_DEVICE: '❌ 设备标识异常',
-    BAD_REQUEST: '❌ 请求格式错误',
-    NOT_FOUND: '❌ 接口不存在'
+    WRONG_CODE: '❌ 提取码错误，请重新输入',
+    BAD_TICKET: '❌ 链接已过期，请重新激活',
+    NO_DOWNLOAD: '❌ 暂无可用的下载资源',
+    MISSING_FIELDS: '❌ 请填写提取码'
   };
-  setResult(resultEl, msgs[data.code] || ('❌ 激活失败：' + (data.code || '未知错误')), 'error');
+  setResult(resultEl, msgs[data.code] || ('❌ 解锁失败：' + (data.code || '未知错误')), 'error');
+}
+
+function hideDownload() {
+  document.getElementById('downloadBtn').style.display = 'none';
+  document.getElementById('pwdBox').style.display = 'none';
+}
+function showDownload() {
+  document.getElementById('downloadBtn').style.display = 'block';
 }
 /* 同设备已激活过则自动解锁（仍由后端校验，不做本地放行） */
 (function autoActivate() {

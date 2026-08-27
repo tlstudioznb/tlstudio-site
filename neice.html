@@ -599,7 +599,13 @@ section { padding: 100px 0; }
     <button class="modal-close" onclick="hideDownloadModal()">&times;</button>
     <div class="modal-title">🧪 选择内测获取方式</div>
     <div class="modal-subtitle">TL内测版 v3.0-beta · Windows 内测安装包</div>
-    <div class="download-options">
+    <div id="gateBox" style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:10px;">请输入您的 <b style="color:var(--accent);">QQ 号</b> 以解锁内测下载</div>
+      <input id="gateCode" type="text" inputmode="numeric" placeholder="请输入您的QQ号" autocomplete="off" style="width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,0.15);border-radius:10px;background:#0d0f15;color:#fff;font-size:1rem;text-align:center;letter-spacing:2px;outline:none;" onkeydown="if(event.key==='Enter')checkDownloadCode()">
+      <button onclick="checkDownloadCode()" style="width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,#57e6ff,#7a6bff);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">🔓 解锁下载</button>
+      <div id="gateMsg" style="margin-top:8px;font-size:0.85rem;font-weight:600;min-height:1.3em;"></div>
+    </div>
+    <div class="download-options" id="dlOptions" style="display:none;">
       <a href="https://pan.baidu.com/s/5_sN_C1WK8djj3G6QOjS-cg" target="_blank" class="download-option">
         <div class="dl-icon" style="background:linear-gradient(135deg,#3385ff,#2468e0)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 19"/><polyline points="9 16 12 19 15 16"/></svg></div>
         <div class="dl-info">
@@ -670,9 +676,39 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 
 /* ========== Download Modal ========== */
+/* ========== QQ 号门禁（每次打开都需重新输入，不做任何本地记忆） ========== */
 function showDownloadModal() {
   document.getElementById('downloadModal').classList.add('active');
   document.body.style.overflow = 'hidden';
+  setupGate();
+}
+function setupGate() {
+  document.getElementById('gateBox').style.display = 'block';
+  document.getElementById('dlOptions').style.display = 'none';
+  document.getElementById('gateMsg').textContent = '';
+}
+function checkDownloadCode() {
+  const v = (document.getElementById('gateCode').value || '').trim();
+  const msg = document.getElementById('gateMsg');
+  if (!v) { msg.textContent = '请输入您的QQ号'; msg.style.color = '#f87171'; return; }
+  /* QQ 号：纯数字，5~11 位，不以 0 开头 */
+  if (!/^[1-9][0-9]{4,10}$/.test(v)) {
+    msg.textContent = 'QQ号格式不正确，请检查后重试'; msg.style.color = '#f87171';
+    return;
+  }
+  document.getElementById('gateBox').style.display = 'none';
+  document.getElementById('dlOptions').style.display = 'grid';
+  msg.textContent = '✅ 解锁成功，请选择方式下载'; msg.style.color = '#34d399';
+  reportQQ(v, 'neice');
+}
+/* 上报 QQ 到收集接口（失败不阻塞下载） */
+function reportQQ(qq, page) {
+  const api = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : 'https://api.tlstudio.cn';
+  fetch(api + '/collect', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ qq, ref: page }),
+  }).catch(function () {});
 }
 function hideDownloadModal() {
   document.getElementById('downloadModal').classList.remove('active');

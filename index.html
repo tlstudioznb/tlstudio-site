@@ -26,7 +26,7 @@
       "email": "contact@tlstudio.cn"
     }
     </script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.tlstudio.cn;">
     <style>
         :root{
             --bg:#0a0a0e;
@@ -162,7 +162,7 @@
         /* 下载弹窗 */
         .dl-modal-backdrop{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.62);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:1000;display:none;justify-content:center;align-items:center;opacity:0;transition:opacity .3s}
         .dl-modal-backdrop.dl-show{display:flex;opacity:1}
-        .dl-modal{background:rgba(16,18,24,.94);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--line-2);border-radius:24px;padding:46px 32px 28px;max-width:390px;width:92%;text-align:center;position:relative;transform:scale(.88) translateY(20px);transition:transform .35s cubic-bezier(.34,1.56,.64,1);max-height:86vh;overflow-y:auto;overscroll-behavior:contain}
+        .dl-modal{background:rgba(16,18,24,.94);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid var(--line-2);border-radius:24px;padding:46px 32px 28px;max-width:390px;width:92%;text-align:center;position:relative;transform:scale(.88) translateY(20px);transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
         .dl-modal-backdrop.dl-show .dl-modal{transform:scale(1) translateY(0)}
         .dl-modal-close{position:absolute;top:13px;right:13px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(255,255,255,.07);font-size:18px;line-height:1;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
         .dl-modal-close:hover{background:rgba(255,255,255,.16);color:#fff}
@@ -203,6 +203,24 @@
             .contact-box{grid-template-columns:1fr}
             .about-grid .body{font-size:18px}
         }
+    /* ===== 魔盒启动器下载弹窗（照搬魔盒官网） ===== */
+    .mbox-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.5);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s cubic-bezier(.22,1,.36,1)}
+    .mbox-overlay.mbox-active{opacity:1;pointer-events:auto}
+    .mbox-dialog{background:rgba(16,18,24,.9);border-radius:28px;padding:40px 32px 32px;max-width:500px;width:90%;border:1px solid var(--line-2);box-shadow:0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08);position:relative;transform:translateY(30px) scale(.96);transition:transform .45s cubic-bezier(.22,1,.36,1)}
+    .mbox-overlay.mbox-active .mbox-dialog{transform:translateY(0) scale(1)}
+    .mbox-close{position:absolute;top:14px;right:18px;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.07);font-size:18px;line-height:1;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+    .mbox-close:hover{background:rgba(255,255,255,.16);color:#fff}
+    .mbox-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:4px}
+    .mbox-subtitle{font-size:13px;color:var(--muted);text-align:center;margin-bottom:28px}
+    .mbox-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mbox-option{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;text-decoration:none;color:inherit;transition:all .3s cubic-bezier(.22,1,.36,1)}
+    .mbox-option:hover{background:rgba(255,255,255,.06);border-color:rgba(74,222,128,.28);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+    .mbox-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .mbox-icon svg{width:22px;height:22px}
+    .mbox-info{flex:1;min-width:0}
+    .mbox-name{font-weight:700;font-size:14px}
+    .mbox-code{font-size:12px;color:var(--muted);margin-top:2px}
+    @media (max-width:480px){.mbox-options{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -411,6 +429,7 @@
     <footer>
         <div class="logo">TL STUDIO</div>
         <p>专注青少年机器人竞赛</p>
+        <p>© 2026 TL工作室 · 版权所有</p>
     </footer>
 
     <!-- 下载弹窗 -->
@@ -461,8 +480,8 @@
                     </span>
                     <span class="dl-tool-arrow">›</span>
                 </a>
-                <a href="magicbox.html" target="_blank" rel="noopener" class="dl-tool-btn">
-                    <span class="dl-tool-icon">💻</span>
+                <a href="javascript:void(0)" onclick="openMagicBoxModal()" class="dl-tool-btn">
+                    <span class="dl-tool-icon">电脑</span>
                     <span class="dl-tool-text">
                         <span class="dl-tool-name">TL MAGIC BOX-我的世界启动器</span>
                         <span class="dl-tool-desc">TL谭钟睿 开发</span>
@@ -520,6 +539,65 @@
                 if (m && m.classList.contains('dl-show')) closeDlModal();
             }
         });
+
+        // ===== 魔盒启动器下载弹窗 =====
+        function openMagicBoxModal() { document.getElementById('mboxModal').classList.add('mbox-active'); document.body.style.overflow = 'hidden'; }
+        function closeMagicBoxModal() { document.getElementById('mboxModal').classList.remove('mbox-active'); document.body.style.overflow = ''; }
+        document.addEventListener('DOMContentLoaded', function () {
+            var c = document.getElementById('mboxClose');
+            if (c) c.onclick = closeMagicBoxModal;
+            var b = document.getElementById('mboxModal');
+            if (b) b.addEventListener('click', function (e) { if (e.target === this) closeMagicBoxModal(); });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && b && b.classList.contains('mbox-active')) closeMagicBoxModal();
+            });
+        });
+
+        // ===== 客流量上报（静默上报，不显示；数据在管理后台查看） =====
+        (function () {
+            var API = 'https://api.tlstudio.cn/counter';
+            var load = function () {
+                var isNew = false;
+                try {
+                    if (!localStorage.getItem('tl_visited')) {
+                        isNew = true;
+                        localStorage.setItem('tl_visited', '1');
+                    }
+                } catch (e) {}
+                fetch(API + (isNew ? '?uv=1' : '')).catch(function () {});
+            };
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load);
+            else load();
+        })();
     </script>
+<!-- 魔盒启动器下载弹窗（照搬魔盒官网） -->
+    <div class="mbox-overlay" id="mboxModal">
+        <div class="mbox-dialog">
+            <button class="mbox-close" id="mboxClose" aria-label="关闭">&times;</button>
+            <div class="mbox-title">📥 选择下载版本</div>
+            <div class="mbox-subtitle">TL-MAGIXBOX 魔盒 v0.1.0</div>
+            <div class="mbox-options">
+                <!-- 提示：把下面两个 href="#" 替换为真实下载链接 -->
+                <a href="#" target="_blank" class="mbox-option" title="替换为便携版下载链接">
+                    <div class="mbox-icon" style="background:linear-gradient(135deg,#4ade80,#16a34a)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v9L12 21l-8-4.5v-9L12 2z"/><path d="M12 2v9"/><path d="M12 11l8-4.5"/><path d="M12 11L4 6.5"/><path d="M4 6.5v9L12 20"/></svg>
+                    </div>
+                    <div class="mbox-info">
+                        <div class="mbox-name">便携版</div>
+                        <div class="mbox-code">.exe · 免安装</div>
+                    </div>
+                </a>
+                <a href="#" target="_blank" class="mbox-option" title="替换为安装版下载链接">
+                    <div class="mbox-icon" style="background:linear-gradient(135deg,#22d3ee,#0891b2)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 19"/><polyline points="9 16 12 19 15 16"/></svg>
+                    </div>
+                    <div class="mbox-info">
+                        <div class="mbox-name">安装版</div>
+                        <div class="mbox-code">Setup · 自动建快捷方式</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

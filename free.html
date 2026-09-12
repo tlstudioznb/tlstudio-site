@@ -113,6 +113,13 @@ main { flex: 1; width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 72
 }
 .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
 .copy-btn.done { border-color: var(--good); color: var(--good); }
+.status-tag {
+  flex-shrink: 0; font-size: 0.74rem; padding: 3px 10px; border-radius: 4px;
+  border: 1px solid var(--line); color: var(--muted);
+}
+.status-tag.ok { color: var(--good); border-color: rgba(71,196,137,0.4); }
+.ledger-row.used { opacity: 0.55; }
+.ledger-row.used .key { color: var(--muted); }
 
 /* ===== 空/加载/错误状态 ===== */
 .state { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 0.9rem; }
@@ -249,17 +256,26 @@ function render() {
     return;
   }
   ledger.innerHTML = '';
-  CARDS.forEach((key, i) => {
+  let usedN = 0;
+  CARDS.forEach((c, i) => {
+    usedN += c.used ? 1 : 0;
     const row = document.createElement('div');
-    row.className = 'ledger-row';
-    row.innerHTML =
+    row.className = 'ledger-row' + (c.used ? ' used' : '');
+    let html =
       '<span class="idx mono">' + String(i + 1).padStart(2, '0') + '</span>' +
-      '<span class="key mono">' + key + '</span>' +
-      '<button class="copy-btn" data-key="' + key + '">复制</button>';
+      '<span class="key mono">' + c.key + '</span>';
+    if (c.used) {
+      html += '<span class="status-tag">已使用</span>';
+    } else {
+      html += '<span class="status-tag ok">可用</span>' +
+              '<button class="copy-btn" data-key="' + c.key + '">复制</button>';
+    }
+    row.innerHTML = html;
     ledger.appendChild(row);
   });
-  $('cardCount').textContent = CARDS.length + ' 张';
+  $('cardCount').textContent = '已领 ' + usedN + ' / ' + CARDS.length + ' 张';
   $('actions').hidden = false;
+  $('copyAll').style.display = (usedN === CARDS.length) ? 'none' : '';
 
   ledger.querySelectorAll('.copy-btn').forEach(btn => {
     btn.onclick = async () => {
@@ -289,11 +305,12 @@ async function loadCards() {
 }
 
 $('copyAll').onclick = async () => {
-  if (!CARDS.length) return;
-  const ok = await copyText(CARDS.join('\n'));
+  const avail = CARDS.filter(c => !c.used).map(c => c.key);
+  if (!avail.length) return;
+  const ok = await copyText(avail.join('\n'));
   const btn = $('copyAll');
   const old = btn.textContent;
-  btn.textContent = ok ? '已复制 ' + CARDS.length + ' 张' : '复制失败';
+  btn.textContent = ok ? '已复制 ' + avail.length + ' 张' : '复制失败';
   setTimeout(() => { btn.textContent = old; }, 2000);
 };
 

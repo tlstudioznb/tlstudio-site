@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日免费卡密 · TL 干声分离器</title>
+<meta name="description" content="TL 干声分离器每日免费卡密。每天 5 张免费激活卡，先到先得，一卡一机，仅当日有效。">
+<meta name="keywords" content="免费卡密,干声分离器,人声提取,TL干声,tlstudio">
+<meta name="robots" content="index, follow">
+<style>
+:root {
+  --bg: #0d0d0f;
+  --bg-soft: #151517;
+  --ink: #f2f0eb;
+  --muted: #9a978f;
+  --line: #26262b;
+  --line-soft: #1d1d21;
+  --accent: #d9a514;
+  --accent-ink: #12110d;
+  --good: #47c489;
+  --maxw: 860px;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-kerning: normal;
+}
+a { color: inherit; text-decoration: none; }
+.mono {
+  font-family: "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+  font-variant-ligatures: none;
+}
+
+/* ===== 顶栏：纯色、无毛玻璃 ===== */
+.topbar {
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+.topbar-inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 24px;
+  height: 60px; display: flex; align-items: center; justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.98rem; letter-spacing: 0.2px; }
+.brand-mark {
+  width: 24px; height: 24px; background: var(--accent); color: var(--accent-ink);
+  font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; font-family: Consolas, monospace;
+}
+.brand small { color: var(--muted); font-weight: 400; margin-left: 2px; }
+.topnav { display: flex; gap: 26px; }
+.topnav a { font-size: 0.88rem; color: var(--muted); transition: color 0.15s; padding: 4px 0; }
+.topnav a:hover { color: var(--ink); }
+.topnav a.active { color: var(--ink); border-bottom: 2px solid var(--accent); }
+
+/* ===== 主内容 ===== */
+main { flex: 1; width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 72px 24px 96px; }
+
+/* ===== Hero：左对齐、纯色、无渐变字 ===== */
+.hero { margin-bottom: 56px; }
+.eyebrow {
+  font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px; font-weight: 600;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; line-height: 1.16;
+  letter-spacing: -0.01em; max-width: 16ch; margin-bottom: 20px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p { color: var(--muted); font-size: 1rem; max-width: 58ch; margin-bottom: 32px; }
+.hero-meta {
+  display: flex; gap: 32px; flex-wrap: wrap; padding-top: 20px;
+  border-top: 1px solid var(--line-soft); font-size: 0.88rem;
+}
+.hero-meta .k { color: var(--muted); margin-right: 8px; }
+.hero-meta .v { font-weight: 600; }
+.hero-meta .v.countdown { font-variant-numeric: tabular-nums; color: var(--accent); }
+
+/* ===== 卡密列表：账本式，非悬浮卡片 ===== */
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 14px;
+}
+.section-head h2 { font-size: 1rem; font-weight: 600; }
+.section-head .count { font-size: 0.82rem; color: var(--muted); }
+.ledger { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.ledger-row {
+  display: flex; align-items: center; gap: 18px; padding: 16px 20px;
+  border-bottom: 1px solid var(--line-soft); transition: background 0.12s;
+}
+.ledger-row:last-child { border-bottom: none; }
+.ledger-row:hover { background: var(--bg-soft); }
+.idx {
+  width: 24px; flex-shrink: 0; text-align: right;
+  color: var(--muted); font-size: 0.8rem; font-variant-numeric: tabular-nums;
+}
+.key {
+  flex: 1; font-size: 1.02rem; letter-spacing: 0.06em;
+  color: var(--ink); word-break: break-all;
+}
+.copy-btn {
+  flex-shrink: 0; font-family: inherit; font-size: 0.82rem; font-weight: 500;
+  color: var(--ink); background: transparent; border: 1px solid var(--line);
+  padding: 6px 14px; border-radius: 5px; cursor: pointer; transition: all 0.12s;
+  min-width: 64px;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn.done { border-color: var(--good); color: var(--good); }
+
+/* ===== 空/加载/错误状态 ===== */
+.state { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 0.9rem; }
+.state.err { color: #e07a6b; }
+
+/* ===== 操作区 ===== */
+.actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  padding: 12px 24px; border-radius: 6px; border: 1px solid transparent; transition: background 0.15s, border-color 0.15s;
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover { background: #e4af1b; }
+.btn-ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== 使用说明 ===== */
+.notice { margin-top: 40px; font-size: 0.88rem; color: var(--muted); }
+.notice h3 { font-size: 0.78rem; color: var(--ink); font-weight: 600; letter-spacing: 0.04em; margin-bottom: 12px; }
+.notice ol { margin-left: 1.2em; }
+.notice li { margin: 6px 0; }
+.notice b { color: var(--ink); font-weight: 600; }
+
+/* ===== 页脚 ===== */
+footer { border-top: 1px solid var(--line); padding: 28px 24px; text-align: center; }
+footer p { font-size: 0.8rem; color: var(--muted); }
+
+@media (max-width: 560px) {
+  .topnav { gap: 16px; }
+  .topnav a { font-size: 0.82rem; }
+  main { padding: 48px 20px 72px; }
+  .hero-meta { gap: 16px; }
+  .ledger-row { padding: 14px 14px; gap: 12px; }
+  .key { font-size: 0.92rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">TL</span>
+      <span>干声分离器<small> · 每日免费卡密</small></span>
+    </div>
+    <nav class="topnav">
+      <a href="index.html">首页</a>
+      <a href="music.html">免费版</a>
+      <a href="vip.html">VIP 下载</a>
+      <a href="free.html" class="active">免费卡密</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">每日免费 · 仅当日有效</div>
+    <h1>今天 <em>5 张</em>免费卡，领完即止。</h1>
+    <p>免费卡与付费卡密同等权限。复制任意一张，到 VIP 下载页输入卡密激活即可使用，一卡一机，次日 0 点作废。</p>
+    <div class="hero-meta">
+      <div><span class="k">今日</span><span class="v" id="dateText">--</span></div>
+      <div><span class="k">距刷新</span><span class="v countdown" id="countdown">--:--:--</span></div>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2>今日卡密</h2>
+    <span class="count" id="cardCount">--</span>
+  </div>
+  <div class="ledger" id="ledger">
+    <div class="state">正在读取今日卡密…</div>
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    <button class="btn btn-primary" id="copyAll">复制全部卡密</button>
+    <a class="btn btn-ghost" href="vip.html">去 VIP 下载页激活</a>
+  </div>
+
+  <div class="notice">
+    <h3>使用说明</h3>
+    <ol>
+      <li>复制任意一张免费卡（每人限用一张，先到先得）。</li>
+      <li>前往 <b>VIP 下载页</b>，点「购买卡密下载」输入卡密完成激活。</li>
+      <li>免费卡仅<b>当日有效</b>，次日 0 点自动作废并生成新一批。</li>
+    </ol>
+  </div>
+</main>
+
+<footer><p>TL 工作室 &copy; 2026 · 每日免费卡密</p></footer>
+
+<script>
+const API = 'https://api.tlstudio.cn/daily-free';
+let CARDS = [];
+const $ = id => document.getElementById(id);
+
+function fmtDate(s) {
+  if (!s) return '--';
+  const [y, m, d] = s.split('-');
+  return y + '/' + m + '/' + d;
+}
+
+// 距下次中国时区（UTC+8）0 点的倒计时
+function updateCountdown() {
+  const now = new Date();
+  const cn = new Date(now.getTime() + 8 * 3600 * 1000);
+  const next = new Date(Date.UTC(cn.getUTCFullYear(), cn.getUTCMonth(), cn.getUTCDate() + 1));
+  const diff = next.getTime() - cn.getTime();
+  const p = n => String(n).padStart(2, '0');
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  $('countdown').textContent = p(h) + ':' + p(m) + ':' + p(s);
+  if (diff <= 0) loadCards();
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand('copy'); document.body.removeChild(ta); return ok;
+    } catch (e2) { return false; }
+  }
+}
+
+function render() {
+  const ledger = $('ledger');
+  if (!CARDS.length) {
+    ledger.innerHTML = '<div class="state err">今日免费卡已领完或暂不可用，请明天再来。</div>';
+    $('cardCount').textContent = '';
+    $('actions').hidden = true;
+    return;
+  }
+  ledger.innerHTML = '';
+  CARDS.forEach((key, i) => {
+    const row = document.createElement('div');
+    row.className = 'ledger-row';
+    row.innerHTML =
+      '<span class="idx mono">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<span class="key mono">' + key + '</span>' +
+      '<button class="copy-btn" data-key="' + key + '">复制</button>';
+    ledger.appendChild(row);
+  });
+  $('cardCount').textContent = CARDS.length + ' 张';
+  $('actions').hidden = false;
+
+  ledger.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.onclick = async () => {
+      const ok = await copyText(btn.getAttribute('data-key'));
+      btn.textContent = ok ? '已复制' : '失败';
+      btn.classList.add('done');
+      setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('done'); }, 1500);
+    };
+  });
+}
+
+async function loadCards() {
+  $('ledger').innerHTML = '<div class="state">正在读取今日卡密…</div>';
+  try {
+    const res = await fetch(API, { cache: 'no-store' });
+    const data = await res.json();
+    if (data.ok) {
+      CARDS = data.cards || [];
+      $('dateText').textContent = fmtDate(data.date);
+    } else {
+      CARDS = [];
+    }
+  } catch (e) {
+    CARDS = [];
+  }
+  render();
+}
+
+$('copyAll').onclick = async () => {
+  if (!CARDS.length) return;
+  const ok = await copyText(CARDS.join('\n'));
+  const btn = $('copyAll');
+  const old = btn.textContent;
+  btn.textContent = ok ? '已复制 ' + CARDS.length + ' 张' : '复制失败';
+  setTimeout(() => { btn.textContent = old; }, 2000);
+};
+
+loadCards();
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>

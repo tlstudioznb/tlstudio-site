@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0c1211">
 <title>零点防线 · ZERO HOUR</title>
 <style>
@@ -17,9 +17,30 @@
 @media(max-width:880px){.sidebar{display:none}.arena{height:65vh;min-height:470px}.intro h2{font-size:58px}.start-symbol{right:12%;width:180px;height:180px}.health-bar{width:75px}.section-head{margin-bottom:13px}.hud{margin-bottom:12px}.header{margin-bottom:23px}.footer{margin-top:18px}}
 @media(max-width:600px){.app{padding:15px 12px 14px}.header{margin-bottom:22px}.brand{font-size:17px}.brand small{font-size:8px;letter-spacing:2px}.logo{width:34px;height:34px}.identity{gap:10px}.online,.header-divider{display:none}.header-right{gap:8px}.section-head h1{font-size:14px}.section-head h1 span{display:none}.eyebrow{font-size:8px}.mode-tag{font-size:9px;padding:6px 8px}.hud{grid-template-columns:repeat(4,1fr)}.stat{padding:11px 9px}.stat-top{font-size:9px;letter-spacing:0}.stat-top svg{display:none}.stat-value{font-size:21px}.stat-content{gap:4px;margin-top:9px}.stat-unit{font-size:8px}.health-bar{display:none}.arena{min-height:465px;height:64vh;max-height:760px}.overlay{padding:30px 25px}.intro h2{font-size:46px;letter-spacing:1px}.intro p{font-size:11px;max-width:270px}.mission-tag{font-size:8px;letter-spacing:1px;margin-bottom:23px}.start-symbol{right:-16px;width:160px;height:160px;opacity:.07}.start-meta{gap:12px;font-size:9px}.arena-label{left:13px;font-size:8px;top:14px}.arena-corner{right:13px;font-size:8px;top:14px}.arena-footer{left:13px;right:13px;font-size:8px}.controls-strip{font-size:9px;line-height:1.7}.restart-hint{display:none}.controls-group{gap:9px}.control kbd{font-size:8px;padding:2px 4px}.footer{font-size:8px;letter-spacing:0}.end-stats{gap:18px}.help-grid{font-size:11px;gap:18px 8px}.help-inner h2{font-size:21px}}
 @media(pointer:coarse){.mobile-controls.playing{display:flex}.controls-strip .desktop-hint{display:none}.arena{cursor:auto}.touch-hint{display:block!important}}
+/* ==== 移动端体验增强（动态视口 / 手势 / 安全区 / 横屏提示 / 弹窗） ==== */
+html,body{overscroll-behavior:none}
+body{touch-action:manipulation;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+.arena{height:clamp(470px,63vh,780px);height:clamp(470px,63dvh,780px)}
+@media(pointer:coarse){
+  .modal-back{padding:10px;align-items:flex-end;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  .modal{max-height:92dvh;border-radius:12px 12px 0 0;max-width:100%}
+  .modal-head{padding:15px 16px}.modal-body{padding:14px 16px 20px}
+  .modal-tabs{padding:11px 16px 0}
+  .gun-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+  .gun-card .gun-svg{height:36px}
+  .icon-button{width:40px;height:40px}
+}
+/* 横屏提示：俯视角枪战竖屏体验差，提示用户旋转 */
+.rotate-hint{display:none;position:fixed;inset:0;z-index:99;background:#0c1211;color:var(--text);flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:30px}
+.rotate-hint svg{width:56px;height:56px;color:var(--lime);animation:float 2.2s ease-in-out infinite}
+.rotate-hint b{font-size:18px;letter-spacing:2px}.rotate-hint span{font-size:12px;color:var(--muted);line-height:1.8;max-width:260px}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@supports(padding:max(0px)){.app{padding-left:max(26px,env(safe-area-inset-left));padding-right:max(38px,env(safe-area-inset-right))}}
+
 </style>
 </head>
 <body>
+<div class="rotate-hint" id="rotateHint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 4.5a7.5 7.5 0 1 0 7.5 7.5"/><path d="M9 1v3.5L12.5 2"/></svg><b>请旋转屏幕至横屏</b><span>零度防线为俯视角射击游戏，横屏可获得最佳瞄准视野与操作体验。</span></div>
 <div class="app">
 <header class="header">
  <div class="identity"><div class="logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5M12 6v12M6 12h12"/><circle cx="12" cy="12" r="3"/></svg></div><div class="brand">零点防线<small>ZERO HOUR / DEFENSE</small></div></div>
@@ -524,6 +545,37 @@ window.addEventListener('pagehide',function(){if(syncTimer){clearTimeout(syncTim
 
 initCloud();
 bindModal();
+// ==== 移动端手势与横屏防护 ====
+(function(){
+  // 阻止双指缩放 / 捏合缩放（iOS Safari）
+  document.addEventListener('gesturestart',e=>{e.preventDefault();},{passive:false});
+  document.addEventListener('gesturechange',e=>{e.preventDefault();},{passive:false});
+  document.addEventListener('gestureend',e=>{e.preventDefault();},{passive:false});
+  // 阻止页面整体橡皮筋滚动（尤其 iOS），但允许弹窗内部滚动
+  document.addEventListener('touchmove',e=>{
+    if(e.target.closest&&e.target.closest('.modal-body'))return;
+    if(e.touches&&e.touches.length>1){e.preventDefault();return;}
+    if(e.target.closest&&!e.target.closest('canvas,.mobile-controls')){e.preventDefault();}
+  },{passive:false});
+  // 双击缩放防护
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',e=>{
+    const now=Date.now();
+    if(now-lastTouchEnd<=300){e.preventDefault();}
+    lastTouchEnd=now;
+  },{passive:false});
+  // 横屏提示显隐（依据 pointer:coarse + 竖屏 + 小屏，CSS 已处理；此处兜底监听 orientationchange 重新触发）
+  const rth=$('rotateHint');
+  function checkRotate(){
+    const coarse=matchMedia('(pointer:coarse)').matches;
+    const portrait=matchMedia('(orientation:portrait)').matches;
+    const small=matchMedia('(max-width:820px)').matches;
+    rth.style.display=(coarse&&portrait&&small)?'flex':'none';
+  }
+  checkRotate();
+  window.addEventListener('orientationchange',()=>setTimeout(checkRotate,150));
+  window.addEventListener('resize',checkRotate);
+})();
 syncGoldUI();
 syncWeapon();updateHUD();resize();requestAnimationFrame(frame);
 })();

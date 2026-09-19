@@ -36,7 +36,71 @@ body{touch-action:manipulation;-webkit-text-size-adjust:100%;-webkit-tap-highlig
 .rotate-hint b{font-size:18px;letter-spacing:2px}.rotate-hint span{font-size:12px;color:var(--muted);line-height:1.8;max-width:260px}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 @supports(padding:max(0px)){.app{padding-left:max(26px,env(safe-area-inset-left));padding-right:max(38px,env(safe-area-inset-right))}}
-
+/* ==== 移动端 UI 精细适配 ==== */
+@media(max-width:560px){
+  /* 顶部 HUD 改为 2x2，舒展可读 */
+  .hud{grid-template-columns:1fr 1fr;border-radius:8px}
+  .stat{padding:13px 14px}
+  .stat-top{font-size:10px;letter-spacing:.5px}
+  .stat-value{font-size:24px}
+  .stat-unit{font-size:10px}
+  .stat-note{font-size:9px}
+  .health-bar{width:60px}
+  /* 标题区 */
+  .section-head{align-items:center;gap:10px}
+  .section-head h1{font-size:16px}
+  .eyebrow{font-size:9px}
+  .mode-tag{font-size:9px;padding:6px 9px;white-space:nowrap}
+  /* header 触控优化 */
+  .header{gap:10px;margin-bottom:18px}
+  .brand{font-size:18px;letter-spacing:2px}
+  .brand small{font-size:8px;letter-spacing:1.5px}
+  .logo{width:36px;height:36px}
+  .header-right{gap:7px}
+  .icon-button{width:42px;height:42px;border-radius:7px}
+  .icon-button svg{width:17px;height:17px}
+  /* 按钮触控尺寸达标(≥44px) */
+  .weapon-button{padding:11px 3px;font-size:11px}
+  .arsenal-btn{padding:12px 4px;font-size:11px}
+  .modal-tab{font-size:12px;padding:11px 16px}
+  .modal-close{width:38px;height:38px}
+  /* overlay 排版 */
+  .overlay{padding:26px 22px}
+  .intro h2{font-size:40px}
+  .primary{gap:20px;padding:14px 20px;font-size:13px}
+  .secondary{font-size:13px;padding:13px 16px}
+  .mode-select{gap:8px;margin-bottom:18px}
+  .mode-option{padding:11px 12px}
+  .mode-option b{font-size:12px}
+  /* 结算面板 */
+  .end-stats{gap:12px;margin:16px 0 22px}
+  .end-stats b{font-size:22px}
+  /* 帮助面板 */
+  .help-grid{grid-template-columns:1fr;gap:13px;font-size:12px}
+  .help-inner h2{font-size:24px}
+  /* footer */
+  .footer{flex-direction:column;gap:6px;align-items:flex-start}
+}
+@media(max-width:380px){
+  .stat-value{font-size:21px}
+  .stat{padding:11px 11px}
+  .intro h2{font-size:34px}
+  .brand{font-size:16px}
+  .icon-button{width:40px;height:40px}
+  .header-right{gap:5px}
+  .mode-option small{font-size:9px}
+  .primary{gap:12px;padding:13px 16px}
+}
+/* 移动端弹窗内部细节 */
+@media(pointer:coarse){
+  .acc-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px}
+  .acc-card{padding:8px 4px}.acc-name{font-size:9px}
+  .gun-detail-stats{grid-template-columns:1fr;gap:5px}
+  .modal-foot{flex-direction:column-reverse;gap:8px}
+  .modal-foot .primary,.modal-foot .ghost{width:100%;justify-content:center;padding:13px}
+  .weapon-spec{gap:12px}.weapon-spec b{font-size:11px}
+  #cloudRestoreInput{font-size:11px;padding:11px 10px}
+}
 </style>
 </head>
 <body>

@@ -23,7 +23,7 @@
 <div class="app">
 <header class="header">
  <div class="identity"><div class="logo"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 8V3h5m8 0h5v5M3 16v5h5m8 0h5v-5M12 6v12M6 12h12"/><circle cx="12" cy="12" r="3"/></svg></div><div class="brand">零点防线<small>ZERO HOUR / DEFENSE</small></div></div>
- <div class="header-right"><div class="online"><i class="dot"></i>LOCAL OPERATION · 离线可玩</div><div class="header-divider"></div><button class="icon-button" id="soundButton" title="开启音效" aria-label="开启音效"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="soundMark" d="m16 9 6 6m0-6-6 6"/></svg></button><button class="icon-button" id="helpButton" title="操作说明" aria-label="操作说明"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16v.5"/></svg></button><button class="icon-button" id="pauseButton" title="暂停游戏 (Esc)" aria-label="暂停游戏"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5" width="3" height="14" rx="1"/><rect x="14" y="5" width="3" height="14" rx="1"/></svg></button></div>
+ <div class="header-right"><div class="online"><i class="dot" id="cloudDot"></i><span id="cloudLabel">本地存档</span></div><div class="header-divider"></div><button class="icon-button" id="soundButton" title="关闭音效" aria-label="关闭音效" style="color:#c3f58b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path id="soundMark" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></svg></button><button class="icon-button" id="cloudButton" title="云端存档" aria-label="云端存档"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 19a4.5 4.5 0 1 1 .5-8.97 6 6 0 0 1 11.6 1.47A3.5 3.5 0 0 1 17.5 19h-11Z"/><path d="M12 16v-6m0 0-2 2m2-2 2 2"/></svg></button><button class="icon-button" id="helpButton" title="操作说明" aria-label="操作说明"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16v.5"/></svg></button><button class="icon-button" id="pauseButton" title="暂停游戏 (Esc)" aria-label="暂停游戏"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5" width="3" height="14" rx="1"/><rect x="14" y="5" width="3" height="14" rx="1"/></svg></button></div>
 </header>
 <div class="section-head"><div><div class="eyebrow">OPERATIONS / 001</div><h1>生存行动<span>没有退路，只有下一波。</span></h1></div><div class="mode-tag">双模式 · 有限 / 无限</div></div>
 <section class="hud" aria-label="战斗状态">
@@ -45,9 +45,9 @@
    <div class="overlay" id="introOverlay"><div class="start-symbol"></div><div class="intro"><div class="mission-tag">行动代号 / NIGHTFALL PROTOCOL</div><h2>守住最后<br>一道<em>防线。</em></h2><p>前哨已失联，增援不会到来。<br>利用掩体，保持移动，在不断逼近的敌人中活下去。</p><div class="mode-select" id="modeSelect"><button class="mode-option active" data-mode="finite"><b>有限模式</b><small>消灭 50 名敌人即可撤离</small></button><button class="mode-option" data-mode="infinite"><b>无限模式</b><small>无尽波次 · 撑得越久越强</small></button></div><button class="primary" id="startButton">开始行动<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button><span class="enter-tip">[ ENTER ]</span><div class="start-meta"><span><i></i>双武器切换</span><span><i></i>有限弹药 · 拾取补给</span><span><i id="modeLabel">有限 · 50 杀</i></span></div></div></div>
    <div class="overlay hidden" id="pauseOverlay"><div class="intro"><div class="mission-tag">TACTICAL PAUSE</div><h2>稍作<em>休整。</em></h2><p>战场已暂停。准备好后，继续守住你的阵地。</p><button class="primary" id="resumeButton">继续行动 <span>↗</span></button><button class="secondary" id="pauseRestartButton">重新开始</button></div></div>
    <div class="overlay hidden" id="endOverlay"><div class="intro"><div class="mission-tag" id="endTag">OPERATION COMPLETE / 行动结束</div><h2>每一次坚持，<br>都算<em>胜利。</em></h2><div class="end-stats"><div><b id="endScore">0</b><span>行动得分</span></div><div><b id="endKills">0</b><span>消灭敌人</span></div><div><b id="endTime">00:00</b><span>存活时间</span></div></div><p id="endSummary">整装，再次出发。</p><button class="primary" id="restartButton">再次行动 <span>↗</span></button><span class="enter-tip">[ ENTER ]</span></div></div>
-   <div class="overlay help-overlay hidden" id="helpOverlay"><div class="help-inner"><div class="mission-tag">FIELD MANUAL / 战场手册</div><h2>活下去，保持移动。</h2><div class="help-grid"><div><kbd>W A S D</kbd> / 方向键移动</div><div><kbd>鼠标</kbd> 瞄准 · 左键射击</div><div><kbd>R</kbd> 换弹，消耗备弹</div><div><kbd>SHIFT</kbd> 朝移动方向冲刺</div><div><kbd>1 / 2</kbd> 切换双槽位武器</div><div><kbd>ESC / P</kbd> 暂停 / 继续</div></div><p>掩体可以挡住双方子弹。冲刺期间短暂无敌，冷却 3 秒。弹药有限：换弹消耗备弹，备弹耗尽需拾取蓝色弹药箱补给（敌人有概率掉落）。绿色补给恢复 25 点生命，每波清场恢复 15 点生命并补充备弹。连续击杀可获得最高 3 倍得分，每击杀奖励 100 金币。</p><p><b style="color:var(--lime)">游戏模式：</b>有限模式消灭 50 名敌人即可通关（胜利奖励 500 金币）；无限模式波次无限，撑得越久越强。</p><p>触屏设备：左侧摇杆移动，按住右侧射击键自动瞄准最近可见敌人；也可直接按住战场指定射击方向。</p><button class="primary" id="closeHelp">明白，返回行动 <span>↗</span></button></div></div>
+   <div class="overlay help-overlay hidden" id="helpOverlay"><div class="help-inner"><div class="mission-tag">FIELD MANUAL / 战场手册</div><h2>活下去，保持移动。</h2><div class="help-grid"><div><kbd>W A S D</kbd> / 方向键移动</div><div><kbd>鼠标</kbd> 瞄准 · 左键射击</div><div><kbd>R</kbd> 换弹，消耗备弹</div><div><kbd>SHIFT</kbd> 朝移动方向冲刺</div><div><kbd>长按 E</kbd> 传送到鼠标位置</div><div><kbd>1 / 2</kbd> 切换双槽位武器</div><div><kbd>ESC / P</kbd> 暂停 / 继续</div></div><p>掩体可以挡住双方子弹。冲刺期间短暂无敌，冷却 3 秒。长按 E 键蓄力约 0.2 秒可瞬移到鼠标位置（冷却 2 秒，落点不能是墙内）。弹药有限：换弹消耗备弹，备弹耗尽需拾取蓝色弹药箱补给（敌人有概率掉落）。绿色补给恢复 25 点生命，每波清场恢复 15 点生命并补充备弹。连续击杀可获得最高 3 倍得分，每击杀奖励 100 金币。</p><p><b style="color:var(--lime)">游戏模式：</b>有限模式消灭 50 名敌人即可通关（胜利奖励 500 金币）；无限模式波次无限，撑得越久越强。</p><p>触屏设备：左侧摇杆移动，按住右侧射击键自动瞄准最近可见敌人；也可直接按住战场指定射击方向。</p><button class="primary" id="closeHelp">明白，返回行动 <span>↗</span></button></div></div>
   </div>
-  <div class="controls-strip"><div class="controls-group desktop-hint"><span class="control"><kbd>WASD</kbd>移动</span><span class="control"><kbd>鼠标</kbd>瞄准 / 射击</span><span class="control"><kbd>R</kbd>换弹</span><span class="control"><kbd>SHIFT</kbd>冲刺</span><span class="control"><kbd>1 / 2</kbd>切换武器</span></div><span class="touch-hint" style="display:none">左侧摇杆移动 · 右侧按住射击 · 自动瞄准</span><span class="restart-hint">ESC / 暂停</span></div>
+  <div class="controls-strip"><div class="controls-group desktop-hint"><span class="control"><kbd>WASD</kbd>移动</span><span class="control"><kbd>鼠标</kbd>瞄准 / 射击</span><span class="control"><kbd>R</kbd>换弹</span><span class="control"><kbd>SHIFT</kbd>冲刺</span><span class="control"><kbd>长按 E</kbd>传送</span><span class="control"><kbd>1 / 2</kbd>切换武器</span></div><span class="touch-hint" style="display:none">左侧摇杆移动 · 右侧按住射击 · 自动瞄准</span><span class="restart-hint">ESC / 暂停</span></div>
  </main>
  <aside class="sidebar">
   <section class="card"><div class="card-head">当前装备 <span>LOADOUT / <b id="weaponSlot">01</b></span></div><div class="weapon-visual"><svg id="rifleSvg" viewBox="0 0 240 85" fill="none"><path d="m15 34 42 2 8-10h76l9 6h43v9h-48l-14 10H71l-15-7-18 16H18z" fill="#7b8c64"/><path d="M77 48h22l-5 22H80z" fill="#586b45"/><path d="m104 48 19-1 11 25-17 4z" fill="#8c9e70"/><path d="M133 29h11v16h-11zM68 29h60v5H68z" fill="#a8ba87"/><path d="M193 34h26v5h-26zM214 31h8v11h-8z" fill="#9eaf7d"/><path d="M91 25v-8h28v8M76 50l-4 14h10M129 52h17l-2 9h-13" stroke="#82936d" stroke-width="3"/><path d="m22 39 29 2-15 12H22z" fill="#435535"/><path d="M155 34v7m8-7v7m8-7v7m8-7v7" stroke="#354b29" stroke-width="3"/><path d="M63 30v16M74 38h40" stroke="#536740" stroke-width="2"/></svg></div><div class="weapon-name" id="weaponName">AR-30 / 游骑兵</div><div class="weapon-type" id="weaponType">全自动突击步枪 · 稳定中远距离输出</div><div class="weapon-spec"><div>伤害<b id="damageSpec">26</b></div><div>射速<b id="rateSpec">600 RPM</b></div><div>弹匣<b id="magSpec">30 RDS</b></div></div><div class="weapon-switch"><button class="weapon-button active" id="rifleButton"><span>1</span>突击步枪</button><button class="weapon-button" id="shotgunButton"><span>2</span>霰弹枪</button></div><div class="coin-row"><span>军需金币 <i style="font-style:normal">CREDITS</i></span><b id="goldValue">0</b></div><div class="arsenal-actions"><button class="arsenal-btn primary-arsenal" id="shopOpenBtn">军械库</button><button class="arsenal-btn" id="warehouseOpenBtn">仓库</button></div></section>
@@ -62,6 +62,7 @@
 <div class="modal-back hidden" id="shopModal"><div class="modal"><div class="modal-head"><h3>军械库 <span style="color:var(--muted);font-size:10px;letter-spacing:2px">ARMORY</span></h3><span class="gold">💰 <b id="shopGold">0</b> <i>CREDITS</i></span><button class="modal-close" data-close="shopModal">✕</button></div><div class="modal-tabs"><button class="modal-tab active" data-shoptab="weapons">枪械</button><button class="modal-tab" data-shoptab="acc">配件</button></div><div class="modal-body" id="shopBody"></div></div></div>
 <div class="modal-back hidden" id="warehouseModal"><div class="modal"><div class="modal-head"><h3>仓库 <span style="color:var(--muted);font-size:10px;letter-spacing:2px">ARMORY LOCKER</span></h3><span class="gold">💰 <b id="warehouseGold">0</b> <i>CREDITS</i></span><button class="modal-close" data-close="warehouseModal">✕</button></div><div class="modal-tabs"><button class="modal-tab active" data-whtab="weapons">枪械</button><button class="modal-tab" data-whtab="acc">配件</button></div><div class="modal-body" id="warehouseBody"></div></div></div>
 <div class="modal-back hidden" id="gunDetailModal"><div class="modal" style="max-width:600px"><div class="modal-head"><h3 id="gunDetailTitle">枪械详情</h3><button class="modal-close" data-close="gunDetailModal">✕</button></div><div class="modal-body" id="gunDetailBody"></div></div></div>
+<div class="modal-back hidden" id="cloudModal"><div class="modal" style="max-width:520px"><div class="modal-head"><h3>云端存档 <span style="color:var(--muted);font-size:10px;letter-spacing:2px">CLOUD SAVE</span></h3><button class="modal-close" data-close="cloudModal">✕</button></div><div class="modal-body"><p id="cloudStatusText" style="margin:2px 0 15px;color:var(--muted);font-size:11px;line-height:1.7">进度会自动同步到云端，换设备可无损恢复。</p><div style="display:flex;gap:9px;margin-bottom:16px"><button class="arsenal-btn" id="cloudSyncBtn">立即同步</button><button class="arsenal-btn primary-arsenal" id="cloudCodeBtn">生成存档码</button></div><div id="cloudCodeBox" style="display:none;margin-bottom:16px"><div style="font:10px var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:8px">你的存档码（在其他设备输入即可恢复进度）</div><div id="cloudCodeValue" style="font:600 18px var(--mono);letter-spacing:2px;color:var(--lime);background:#0e1711;border:1px solid var(--line);padding:13px 15px;border-radius:5px;user-select:all;word-break:break-all"></div><button class="arsenal-btn" id="cloudCopyBtn" style="margin-top:9px">复制存档码</button></div><div style="border-top:1px solid var(--line);padding-top:15px"><div style="font:10px var(--mono);color:var(--muted);letter-spacing:1px;margin-bottom:8px">从存档码恢复</div><div style="display:flex;gap:8px"><input id="cloudRestoreInput" placeholder="粘贴存档码，如 LD-XXXX-XXXX-XXXX" style="flex:1;min-width:0;background:#0e1711;border:1px solid var(--line);border-radius:4px;color:var(--text);padding:10px 12px;font:12px var(--mono);letter-spacing:1px;outline:none"><button class="arsenal-btn" id="cloudRestoreBtn">恢复</button></div></div><p style="margin:15px 0 0;color:#5e6e5c;font-size:10px;line-height:1.8">说明：金币、枪械、配件、弹道、击杀音效与最高分都会自动上传；生成存档码后可在另一台设备输入以同步全部进度。</p></div></div></div>
 
 <script>
 'use strict';
@@ -147,9 +148,11 @@ function gunById(id){return GUNS.find(g=>g.id===id);}
 // 动态 weapons 数组：索引即槽位号，供原版代码 weapons[p.weapon] 使用
 function rebuildWeapons(){return LOADOUT.slots.map(s=>gunById(s.gunId)||GUNS[0]);}
 let weapons=rebuildWeapons();
-let width=0,height=0,scale=1,ox=0,oy=0,dpr=1,last=0,clock=0,mode='intro',beforeHelp='intro',best=0,audio=null,soundOn=false;
+let width=0,height=0,scale=1,ox=0,oy=0,dpr=1,last=0,clock=0,mode='intro',beforeHelp='intro',best=0,audio=null,soundOn=true;
 let gameMode='finite'; // 'finite' 有限(50杀) / 'infinite' 无限
 const FINITE_KILLS=50;
+const TP_HOLD=0.2,TP_CD=2; // 长按E传送：蓄力0.2秒，冷却2秒
+let eHold=0,tpCooldown=0;
 try{best=Number(localStorage.getItem('zero-hour-best-v1'))||0;}catch{}
 const keys=new Set(), mouse={x:780,y:450,down:false,inside:false}, touch={x:0,y:0,fire:false,auto:false,id:null};
 const state={player:null,enemies:[],bullets:[],particles:[],pickups:[],texts:[],rings:[],trails:[],wave:0,score:0,kills:0,time:0,shots:0,hits:0,streak:0,comboTimer:0,toSpawn:0,spawnTimer:0,nextWave:0,cleared:false,completed:0,shake:0,flash:0,navTimer:0,toastTimer:0,bannerTimer:0};
@@ -163,7 +166,7 @@ state.player=playerDefault();
 function tone(freq,length=.06,type='triangle',volume=.04,end=0){if(!soundOn||!audio)return;try{const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.setValueAtTime(freq,audio.currentTime);if(end)o.frequency.exponentialRampToValueAtTime(end,audio.currentTime+length);g.gain.setValueAtTime(volume,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+length);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+length);}catch{}}
 function initAudio(){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume().catch(()=>{});}catch{}}
 function setOverlay(id,visible){$(id).classList.toggle('hidden',!visible);}
-function clearInputs(){keys.clear();mouse.down=false;touch.fire=false;touch.auto=false;touch.x=touch.y=0;touch.id=null;$('joystickKnob').style.transform='';}
+function clearInputs(){keys.clear();mouse.down=false;touch.fire=false;touch.auto=false;touch.x=touch.y=0;touch.id=null;eHold=0;$('joystickKnob').style.transform='';}
 function start(){clearInputs();state.player=playerDefault();Object.assign(state,{enemies:[],bullets:[],particles:[],pickups:[],texts:[],rings:[],trails:[],wave:0,score:0,kills:0,time:0,shots:0,hits:0,streak:0,comboTimer:0,toSpawn:0,spawnTimer:0,nextWave:0,cleared:false,completed:0,shake:0,flash:0,navTimer:0,toastTimer:0,bannerTimer:0});nav=null;navTarget=-1;mode='playing';['introOverlay','pauseOverlay','endOverlay','helpOverlay'].forEach(id=>setOverlay(id,false));$('toast').classList.remove('show');$('mobileControls').classList.add('playing');$('fieldStatus').innerHTML='● <b>交战中</b> / OPERATION LIVE';if(soundOn)initAudio();syncWeapon();nextWave();updateHUD();canvas.focus({preventScroll:true});}
 function pause(){if(mode==='playing'){mode='paused';clearInputs();setOverlay('pauseOverlay',true);$('mobileControls').classList.remove('playing');$('fieldStatus').innerHTML='Ⅱ <b>已暂停</b> / TACTICAL PAUSE';}else if(mode==='paused'){resume();}}
 function resume(){if(mode!=='paused')return;mode='playing';setOverlay('pauseOverlay',false);$('mobileControls').classList.add('playing');$('fieldStatus').innerHTML='● <b>交战中</b> / OPERATION LIVE';canvas.focus({preventScroll:true});}
@@ -194,6 +197,9 @@ function fire(){const p=state.player,w=weapons[p.weapon];const magMax=gameMode==
 function hurt(damage){const p=state.player;if(p.invulnerable>0||mode!=='playing')return;p.hp=Math.max(0,p.hp-damage);p.invulnerable=.55;state.flash=.2;state.shake=5;state.streak=0;state.comboTimer=0;sparks(p.x,p.y,'#d9eab8',10);tone(110,.1,'square',.035,55);if(p.hp<=0)end();}
 function killEnemy(e){state.kills++;state.streak++;state.comboTimer=3;const mult=Math.min(3,1+Math.floor((state.streak-1)/3)*.5),gain=Math.round((e.type==='heavy'?200:e.type==='gunner'?125:100)*mult);state.score+=gain;floating(e.x,e.y-21,'+'+gain);sparks(e.x,e.y,e.type==='heavy'?'#d5a070':'#d88770',15,180);if(Math.random()<.12)state.pickups.push({x:e.x,y:e.y,life:20,kind:'ammo'});if(Math.random()<.15||(state.player.hp<40&&Math.random()<.28))state.pickups.push({x:e.x,y:e.y,life:20,kind:'hp'});tone(500,.045,'triangle',.025,750);const coinGain=100;gold+=coinGain;saveGold();floating(e.x,e.y-36,'+'+coinGain+'💵','#eeb77c');playKillSound();if(gameMode==='finite'&&state.kills>=FINITE_KILLS){victory();}}
 function update(dt){const p=state.player;state.time+=dt;p.cooldown=Math.max(0,p.cooldown-dt);p.dashCooldown=Math.max(0,p.dashCooldown-dt);p.invulnerable=Math.max(0,p.invulnerable-dt);p.recoil=Math.max(0,p.recoil-dt*12);state.shake=Math.max(0,state.shake-dt*24);state.flash=Math.max(0,state.flash-dt);state.comboTimer=Math.max(0,state.comboTimer-dt);if(!state.comboTimer)state.streak=0;state.navTimer-=dt;if(state.navTimer<=0){buildNav();state.navTimer=.3;}
+ tpCooldown=Math.max(0,tpCooldown-dt);
+ if(keys.has('e')&&tpCooldown<=0&&mode==='playing'){eHold+=dt;if(eHold>=TP_HOLD){const tx=clamp(mouse.x,40,WORLD.w-40),ty=clamp(mouse.y,40,WORLD.h-40);if(!walls.some(w=>circleRect(tx,ty,p.r,w))){sparks(p.x,p.y,'#6ab8ff',18,160);p.x=tx;p.y=ty;sparks(p.x,p.y,'#6ab8ff',18,160);state.rings.push({x:p.x,y:p.y,r:8,max:38,life:.5,maxLife:.5,color:'#6ab8ff'});tone(250,.2,'sine',.08,400);eHold=0;tpCooldown=TP_CD;}}
+ }else if(!keys.has('e')){eHold=0;}
  if(state.bannerTimer>0){state.bannerTimer-=dt;if(state.bannerTimer<=0)$('waveMessage').classList.remove('show');}if(state.toastTimer>0){state.toastTimer-=dt;if(state.toastTimer<=0)$('toast').classList.remove('show');}
  if(p.reload>0){p.reload=Math.max(0,p.reload-dt);if(p.reload===0){const magMax=gameMode==='finite'?Math.min(weapons[p.weapon].max,50):weapons[p.weapon].max;const need=magMax-p.ammo[p.weapon];const take=gameMode==='infinite'?need:Math.min(need,p.reserve[p.weapon]);p.ammo[p.weapon]+=take;if(gameMode!=='infinite')p.reserve[p.weapon]-=take;tone(550,.055,'square',.02);}}
  let mx=(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0)+touch.x,my=(keys.has('s')||keys.has('arrowdown')?1:0)-(keys.has('w')||keys.has('arrowup')?1:0)+touch.y;let len=Math.hypot(mx,my);if(len>1){mx/=len;my/=len;}if(p.dashTime>0){p.dashTime-=dt;move(p,p.dx*820*dt,p.dy*820*dt);state.particles.push({x:p.x,y:p.y,vx:0,vy:0,life:.18,max:.18,color:'#c3f58b',size:9});}else{move(p,mx*225*dt,my*225*dt);}p.step+=Math.hypot(mx,my)*dt*14;
@@ -224,6 +230,7 @@ function render(){ctx.setTransform(dpr,0,0,dpr,0,0);rect(0,0,width,height,'#1018
  for(const b of state.bullets){const a=Math.atan2(b.vy,b.vx),len=b.enemy?16:24;line(b.x-Math.cos(a)*len,b.y-Math.sin(a)*len,b.x,b.y,b.enemy?'#e9987277':'#d7eda866',b.enemy?3:2);line(b.x-Math.cos(a)*len*.5,b.y-Math.sin(a)*len*.5,b.x,b.y,b.enemy?'#ffb991':'#f5f5d0',b.enemy?2:1.5);}
  for(const p of state.particles){ctx.globalAlpha=p.life/p.max;rect(p.x-p.size/2,p.y-p.size/2,p.size,p.size,p.color);}ctx.globalAlpha=1;ctx.textAlign='center';for(const text of state.texts){ctx.globalAlpha=Math.min(1,text.life*2);ctx.font='bold 15px Consolas,monospace';ctx.fillStyle=text.color;ctx.fillText(text.text,text.x,text.y);}ctx.globalAlpha=1;ctx.textAlign='left';
  if(mode==='playing'&&mouse.inside&&!touch.auto){const x=mouse.x,y=mouse.y,r=7+state.player.recoil*3;ctx.strokeStyle='#d7e9be';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.stroke();for(const [a,b,c,d]of[[x-r-5,y,x-r-1,y],[x+r+1,y,x+r+5,y],[x,y-r-5,x,y-r-1],[x,y+r+1,x,y+r+5]])line(a,b,c,d,'#d7e9be',1.2);circle(x,y,1,'#edf5e0');}
+ if(mode==='playing'&&eHold>0&&tpCooldown<=0){const x=mouse.x,y=mouse.y,prog=Math.min(1,eHold/TP_HOLD),r=24;ctx.strokeStyle='rgba(106,184,255,'+(0.3+prog*0.6)+')';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x,y,r,-Math.PI/2,-Math.PI/2+Math.PI*2*prog);ctx.stroke();ctx.fillStyle='rgba(106,184,255,'+(0.2+prog*0.4)+')';ctx.beginPath();ctx.arc(x,y,r*0.3,0,Math.PI*2);ctx.fill();if(prog>0.5){ctx.fillStyle='rgba(255,255,255,0.7)';ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fill();}}
  ctx.restore();const vignette=ctx.createRadialGradient(width/2,height/2,height*.18,width/2,height/2,Math.max(width,height)*.65);vignette.addColorStop(0,'#08100700');vignette.addColorStop(1,'#08100785');ctx.fillStyle=vignette;ctx.fillRect(0,0,width,height);if(state.flash>0&&mode==='playing'){ctx.fillStyle='rgba(211,87,62,'+state.flash*.5+')';ctx.fillRect(0,0,width,height);}}
 let hudTimer=0;function frame(t){let dt=last?Math.min((t-last)/1000,.035):0;last=t;clock=t/1000;if(mode==='playing'){update(dt);hudTimer+=dt;if(hudTimer>.075){updateHUD();hudTimer=0;}}render();requestAnimationFrame(frame);}
 function pointerPosition(e){const r=canvas.getBoundingClientRect();mouse.x=(e.clientX-r.left-ox)/scale;mouse.y=(e.clientY-r.top-oy)/scale;mouse.inside=true;}
@@ -233,6 +240,11 @@ $('startButton').onclick=start;$('restartButton').onclick=start;$('pauseRestartB
 // 模式选择
 document.querySelectorAll('.mode-option').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.mode-option').forEach(b=>b.classList.toggle('active',b===btn));gameMode=btn.dataset.mode;$('modeLabel').textContent=gameMode==='finite'?'有限 · 50 杀':'无限 · 无尽波次';}));
 $('soundButton').onclick=()=>{soundOn=!soundOn;if(soundOn)initAudio();$('soundButton').title=soundOn?'关闭音效':'开启音效';$('soundButton').setAttribute('aria-label',soundOn?'关闭音效':'开启音效');$('soundButton').style.color=soundOn?'#c3f58b':'';$('soundMark').setAttribute('d',soundOn?'M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14':'m16 9 6 6m0-6-6 6');tone(600,.08);};
+// 默认开启音效：页面加载即初始化音频，首次用户交互时确保 AudioContext 处于运行态
+initAudio();
+window.addEventListener('pointerdown',()=>{if(soundOn)initAudio();},{once:false});
+window.addEventListener('keydown',()=>{if(soundOn)initAudio();},{once:false});
+
 const joy=$('joystick'),knob=$('joystickKnob');function joystickMove(e){if(touch.id!==e.pointerId)return;const r=joy.getBoundingClientRect();let x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,l=Math.hypot(x,y),max=35;if(l>max){x=x/l*max;y=y/l*max;}touch.x=x/max;touch.y=y/max;touch.auto=true;knob.style.transform='translate('+x+'px,'+y+'px)';}joy.addEventListener('pointerdown',e=>{if(mode!=='playing')return;e.preventDefault();touch.id=e.pointerId;joy.setPointerCapture(e.pointerId);joystickMove(e);});joy.addEventListener('pointermove',joystickMove);function joystickEnd(e){if(e.pointerId!==touch.id)return;touch.id=null;touch.x=touch.y=0;knob.style.transform='';}joy.addEventListener('pointerup',joystickEnd);joy.addEventListener('pointercancel',joystickEnd);
 const mobileFire=$('mobileFire');mobileFire.addEventListener('pointerdown',e=>{if(mode!=='playing')return;e.preventDefault();touch.fire=true;touch.auto=true;mobileFire.setPointerCapture(e.pointerId);});mobileFire.addEventListener('pointerup',()=>touch.fire=false);mobileFire.addEventListener('pointercancel',()=>touch.fire=false);
 // ==================== 枪械矢量建模（适配零点防线 SVG 风格） ====================
@@ -421,6 +433,96 @@ function bindModal(){
   document.querySelectorAll('[data-shoptab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-shoptab]').forEach(x=>x.classList.toggle('active',x===b));renderShop(b.dataset.shoptab);}));
   document.querySelectorAll('[data-whtab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-whtab]').forEach(x=>x.classList.toggle('active',x===b));renderWarehouse(b.dataset.whtab);}));
 }
+// ==== 云端存档（自动存档 + 存档码）====
+const CLOUD_API='https://api.tlstudio.cn', DEV_KEY='zh-guns-device', SYNC_KEY='zh-guns-syncedAt';
+function getDeviceId(){
+  let id='';try{id=localStorage.getItem(DEV_KEY)||'';}catch{}
+  if(id)return id;
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789',a=new Uint32Array(24);crypto.getRandomValues(a);
+  let s='';for(let i=0;i<24;i++)s+=chars[a[i]%chars.length];id='dv-'+s;
+  try{localStorage.setItem(DEV_KEY,id);}catch{}
+  return id;
+}
+const DEVICE_ID=getDeviceId();
+function setCloudStatus(text){const a=$('cloudLabel');if(a)a.textContent=text;const b=$('cloudStatusText');if(b)b.textContent=text;const d=$('cloudDot');if(d)d.style.background=(/离线|失败|网络|错误/.test(text)?'#ef8d7e':'var(--lime)');}
+function collectSaveData(){return{v:1,gold,owned,loadout:LOADOUT,scardEquip,scardOwned,trailOwned,trailEquipped,ksOwned,ksEquipped,lotteryTickets,gamesPlayed,best};}
+function applySaveData(d){
+  if(!d||typeof d!=='object')return false;
+  if(typeof d.gold==='number')gold=d.gold;
+  if(Array.isArray(d.owned)){owned=d.owned.filter(id=>GUNS.some(g=>g.id===id));if(!owned.includes('m4_starter'))owned.push('m4_starter');if(!owned.includes('m12s_sky'))owned.push('m12s_sky');}
+  if(d.loadout&&Array.isArray(d.loadout.slots)){LOADOUT.slots=d.loadout.slots.map(sl=>gunById(sl&&sl.gunId)?sl:{gunId:'m4_starter'});LOADOUT.active=(d.loadout.active===0||d.loadout.active===1)?d.loadout.active:0;}
+  if(d.scardEquip&&typeof d.scardEquip==='object')scardEquip=d.scardEquip;
+  if(d.scardOwned&&typeof d.scardOwned==='object')scardOwned=d.scardOwned;
+  if(Array.isArray(d.trailOwned))trailOwned=d.trailOwned;
+  if(typeof d.trailEquipped==='string')trailEquipped=d.trailEquipped;
+  if(Array.isArray(d.ksOwned))ksOwned=d.ksOwned;
+  if(typeof d.ksEquipped==='string')ksEquipped=d.ksEquipped;
+  if(typeof d.lotteryTickets==='number')lotteryTickets=d.lotteryTickets;
+  if(typeof d.gamesPlayed==='number')gamesPlayed=d.gamesPlayed;
+  if(typeof d.best==='number'&&d.best>best){best=d.best;try{localStorage.setItem('zero-hour-best-v1',String(best));}catch{}}
+  store.set('gold',gold);store.set('owned',owned);store.set('loadout',LOADOUT);
+  store.set('scardEquip',scardEquip);store.set('scardOwned',scardOwned);store.set('trailOwned',trailOwned);store.set('trailEquipped',trailEquipped);store.set('ksOwned',ksOwned);store.set('ksEquipped',ksEquipped);
+  store.set('lotteryTickets',lotteryTickets);store.set('gamesPlayed',gamesPlayed);
+  weapons=rebuildWeapons();state.player.weapon=LOADOUT.active;
+  syncGoldUI();syncWeapon();updateHUD();
+  return true;
+}
+let syncTimer=null,suppressSync=false;
+function scheduleCloudSync(){if(suppressSync)return;if(syncTimer)clearTimeout(syncTimer);syncTimer=setTimeout(cloudSave,1200);}
+async function cloudSave(){
+  if(syncTimer){clearTimeout(syncTimer);syncTimer=null;}
+  if(suppressSync)return;
+  try{
+    const res=await fetch(CLOUD_API+'/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:DEVICE_ID,data:collectSaveData()})});
+    const j=await res.json();
+    if(j&&j.ok){try{localStorage.setItem(SYNC_KEY,String(j.updatedAt||Date.now()));}catch{}setCloudStatus('已同步 '+new Date().toLocaleTimeString());}
+    else setCloudStatus('同步失败');
+  }catch(e){setCloudStatus('离线 · 稍后重试');}
+}
+async function cloudLoad(){
+  try{
+    const res=await fetch(CLOUD_API+'/load',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:DEVICE_ID})});
+    const j=await res.json();
+    let syncedAt=0;try{syncedAt=Number(localStorage.getItem(SYNC_KEY))||0;}catch{}
+    if(j&&j.ok&&j.data){const ts=Number(j.updatedAt)||0;if(ts>syncedAt){suppressSync=true;applySaveData(j.data);suppressSync=false;try{localStorage.setItem(SYNC_KEY,String(ts));}catch{}toast('已从云端恢复存档');}else setCloudStatus('云端在线 · 最新');}
+    else setCloudStatus('云端在线 · 暂无存档');
+  }catch(e){setCloudStatus('离线模式 · 本地保存');}
+}
+async function genSaveCode(){
+  setCloudStatus('生成存档码中…');
+  try{
+    const res=await fetch(CLOUD_API+'/code',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:DEVICE_ID,data:collectSaveData()})});
+    const j=await res.json();
+    if(j&&j.ok&&j.code){$('cloudCodeValue').textContent=j.code;$('cloudCodeBox').style.display='block';setCloudStatus('存档码已生成');}
+    else setCloudStatus('生成失败 · 请重试');
+  }catch(e){setCloudStatus('网络错误 · 请重试');}
+}
+async function restoreFromCode(code){
+  const c=String(code||'').trim();
+  if(!c){toast('请输入存档码');return;}
+  setCloudStatus('恢复中…');
+  try{
+    const res=await fetch(CLOUD_API+'/load',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:c})});
+    const j=await res.json();
+    if(j&&j.ok&&j.data){suppressSync=true;applySaveData(j.data);suppressSync=false;try{localStorage.setItem(SYNC_KEY,String(j.updatedAt||Date.now()));}catch{}setCloudStatus('存档已恢复');toast('云端存档已恢复');scheduleCloudSync();}
+    else setCloudStatus('存档码无效或不存在');
+  }catch(e){setCloudStatus('网络错误 · 请重试');}
+}
+function initCloud(){
+  const _set=store.set.bind(store);
+  store.set=function(k,v){_set(k,v);scheduleCloudSync();};
+  $('cloudButton').addEventListener('click',()=>setOverlay('cloudModal',true));
+  $('cloudSyncBtn').addEventListener('click',()=>{setCloudStatus('同步中…');cloudSave();});
+  $('cloudCodeBtn').addEventListener('click',genSaveCode);
+  $('cloudCopyBtn').addEventListener('click',async()=>{const v=$('cloudCodeValue').textContent;if(!v)return;try{await navigator.clipboard.writeText(v);toast('存档码已复制');}catch(e){$('cloudCodeValue').select&&$('cloudCodeValue').select();toast('请手动复制');}});
+  const inp=$('cloudRestoreInput');
+  $('cloudRestoreBtn').addEventListener('click',()=>restoreFromCode(inp.value));
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')restoreFromCode(inp.value);});
+  cloudLoad();
+}
+window.addEventListener('pagehide',function(){if(syncTimer){clearTimeout(syncTimer);syncTimer=null;}try{navigator.sendBeacon(CLOUD_API+'/save',new Blob([JSON.stringify({key:DEVICE_ID,data:collectSaveData()})],{type:'text/plain'}));}catch(e){}});
+
+initCloud();
 bindModal();
 syncGoldUI();
 syncWeapon();updateHUD();resize();requestAnimationFrame(frame);

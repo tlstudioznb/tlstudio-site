@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TL 浏览器 · 功能多 更安全 无广告</title>
+<meta name="description" content="TL 浏览器 —— 内置 TLSTUDIO 双站入口的桌面浏览器，四重安全防护、广告拦截、下载中心、双站对照，单文件免安装。" />
+<style>
+  :root {
+    --bg: #0a0a0e;
+    --bg-soft: #0d0e14;
+    --panel: #101218;
+    --panel-2: #14161f;
+    --line: rgba(255, 255, 255, 0.07);
+    --text: #f2f4f8;
+    --text-secondary: #8b93a5;
+    --text-muted: #5d6573;
+    --accent: #57e6ff;
+    --accent-hover: #7a6bff;
+    --purple: #7a6bff;
+    --pink: #f472b6;
+    --success: #34d399;
+    --error: #f87171;
+    --radius: 16px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", "HarmonyOS Sans SC", sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: rgba(87, 230, 255, 0.25); }
+
+  /* ───────────────────────── 顶部导航 ───────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 64px;
+    transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .nav.scrolled {
+    background: rgba(10, 10, 14, 0.72);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border-bottom-color: var(--line);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; }
+  .nav-logo .dot {
+    width: 26px; height: 26px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    display: grid; place-items: center;
+    font-size: 13px; color: #081018; font-weight: 800;
+    box-shadow: 0 0 18px rgba(87, 230, 255, 0.35);
+  }
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-links a {
+    padding: 8px 14px; border-radius: 10px;
+    color: var(--text-secondary); font-size: 14px;
+    transition: color .2s ease, background .2s ease;
+  }
+  .nav-links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: #081018; font-weight: 700; font-size: 14px;
+    padding: 9px 18px; border-radius: 12px;
+    box-shadow: 0 4px 22px rgba(87, 230, 255, 0.28);
+    transition: transform .15s ease, box-shadow .2s ease;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(122, 107, 255, 0.42); }
+
+  .nav-burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+  .nav-burger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .2s; }
+
+  /* ───────────────────────── Hero ───────────────────────── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    overflow: hidden;
+  }
+  #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .hero-mask {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 38%, transparent 0%, rgba(10, 10, 14, 0.35) 52%, var(--bg) 82%);
+  }
+  .hero-inner { position: relative; z-index: 2; max-width: 860px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(87, 230, 255, 0.08);
+    border: 1px solid rgba(87, 230, 255, 0.22);
+    color: var(--accent);
+    font-size: 13px; padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 26px;
+  }
+  .hero-badge .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.55); }
+    70% { box-shadow: 0 0 0 9px rgba(52, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
+  }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .hero h1 .grad {
+    background: linear-gradient(120deg, var(--accent) 0%, var(--purple) 55%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p.sub {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 620px;
+    margin: 0 auto 34px;
+  }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary, .btn-ghost {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px; border-radius: 14px;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    color: #081018;
+    box-shadow: 0 6px 28px rgba(87, 230, 255, 0.32);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(122, 107, 255, 0.45); }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { border-color: rgba(255, 255, 255, 0.2); background: rgba(255, 255, 255, 0.04); }
+  .hero-meta { margin-top: 30px; font-size: 13px; color: var(--text-muted); display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero-meta .ok { color: var(--success); }
+
+  .scroll-hint {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+    z-index: 2; color: var(--text-muted); font-size: 12px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .scroll-hint .mouse { width: 22px; height: 34px; border: 2px solid var(--text-muted); border-radius: 12px; position: relative; }
+  .scroll-hint .mouse::after {
+    content: ""; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+    width: 3px; height: 7px; border-radius: 3px; background: var(--text-secondary);
+    animation: wheel 1.6s infinite;
+  }
+  @keyframes wheel { 0% { opacity: 1; top: 6px; } 100% { opacity: 0; top: 16px; } }
+
+  /* ───────────────────────── 通用 section ───────────────────────── */
+  section { padding: 96px 32px; position: relative; }
+  .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  .section-label {
+    display: inline-block; font-size: 12px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 14px; font-weight: 600;
+  }
+  .section-title { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.01em; }
+  .section-desc { color: var(--text-secondary); margin-top: 14px; font-size: 16px; }
+
+  /* ───────────────────────── Features ───────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .feature-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .feature-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .3s ease;
+  }
+  .feature-card:hover { transform: translateY(-6px); border-color: rgba(87, 230, 255, 0.25); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45); }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 22px; margin-bottom: 18px;
+    background: rgba(87, 230, 255, 0.1);
+    border: 1px solid rgba(87, 230, 255, 0.18);
+  }
+  .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--text-secondary); }
+
+  /* ───────────────────────── Highlights ───────────────────────── */
+  .highlights { max-width: 980px; margin: 0 auto; }
+  .highlight-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    padding: 40px 0;
+  }
+  .highlight-row + .highlight-row { border-top: 1px solid var(--line); }
+  .highlight-row h3 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .highlight-row p { color: var(--text-secondary); font-size: 15px; }
+  .highlight-visual {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 26px; text-align: center;
+  }
+  .shield-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .shield-item {
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px; text-align: left;
+  }
+  .shield-item .num { font-size: 22px; font-weight: 800; background: linear-gradient(120deg, var(--accent), var(--purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .shield-item .lbl { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* ───────────────────────── Tech specs ───────────────────────── */
+  .tech-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 30px; }
+  .tech-tag {
+    padding: 7px 16px; border-radius: 999px; font-size: 13px;
+    background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
+    color: var(--text-secondary);
+  }
+  .tech-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    max-width: 980px; margin: 0 auto;
+  }
+  .tech-cell {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 24px; text-align: center;
+  }
+  .tech-cell .v { font-size: 26px; font-weight: 800; color: var(--text); }
+  .tech-cell .k { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+
+  /* ───────────────────────── CTA ───────────────────────── */
+  .cta-bottom {
+    text-align: center;
+    padding: 110px 24px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(87, 230, 255, 0.08), transparent 60%);
+  }
+  .cta-bottom h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; margin-bottom: 16px; }
+  .cta-bottom p { color: var(--text-secondary); margin-bottom: 30px; font-size: 16px; }
+
+  /* ───────────────────────── Footer ───────────────────────── */
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 32px;
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a:hover { color: var(--text); }
+
+  /* ───────────────────────── 下载 Modal ───────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(4, 5, 8, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; padding: 24px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-dialog {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px 32px;
+    width: 100%; max-width: 460px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    animation: pop .22s ease;
+  }
+  @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .modal-dialog h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .modal-dialog .ver { color: var(--accent); font-size: 14px; margin-bottom: 20px; }
+  .dl-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; border-radius: 12px;
+    border: 1px solid var(--line); background: var(--panel-2);
+    margin-bottom: 12px; cursor: pointer;
+    transition: border-color .2s ease, background .2s ease;
+  }
+  .dl-option:hover { border-color: rgba(87, 230, 255, 0.35); background: rgba(87, 230, 255, 0.05); }
+  .dl-option .ico { font-size: 22px; }
+  .dl-option .name { font-weight: 700; font-size: 15px; }
+  .dl-option .sub { font-size: 12px; color: var(--text-muted); }
+  .modal-close {
+    margin-top: 14px; width: 100%; padding: 12px;
+    background: transparent; border: 1px solid var(--line);
+    color: var(--text-secondary); border-radius: 12px; font-size: 14px; cursor: pointer;
+  }
+  .modal-close:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.2); }
+
+  /* ───────────────────────── reveal 动画 ───────────────────────── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ───────────────────────── 响应式 ───────────────────────── */
+  @media (max-width: 900px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    .highlight-row { grid-template-columns: 1fr; gap: 24px; }
+    .nav-links { display: none; }
+    .nav-burger { display: flex; }
+    .nav.open .nav-links {
+      display: flex; flex-direction: column; position: absolute;
+      top: 64px; left: 0; right: 0; padding: 16px;
+      background: rgba(10, 10, 14, 0.97);
+      border-bottom: 1px solid var(--line);
+    }
+  }
+  @media (max-width: 640px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 64px 20px; }
+    .nav { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- 顶部导航 -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">
+      <span class="dot">TL</span>
+      TL 浏览器
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">功能</a>
+      <a href="#security">安全</a>
+      <a href="#specs">参数</a>
+      <a href="#download">下载</a>
+    </div>
+    <a class="nav-cta" href="#download">立即下载</a>
+    <button class="nav-burger" id="burger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-mask"></div>
+    <div class="hero-inner">
+      <div class="hero-badge"><span class="pulse"></span>v1.0.0 已发布 · 免安装</div>
+      <h1>功能多 <span class="grad">更安全</span><br />没广告的浏览器</h1>
+      <p class="sub">TL 浏览器内置 TLSTUDIO 双站入口，自带广告拦截、主页守护、下载中心与双站对照，是 360 安全浏览器的轻量替代。</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#download">免费下载 · 单文件 exe</a>
+        <a class="btn-ghost" href="#features">了解功能 ↓</a>
+      </div>
+      <div class="hero-meta">
+        <span><span class="ok">✓</span> 单文件 49.7 MB</span>
+        <span><span class="ok">✓</span> 冷启动约 1.2s</span>
+        <span><span class="ok">✓</span> 115+ 广告拦截规则</span>
+        <span><span class="ok">✓</span> Windows 10/11</span>
+      </div>
+    </div>
+    <div class="scroll-hint"><div class="mouse"></div>下滑了解</div>
+  </header>
+
+  <!-- 功能 -->
+  <section id="features">
+    <div class="section-head reveal">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">不只是浏览器</h2>
+      <p class="section-desc">把「安全」和「无广告」做成内置能力，而不是让你自己去装扩展。</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🛡️</div>
+        <h3>广告与跟踪拦截</h3>
+        <p>内置 115+ 规则，拦掉弹窗广告与追踪脚本，还你干净页面，可一键开关。</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🏠</div>
+        <h3>主页守护</h3>
+        <p>起始页永远是你指定的官网，外部程序改快捷方式、改主页都会被自动还原。</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⬇️</div>
+        <h3>下载中心</h3>
+        <p>下载进度、历史记录一目了然，Ctrl+J 随时调出，打开文件或所在文件夹一键直达。</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔀</div>
+        <h3>双站对照</h3>
+        <p>tlstudio.cn 与 tldoublerstudio.cn 并排显示，一次看清两个官网。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 安全 -->
+  <section id="security">
+    <div class="section-head reveal">
+      <div class="section-label">Security</div>
+      <h2 class="section-title">四重安全防护</h2>
+      <p class="section-desc">主页、搜索引擎、启动参数、快捷方式，四道防线层层守护。</p>
+    </div>
+    <div class="highlights">
+      <div class="highlight-row reveal">
+        <div>
+          <h3>起始页白名单</h3>
+          <p>只认 tlstudio.cn 和 tldoublerstudio.cn 两个官网，任何外部程序塞进来的网址都会被丢进黑名单，主页永远是纯净的。</p>
+        </div>
+        <div class="highlight-visual shield-grid">
+          <div class="shield-item"><div class="num">白名单</div><div class="lbl">仅两个官网域名</div></div>
+          <div class="shield-item"><div class="num">守护</div><div class="lbl">逐字节比对还原</div></div>
+          <div class="shield-item"><div class="num">参数</div><div class="lbl">启动参数过闸</div></div>
+          <div class="shield-item"><div class="num">自愈</div><div class="lbl">快捷方式自检修复</div></div>
+        </div>
+      </div>
+      <div class="highlight-row reveal">
+        <div>
+          <h3>纯净无广告</h3>
+          <p>广告拦截只挂子资源与已确认的非顶层文档，最坏只是少一个广告位，绝不会出现「点开一片白」。</p>
+        </div>
+        <div class="highlight-visual">
+          <div style="font-size:40px;margin-bottom:8px;">🧹</div>
+          <div style="color:var(--text-secondary);">拦截掉的请求返回「空的但合法」的响应，图片给 1×1 透明 GIF。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 参数 -->
+  <section id="specs">
+    <div class="section-head reveal">
+      <div class="section-label">Tech Specs</div>
+      <h2 class="section-title">轻量 · 快速 · 免安装</h2>
+      <p class="section-desc">基于 WebView2 内核，单文件自包含，双击即用。</p>
+    </div>
+    <div class="tech-tags reveal">
+      <span class="tech-tag">Windows 10 / 11</span>
+      <span class="tech-tag">单文件 exe</span>
+      <span class="tech-tag">免安装</span>
+      <span class="tech-tag">WebView2 内核</span>
+      <span class="tech-tag">微软雅黑界面</span>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-cell reveal"><div class="v">49.7 MB</div><div class="k">体积</div></div>
+      <div class="tech-cell reveal"><div class="v">~1.2s</div><div class="k">冷启动</div></div>
+      <div class="tech-cell reveal"><div class="v">115+</div><div class="k">拦截规则</div></div>
+      <div class="tech-cell reveal"><div class="v">4 道</div><div class="k">安全防护</div></div>
+    </div>
+  </section>
+
+  <!-- 下载 CTA -->
+  <section class="cta-bottom" id="download">
+    <div class="section-head reveal" style="margin-bottom:24px;">
+      <div class="section-label">Download</div>
+      <h2>现在就下载</h2>
+      <p>单文件免安装，下载后双击即可使用。自动更新通知已内置，新版本一键直达。</p>
+    </div>
+    <button class="btn-primary" id="openDownload" style="border:none;font-size:17px;padding:16px 36px;">
+      ⬇️ 下载 TL 浏览器 v1.0.0
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>© 2026 TLSTUDIO · TL 浏览器</div>
+    <div class="footer-links">
+      <a href="https://tlstudio.cn" target="_blank" rel="noopener">tlstudio.cn</a>
+      <a href="https://tldoublerstudio.cn" target="_blank" rel="noopener">tldoublerstudio.cn</a>
+    </div>
+  </footer>
+
+  <!-- 下载 Modal -->
+  <div class="modal-overlay" id="dlModal">
+    <div class="modal-dialog">
+      <h3>下载 TL 浏览器</h3>
+      <div class="ver">最新版本 v1.0.0 · Windows 10/11 · 单文件 49.7 MB</div>
+      <a class="dl-option" id="dlLanzou" href="#" target="_blank" rel="noopener">
+        <span class="ico">☁️</span>
+        <div><div class="name">蓝奏云下载</div><div class="sub">国内直连 · 下载快 · 提取码 tlzz</div></div>
+      </a>
+      <a class="dl-option" id="dlGithub" href="#" target="_blank" rel="noopener">
+        <span class="ico">💾</span>
+        <div><div class="name">GitHub 直链下载</div><div class="sub">GitHub Releases 官方直链 · 海外 / 可翻墙用户</div></div>
+      </a>
+      <button class="modal-close" id="dlClose">取消</button>
+    </div>
+  </div>
+
+  <script>
+    const DOWNLOAD_URL = "https://github.com/tlstudio-zhuanye/TLBrowser/releases/download/v1.0.0/TLBrowser.exe";
+    const LANZOU_URL = "https://wwasp.lanzoul.com/b01d7a80bc";
+
+    // 两个下载选项
+    document.getElementById('dlGithub').href = DOWNLOAD_URL;
+    const lz = document.getElementById('dlLanzou');
+    if (LANZOU_URL) {
+      lz.href = LANZOU_URL;
+    } else {
+      lz.style.display = 'none'; // 暂无蓝奏云链接时隐藏该选项
+    }
+
+    // Modal 开关（所有下载入口统一打开 Modal 二选一）
+    const modal = document.getElementById('dlModal');
+    const openModal = (e) => { e.preventDefault(); modal.classList.add('open'); };
+    document.querySelectorAll('a[href="#download"]').forEach(a => a.addEventListener('click', openModal));
+    document.getElementById('openDownload').addEventListener('click', openModal);
+    document.getElementById('dlClose').addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('open'); });
+
+    // 导航滚动阴影 + 移动端菜单
+    const nav = document.getElementById('nav');
+    const burger = document.getElementById('burger');
+    window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+    burger.addEventListener('click', () => nav.classList.toggle('open'));
+
+    // 滚动 reveal
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Hero 粒子连线
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    function resize() {
+      W = canvas.width = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COUNT = 60;
+    function make() {
+      particles = [];
+      for (let i = 0; i < COUNT; i++) {
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          r: Math.random() * 1.8 + 0.6
+        });
+      }
+    }
+    make();
+    window.addEventListener('resize', () => { resize(); make(); });
+
+    const LINK = 140;
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK) {
+            const alpha = (1 - d / LINK) * 0.35;
+            ctx.strokeStyle = `rgba(87, 230, 255, ${alpha})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+      for (const p of particles) {
+        ctx.fillStyle = "rgba(122, 107, 255, 0.85)";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+    tick();
+  </script>
+</body>
+</html>

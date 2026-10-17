@@ -586,7 +586,7 @@ section { padding: 100px 0; }
     <div class="tech-tags reveal">
       <span class="tech-tag accent">HTDemucs v4.1+</span>
       <span class="tech-tag accent">BS-Roformer</span>
-      <span class="tech-tag accent">GPU 加速</span>
+      <span class="tech-tag accent">双引擎融合</span>
       <span class="tech-tag accent">PyTorch 2.0</span>
       <span class="tech-tag accent">FFmpeg</span>
       <span class="tech-tag">MP3 输入</span>
@@ -615,38 +615,38 @@ section { padding: 100px 0; }
 <section class="versions" id="versions">
   <div class="container text-center">
     <span class="section-label reveal">三个演示版</span>
-    <h2 class="section-title reveal">按你的显卡挑一个</h2>
-    <p class="section-desc reveal">都是绿色版，解压后双击就用；三个版本都带完整的调试面板</p>
+    <h2 class="section-title reveal">三个演示版怎么选</h2>
+    <p class="section-desc reveal">都是绿色版，解压后双击就用；纯 CPU 运行，无需显卡</p>
     <div class="ver-grid">
       <div class="ver-card reveal">
         <div class="ver-code">C 版</div>
-        <div class="ver-name">CPU 通用版</div>
+        <div class="ver-name">CPU 基础版</div>
         <ul class="ver-meta">
-          <li><b>没显卡也能跑</b>，老机器/笔记本通用</li>
-          <li>带 Roformer 录音级音质档</li>
-          <li>体积约 1.4 GB</li>
+          <li><b>纯 CPU 运行</b>，老机器 / 笔记本通用</li>
+          <li>htdemucs 四轨分离，最小体积先试水</li>
+          <li>体积约 0.8 GB</li>
           <li>速度慢：1 分钟歌约需 10 分钟</li>
         </ul>
       </div>
       <div class="ver-card reveal">
         <div class="ver-code">A 版</div>
-        <div class="ver-name">GPU 加速版</div>
+        <div class="ver-name">CPU 增强版</div>
         <ul class="ver-meta">
-          <li><b>NVIDIA 显卡加速</b>，快很多</li>
-          <li>htdemucs 快速 / 高 / 极致三档</li>
-          <li>体积约 2.5 GB</li>
-          <li>速度快：1 分钟歌约 10~20 秒</li>
+          <li><b>htdemucs + Roformer</b>，录音级人声</li>
+          <li>在 C 版基础上多一档「Roformer 纯净人声」</li>
+          <li>体积约 1.4 GB</li>
+          <li>比 C 版更干净，速度略慢</li>
         </ul>
       </div>
       <div class="ver-card best reveal">
         <span class="ver-badge">推荐</span>
         <div class="ver-code">B 版</div>
-        <div class="ver-name">GPU + Roformer 完整版</div>
+        <div class="ver-name">融合旗舰版</div>
         <ul class="ver-meta">
-          <li><b>全部音质档都有</b>，含录音级人声</li>
-          <li>调试项最全，适合压测找参数</li>
-          <li>体积约 3 GB</li>
-          <li>建议显存 4 GB 以上</li>
+          <li><b>双引擎频域融合</b>，人声最纯净</li>
+          <li>Demucs + Roformer 两路人声几何平均融合</li>
+          <li>体积约 1.4 GB · 纯 CPU 运行</li>
+          <li>耗时最长，但音质天花板</li>
         </ul>
       </div>
     </div>

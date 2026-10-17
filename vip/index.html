@@ -391,6 +391,43 @@ section { padding: 100px 0; }
 .footer-links a { font-size: 0.82rem; color: var(--text-secondary); transition: color 0.2s; }
 .footer-links a:hover { color: var(--accent); }
 
+/* ========== Upgrade VIPPRO Banner ========== */
+.upgrade-banner {
+  background:
+    radial-gradient(ellipse 60% 120% at 50% 0%, rgba(230,184,0,0.18), transparent 70%),
+    linear-gradient(135deg, #16110a 0%, #0a0a0e 60%, #141026 100%);
+  border-top: 1px solid rgba(230,184,0,0.25);
+  border-bottom: 1px solid rgba(230,184,0,0.25);
+  text-align: center;
+  padding: 56px 0;
+}
+.upgrade-banner .ub-crown { font-size: 2.4rem; margin-bottom: 12px; }
+.upgrade-banner h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 800; margin-bottom: 12px;
+  background: linear-gradient(135deg, #f5d76e 0%, #e6b800 50%, #c8a000 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.upgrade-banner p {
+  font-size: 1.02rem; color: var(--text-secondary); margin-bottom: 28px;
+  max-width: 640px; margin-left: auto; margin-right: auto;
+}
+.upgrade-banner .ub-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 38px; border-radius: 12px;
+  background: linear-gradient(135deg, #f0c000, #e6b800); color: #1a1408;
+  font-size: 1.05rem; font-weight: 800;
+  border: none; cursor: pointer; text-decoration: none;
+  box-shadow: 0 6px 22px rgba(230,184,0,0.35);
+  transition: all 0.25s;
+}
+.upgrade-banner .ub-btn:hover {
+  background: linear-gradient(135deg, #e6b800, #c8a000);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(230,184,0,0.45);
+}
+.upgrade-banner .ub-btn svg { width: 18px; height: 18px; }
+
 /* ========== Scroll Animations ========== */
 .reveal {
   opacity: 0; transform: translateY(30px);
@@ -436,6 +473,7 @@ section { padding: 100px 0; }
          <a href="#features">功能特色</a>
       <a href="#highlights">下载</a>
       <a href="#tech">关于</a>
+      <a href="https://tlstudio.cn/vippro/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;">👑 VIPPRO</a>
       <a href="/music/">返回免费版</a>
       <a href="/neice/">测试版本入口</a>
     </div>
@@ -455,6 +493,19 @@ section { padding: 100px 0; }
         <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       购买卡密下载
+    </a>
+  </div>
+</section>
+
+<!-- Upgrade VIPPRO Banner -->
+<section class="upgrade-banner">
+  <div class="container">
+    <div class="ub-crown">👑</div>
+    <h2>升级 VIPPRO 黑金旗舰版</h2>
+    <p>双引擎频域融合，人声最纯净；集成视频人声、人声净化套件、音频工具箱与 AI 配音，一次解锁全部旗舰功能。</p>
+    <a class="ub-btn" href="https://tlstudio.cn/vippro/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      了解并升级 VIPPRO
     </a>
   </div>
 </section>

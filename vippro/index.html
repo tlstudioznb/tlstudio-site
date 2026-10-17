@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TL干声分离器 VIPPRO - 黑金旗舰版 · 多模型融合，人声最纯净</title>
+<meta name="description" content="TL干声分离器 VIPPRO 黑金旗舰版：Demucs + Roformer 双引擎频域融合，人声最纯净；集成视频人声、人声净化套件、音频工具箱、AI配音，全功能解锁。">
+<meta name="keywords" content="干声分离器,人声提取,伴奏分离,AI音乐分离,VIPPRO,黑金旗舰,双引擎融合,TL干声分离器,tlstudio">
+<meta name="robots" content="index, follow">
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #07070a;
+  --panel: #0d0d12;
+  --border: rgba(212,175,55,0.14);
+  --text: #f6f3e9;
+  --text-secondary: #9a9486;
+  --accent: #d4af37;
+  --accent-hover: #b8932b;
+  --accent-soft: rgba(212,175,55,0.08);
+  --success: #34d399;
+  --error: #f87171;
+  --purple: #7a6bff;
+  --pink: #f472b6;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ========== Navigation ========== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(7,7,10,0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(212,175,55,0.12);
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 1px 14px rgba(212,175,55,0.10); }
+.nav-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; padding: 0 24px;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 1.05rem; color: var(--text);
+}
+.nav-logo {
+  width: 30px; height: 30px; background: linear-gradient(135deg, #f0c000, #d4af37);
+  border-radius: 7px; display: flex; align-items: center; justify-content: center;
+  color: #1a1408; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 0.9rem; color: var(--text-secondary);
+  transition: color 0.2s; position: relative;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--text); border-radius: 1px;
+  transition: all 0.3s;
+}
+
+/* ========== Hero ========== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.12), transparent 60%),
+    linear-gradient(170deg, #16110a 0%, #07070a 45%, #0c0a06 75%, #07070a 100%);
+}
+#heroCanvas {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative; z-index: 1;
+  max-width: 800px; padding: 120px 24px 80px;
+  opacity: 0; transform: translateY(32px);
+  animation: heroFadeIn 1s ease 0.3s forwards;
+}
+.hero-logo {
+  width: 86px; height: 86px; margin: 0 auto 22px;
+  background: linear-gradient(135deg, #f0c000, #d4af37);
+  border-radius: 22px; display: flex; align-items: center; justify-content: center;
+  color: #1a1408; font-size: 1.9rem; font-weight: 900; letter-spacing: 1px;
+  box-shadow: 0 10px 30px rgba(212,175,55,0.35);
+  animation: maskPulse 3s ease-in-out infinite;
+}
+@keyframes maskPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+@keyframes heroFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-badge {
+  display: inline-block;
+  padding: 5px 14px; border-radius: 20px;
+  background: rgba(212,175,55,0.10); color: var(--accent);
+  font-size: 0.8rem; font-weight: 600; margin-bottom: 24px;
+  border: 1px solid rgba(212,175,55,0.25);
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800; line-height: 1.18;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #f5d76e 0%, #d4af37 45%, #b8932b 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero h1 .sub { font-size: 0.5em; letter-spacing: 4px; display:block; margin-top:6px; -webkit-text-fill-color: var(--accent); }
+.hero p {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  color: var(--text-secondary); margin-bottom: 40px;
+  max-width: 620px; margin-left: auto; margin-right: auto;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 40px; border-radius: 12px;
+  background: linear-gradient(135deg, #f0c000, #d4af37); color: #1a1408;
+  font-size: 1.05rem; font-weight: 700;
+  border: none; cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 18px rgba(212,175,55,0.30);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #d4af37, #b8932b);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(212,175,55,0.40);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-primary svg { width: 18px; height: 18px; }
+
+/* ========== Section Common ========== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-block; font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800; margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 1.05rem; color: var(--text-secondary);
+  max-width: 600px; margin: 0 auto 56px;
+}
+.text-center { text-align: center; }
+
+/* ========== Features ========== */
+.features { background: var(--bg); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.feature-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 16px; padding: 34px 24px;
+  text-align: center;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: linear-gradient(90deg, #f0c000, #d4af37);
+  transform: scaleX(0); transition: transform 0.35s;
+}
+.feature-card.pro::after {
+  content: 'PRO'; position: absolute; top: 12px; right: 12px;
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 1px;
+  color: #1a1408; background: linear-gradient(135deg, #f0c000, #d4af37);
+  padding: 2px 7px; border-radius: 6px;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(212,175,55,0.12);
+  border-color: rgba(212,175,55,0.35);
+}
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon {
+  font-size: 2.6rem; margin-bottom: 16px;
+  display: block;
+}
+.feature-card h3 {
+  font-size: 1.05rem; font-weight: 700; margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;
+}
+
+/* ========== Highlights ========== */
+.highlights { background: var(--panel); }
+.highlights-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center;
+}
+.mockup-frame {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  box-shadow: 0 12px 40px rgba(212,175,55,0.10);
+  aspect-ratio: 4/3;
+  display: flex; flex-direction: column;
+}
+.mockup-titlebar {
+  height: 36px; background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 14px; gap: 7px;
+}
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dot:nth-child(1) { background: var(--error); }
+.mockup-dot:nth-child(2) { background: #d29922; }
+.mockup-dot:nth-child(3) { background: var(--success); }
+.mockup-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 16px;
+  padding: 24px;
+}
+.mockup-body .mock-wave { display: flex; align-items: center; gap: 3px; }
+.mockup-body .mock-bar { width: 4px; border-radius: 2px; background: var(--accent); opacity: 0.35; }
+.mockup-body .mock-label { font-size: 0.75rem; color: var(--text-secondary); }
+.mockup-body .mock-btn {
+  padding: 8px 24px; border-radius: 8px;
+  background: linear-gradient(135deg, #f0c000, #d4af37); color: #1a1408; font-size: 0.8rem; font-weight:700;
+  border: none; opacity: 0.6;
+}
+.highlights-list { list-style: none; display: flex; flex-direction: column; gap: 22px; }
+.highlights-list li { display: flex; gap: 16px; align-items: flex-start; }
+.hl-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; flex-shrink: 0;
+  background: var(--bg); border: 1px solid var(--border);
+}
+.hl-text h4 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+.hl-text p { font-size: 0.88rem; color: var(--text-secondary); }
+.hl-text .tag {
+  display:inline-block; margin-left:8px; font-size:0.65rem; font-weight:700;
+  color:#1a1408; background:linear-gradient(135deg,#f0c000,#d4af37); padding:1px 7px; border-radius:5px; vertical-align:middle;
+}
+
+/* ========== Fusion highlight band ========== */
+.fusion {
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(212,175,55,0.10), transparent 70%),
+    var(--bg);
+  text-align: center;
+}
+.fusion-steps {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  max-width: 880px; margin: 0 auto;
+}
+.fusion-step {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px 22px;
+}
+.fusion-step .num {
+  width: 38px; height: 38px; margin: 0 auto 14px;
+  border-radius: 50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; color:#1a1408; background:linear-gradient(135deg,#f0c000,#d4af37);
+}
+.fusion-step h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.fusion-step p { font-size: 0.85rem; color: var(--text-secondary); }
+
+/* ========== Compare ========== */
+.compare { background: var(--panel); }
+.compare-wrap { max-width: 940px; margin: 0 auto; overflow-x: auto; }
+.compare-table {
+  width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 620px;
+}
+.compare-table th, .compare-table td {
+  padding: 14px 12px; text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.compare-table td:first-child, .compare-table th:first-child {
+  text-align: left; color: var(--text-secondary);
+}
+.compare-table thead th { font-size: 1rem; font-weight: 700; color: var(--text); }
+.compare-table .pro-col { background: rgba(212,175,55,0.07); }
+.compare-table .pro-head { color: var(--accent); }
+.compare-table .yes { color: var(--success); font-weight: 700; }
+.compare-table .no { color: #5a554a; }
+.compare-table .soon { color: var(--accent); font-size: 0.78rem; }
+
+/* ========== Tech Specs ========== */
+.tech-specs { background: var(--bg); }
+.tech-tags {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center; margin-bottom: 48px;
+}
+.tech-tag {
+  padding: 10px 20px; border-radius: 10px;
+  background: var(--panel); border: 1px solid var(--border);
+  font-size: 0.9rem; font-weight: 600;
+  transition: all 0.25s;
+}
+.tech-tag:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+.tech-tag.accent { border-color: var(--accent); color: var(--accent); background: rgba(212,175,55,0.08); }
+.tech-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  max-width: 800px; margin: 0 auto;
+}
+.tech-item {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; text-align: center;
+}
+.tech-item h4 { font-size: 0.85rem; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; }
+.tech-item p { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+
+/* ========== CTA Bottom ========== */
+.cta-bottom {
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(212,175,55,0.12), transparent 70%),
+    linear-gradient(170deg, #16110a 0%, #0c0a06 100%);
+  text-align: center; padding: 100px 0;
+}
+.cta-bottom h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 800; margin-bottom: 12px;
+}
+.cta-bottom .cta-desc {
+  font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 36px;
+}
+.badge-row { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+.badge {
+  padding: 4px 12px; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 600;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+/* ========== Download Modal ========== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.modal-overlay.active { opacity: 1; pointer-events: auto; }
+.modal-dialog {
+  background: rgba(13,13,18,0.85);
+  border-radius: 28px;
+  padding: 40px 32px 32px;
+  max-width: 500px; width: 90%;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(212,175,55,0.12);
+  border: 1px solid rgba(212,175,55,0.18);
+  position: relative;
+  transform: translateY(30px) scale(0.96);
+  transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+}
+.modal-overlay.active .modal-dialog { transform: translateY(0) scale(1); }
+.modal-close {
+  position: absolute; top: 14px; right: 18px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.07);
+  font-size: 1.15rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); transition: all 0.25s;
+}
+.modal-close:hover { background: rgba(0,0,0,0.2); color: var(--text); transform: scale(1.08); }
+.modal-title {
+  font-size: 1.35rem; font-weight: 800; text-align: center;
+  margin-bottom: 4px; letter-spacing: -0.3px;
+  background: linear-gradient(135deg, #f5d76e, #d4af37);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.modal-subtitle { font-size: 0.85rem; color: var(--text-secondary); text-align: center; margin-bottom: 28px; }
+.download-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.download-option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 14px;
+  border: 1px solid rgba(212,175,55,0.14);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer; text-decoration: none; color: inherit;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.download-option:hover {
+  background: rgba(212,175,55,0.08);
+  border-color: rgba(212,175,55,0.30);
+  transform: translateY(-2px);
+}
+.download-option .dl-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; font-weight: 800; color: #1a1408; flex-shrink: 0;
+  background: linear-gradient(135deg, #f0c000, #d4af37);
+}
+.download-option .dl-info { flex: 1; }
+.download-option .dl-name { font-weight: 700; font-size: 0.95rem; }
+.download-option .dl-code { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+.download-option .dl-arrow { color: var(--text-secondary); font-size: 0.9rem; }
+
+/* ========== Footer ========== */
+.footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); }
+.footer p { font-size: 0.85rem; color: var(--text-secondary); }
+.footer-links { display: flex; gap: 24px; justify-content: center; margin-top: 12px; }
+.footer-links a { font-size: 0.82rem; color: var(--text-secondary); transition: color 0.2s; }
+.footer-links a:hover { color: var(--accent); }
+
+/* ========== Scroll Animations ========== */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ========== Responsive ========== */
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .highlights-row { grid-template-columns: 1fr; gap: 40px; }
+  .tech-grid { grid-template-columns: repeat(2, 1fr); }
+  .fusion-steps { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 56px; left: 0; right: 0;
+    background: rgba(7,7,10,0.96);
+    backdrop-filter: blur(16px);
+    padding: 16px 24px; gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-hamburger { display: flex; }
+  .features-grid { grid-template-columns: 1fr; }
+  .tech-grid { grid-template-columns: 1fr; }
+  .fusion-steps { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  section { padding: 64px 0; }
+  .download-options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">TL</div>
+      <span>TL干声 VIPPRO</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">功能特色</a>
+      <a href="#fusion">融合引擎</a>
+      <a href="#compare">版本对比</a>
+      <a href="#tech">技术规格</a>
+      <a href="/vip/">返回 VIP 版</a>
+      <a href="/neice/">测试版本入口</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-logo">TL</div>
+    <span class="hero-badge">👑 黑金旗舰版</span>
+    <h1>TL 干声分离器<span class="sub">V I P P R O</span></h1>
+    <p>多模型融合旗舰 · 人声最纯净 · 全功能解锁。Demucs + Roformer 双引擎频域融合，集成视频人声、人声净化、音频工具箱与 AI 配音。</p>
+    <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      购买卡密下载
+    </a>
+    <div style="margin-top:18px;font-size:0.92rem;color:var(--text-secondary);">还没有卡密？<a href="/music/" style="color:var(--accent);text-decoration:none;font-weight:700;">先下载免费版试用 →</a></div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="container text-center">
+    <span class="section-label reveal">核心能力</span>
+    <h2 class="section-title reveal">旗舰全功能，一应俱全</h2>
+    <p class="section-desc reveal">在四轨分离之上，集成视频人声、人声净化、音频工具箱与 AI 配音——一个软件，覆盖全部工作流</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎤</span>
+        <h3>人声提取</h3>
+        <p>双引擎融合，主唱人声最纯净，保留呼吸与细节</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🥁</span>
+        <h3>鼓组提取</h3>
+        <p>独立提取底鼓、军鼓、镲片等打击乐</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎸</span>
+        <h3>贝斯提取</h3>
+        <p>获取低频律动线条，节奏清晰分明</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎹</span>
+        <h3>伴奏提取</h3>
+        <p>剩余所有乐器合成为纯净伴奏</p>
+      </div>
+      <div class="feature-card pro reveal">
+        <span class="feature-icon">🎬</span>
+        <h3>视频人声提取</h3>
+        <p>直接从视频抽人声，支持批量处理</p>
+      </div>
+      <div class="feature-card pro reveal">
+        <span class="feature-icon">✨</span>
+        <h3>人声净化套件</h3>
+        <p>智能降噪 / 去混响 / 人声增强一键处理</p>
+      </div>
+      <div class="feature-card pro reveal">
+        <span class="feature-icon">🧰</span>
+        <h3>音频工具箱</h3>
+        <p>格式转换、剪辑、合并等实用工具</p>
+      </div>
+      <div class="feature-card pro reveal">
+        <span class="feature-icon">🗣️</span>
+        <h3>AI 配音 + 语音克隆</h3>
+        <p>后续版本开放下载</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Fusion Engine -->
+<section class="fusion" id="fusion">
+  <div class="container text-center">
+    <span class="section-label reveal">双引擎频域融合</span>
+    <h2 class="section-title reveal">人声天花板，怎么来的</h2>
+    <p class="section-desc reveal">Demucs 与 BS-Roformer 各自提取人声，在频域做几何平均融合，相位取自 Roformer——兼顾两者优势，人声最干净</p>
+    <div class="fusion-steps">
+      <div class="fusion-step reveal">
+        <div class="num">1</div>
+        <h4>Demucs 提取</h4>
+        <p>htdemucs 给出 5–45% 频段的人声基底</p>
+      </div>
+      <div class="fusion-step reveal">
+        <div class="num">2</div>
+        <h4>Roformer 提取</h4>
+        <p>BS-Roformer 补充 55–88% 频段细节</p>
+      </div>
+      <div class="fusion-step reveal">
+        <div class="num">3</div>
+        <h4>频域融合</h4>
+        <p>几何平均振幅 + Roformer 相位，合成最纯净人声</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Highlights -->
+<section class="highlights" id="highlights">
+  <div class="container">
+    <div class="highlights-row">
+      <div class="mockup-frame reveal">
+        <div class="mockup-titlebar">
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+        </div>
+        <div class="mockup-body">
+          <div class="mock-wave" id="mockWave"></div>
+          <span class="mock-label">TL干声 VIPPRO</span>
+          <a href="#" class="mock-btn" onclick="showDownloadModal();return false">下载软件</a>
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-label">为什么是 VIPPRO</span>
+        <h2 class="section-title">旗舰该有的，全给你</h2>
+        <ul class="highlights-list">
+          <li>
+            <div class="hl-icon">🚀</div>
+            <div class="hl-text">
+              <h4>双引擎频域融合<span class="tag">旗舰</span></h4>
+              <p>Demucs + Roformer 几何平均融合，人声纯净度天花板</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">💻</div>
+            <div class="hl-text">
+              <h4>纯 CPU 运行，无需显卡</h4>
+              <p>普通 CPU 即可跑，不挑硬件，不烧显卡</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">🎬</div>
+            <div class="hl-text">
+              <h4>视频人声 + 批量处理<span class="tag">旗舰</span></h4>
+              <p>视频直接抽人声，多文件批量分离省时</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">✨</div>
+            <div class="hl-text">
+              <h4>人声净化套件<span class="tag">旗舰</span></h4>
+              <p>降噪 / 去混响 / 增强，一键修干净</p>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">📦</div>
+            <div class="hl-text">
+              <h4>一键安装，开箱即用</h4>
+              <p>下载解压即用，无需配置 Python 环境</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Compare -->
+<section class="compare" id="compare">
+  <div class="container text-center">
+    <span class="section-label reveal">版本对比</span>
+    <h2 class="section-title reveal">免费 / VIP / VIPPRO</h2>
+    <p class="section-desc reveal">旗舰版在 VIP 全部能力之上，多出融合引擎与三大旗舰模块</p>
+    <div class="compare-wrap reveal">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>能力</th>
+            <th>免费版</th>
+            <th>VIP 版</th>
+            <th class="pro-head pro-col">VIPPRO 旗舰</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>人声 / 伴奏 / 鼓 / 贝斯 四轨</td>
+            <td class="yes">✓</td>
+            <td class="yes">✓</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>六轨细分离（htdemucs_6s）</td>
+            <td class="no">—</td>
+            <td class="yes">✓</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>双引擎频域融合（最纯净）</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>视频人声提取 + 批量</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>人声净化套件</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>音频工具箱</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>AI 配音 + 语音克隆</td>
+            <td class="no">—</td>
+            <td class="no">—</td>
+            <td class="soon pro-col">后续开放</td>
+          </tr>
+          <tr>
+            <td>本地运行 / 无需联网</td>
+            <td class="yes">✓</td>
+            <td class="yes">✓</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+          <tr>
+            <td>纯 CPU / 无需显卡</td>
+            <td class="yes">✓</td>
+            <td class="yes">✓</td>
+            <td class="yes pro-col">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Specs -->
+<section class="tech-specs" id="tech">
+  <div class="container text-center">
+    <span class="section-label reveal">技术规格</span>
+    <h2 class="section-title reveal">技术线与格式支持</h2>
+    <p class="section-desc reveal">基于业界领先的 AI 模型，提供高质量音频分离</p>
+    <div class="tech-tags reveal">
+      <span class="tech-tag accent">HTDemucs v4.1+</span>
+      <span class="tech-tag accent">BS-Roformer</span>
+      <span class="tech-tag accent">双引擎融合</span>
+      <span class="tech-tag">PyTorch 2.0</span>
+      <span class="tech-tag">FFmpeg</span>
+      <span class="tech-tag">MP3 / WAV / FLAC</span>
+      <span class="tech-tag">视频输入</span>
+    </div>
+    <div class="tech-grid reveal">
+      <div class="tech-item">
+        <h4>模型版本</h4>
+        <p>Demucs + Roformer 双引擎</p>
+      </div>
+      <div class="tech-item">
+        <h4>输出音轨</h4>
+        <p>4 轨 + 视频 / 净化</p>
+      </div>
+      <div class="tech-item">
+        <h4>平台支持</h4>
+        <p>Windows</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Bottom -->
+<section class="cta-bottom">
+  <div class="container reveal">
+    <h2>立即下载 VIPPRO 黑金旗舰</h2>
+    <p class="cta-desc">无需注册，卡密激活即刻解锁全功能</p>
+    <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      立即下载 TL干声分离器 VIPPRO
+    </a>
+    <div class="badge-row">
+      <span class="badge">v2.0.0</span>
+      <span class="badge">Windows</span>
+      <span class="badge">黑金旗舰</span>
+    </div>
+  </div>
+</section>
+
+<!-- Download Modal -->
+<div class="modal-overlay" id="downloadModal">
+  <div class="modal-dialog">
+    <button class="modal-close" onclick="hideDownloadModal()">&times;</button>
+    <div class="modal-title">👑 VIPPRO 激活</div>
+    <div class="modal-subtitle">输入卡密，验证后解锁下载（一卡一机）</div>
+    <div style="padding:22px;border:1.5px dashed var(--accent);border-radius:16px;background:rgba(212,175,55,0.06);">
+      <div style="font-size:0.78rem;color:var(--text-secondary);letter-spacing:1px;text-align:center;">激活卡密</div>
+      <input id="cardInput" type="text" placeholder="请输入卡密，如 TLPRO-XXXX-XXXX-XXXX" autocomplete="off" style="width:100%;margin-top:8px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;font-family:'Consolas','Courier New',monospace;letter-spacing:1px;text-align:center;outline:none;background:var(--panel);color:var(--text);" onkeydown="if(event.key==='Enter')verifyActivation()">
+      <div id="verifyResult" style="text-align:center;margin-top:10px;font-size:0.88rem;font-weight:600;min-height:1.3em;"></div>
+      <button onclick="verifyActivation()" style="width:100%;margin-top:12px;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#f0c000,#d4af37);color:#1a1408;font-size:0.95rem;font-weight:700;cursor:pointer;">🔓 验证激活</button>
+    </div>
+    <div id="pwdBox" style="display:none;margin-top:14px;padding:16px;border:1.5px solid rgba(212,175,55,0.18);border-radius:12px;background:rgba(255,255,255,0.04);">
+      <div id="pwdHint" style="font-size:0.82rem;color:var(--text-secondary);text-align:center;margin-bottom:8px;">提取码已解锁，请输入下载提取码</div>
+      <input id="pwdInput" type="text" placeholder="请输入提取码" autocomplete="off" style="width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;text-align:center;letter-spacing:2px;outline:none;background:var(--panel);color:var(--text);" onkeydown="if(event.key==='Enter')unlockDownload()">
+      <button onclick="unlockDownload()" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:linear-gradient(135deg,#7a6bff,#f472b6);color:#fff;font-size:0.92rem;font-weight:600;cursor:pointer;">🔑 获取下载链接</button>
+      <div id="pwdResult" style="text-align:center;margin-top:10px;font-size:0.85rem;font-weight:600;min-height:1.3em;"></div>
+    </div>
+    <div style="margin-top:20px;text-align:center;padding:16px;border-radius:14px;background:rgba(212,175,55,0.06);border:1px solid rgba(212,175,55,0.18);">
+      <div style="font-size:0.85rem;color:var(--text-secondary);">没有卡密？</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--text);margin-top:6px;">请联系微信：<span style="color:var(--accent);">tzr19127101909</span></div>
+    </div>
+    <div id="downloadBtn" style="margin-top:16px;display:none;">
+      <a id="downloadLink" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:15px;border-radius:12px;background:linear-gradient(135deg,#f0c000,#d4af37);color:#1a1408;font-size:1rem;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(212,175,55,0.30);transition:all 0.25s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 26px rgba(212,175,55,0.40)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 18px rgba(212,175,55,0.30)';">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        立即下载 TL干声分离器 VIPPRO
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p>TL 工作室 &copy; 2026 版权所有</p>
+    <div class="footer-links">
+      <a href="#features">功能</a>
+      <a href="#fusion">融合引擎</a>
+      <a href="#compare">对比</a>
+      <a href="#tech">技术</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===================== TL 干声分离器 VIPPRO — 黑金旗舰 ===================== */
+const API_BASE = 'https://api.tlstudio.cn';
+const DEVICE_KEY = 'tl_vippro_device';
+const ACTIVE_KEY = 'tl_vippro_active_card';
+let _ticket = '';
+
+function randomString(len, chars) {
+  const arr = new Uint32Array(len);
+  crypto.getRandomValues(arr);
+  let s = '';
+  for (let i = 0; i < len; i++) s += chars[arr[i] % chars.length];
+  return s;
+}
+function getDeviceId() {
+  let id = null;
+  try { id = localStorage.getItem(DEVICE_KEY); } catch (e) {}
+  if (!id || id.length < 8) {
+    id = 'dev-' + randomString(24, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+    try { localStorage.setItem(DEVICE_KEY, id); } catch (e) {}
+  }
+  return id;
+}
+function setResult(el, text, type) {
+  el.textContent = text;
+  el.style.color = type === 'success' ? '#1a9e5a' : type === 'error' ? '#d23b3b' : 'var(--text-secondary)';
+}
+async function verifyActivation() {
+  const cardEl = document.getElementById('cardInput');
+  const resultEl = document.getElementById('verifyResult');
+  const card = (cardEl.value || '').trim().toUpperCase();
+
+  hideDownload();
+  if (!card) { setResult(resultEl, '❌ 请输入卡密', 'error'); return; }
+
+  setResult(resultEl, '⏳ 正在验证卡密…', 'text');
+  let data;
+  try {
+    const res = await fetch(API_BASE + '/activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ card: card, device: getDeviceId() })
+    });
+    data = await res.json();
+  } catch (e) {
+    setResult(resultEl, '❌ 无法连接服务器，请检查网络', 'error');
+    return;
+  }
+
+  if (!data.ok) {
+    const msgs = {
+      INVALID_CARD: '❌ 卡密无效，请检查后重试',
+      CARD_BOUND: '❌ 该卡密已绑定其他设备',
+      MISSING_FIELDS: '❌ 请填写卡密',
+      BAD_DEVICE: '❌ 设备标识异常',
+      BAD_REQUEST: '❌ 请求格式错误',
+      NOT_FOUND: '❌ 接口不存在'
+    };
+    setResult(resultEl, msgs[data.code] || ('❌ 激活失败：' + (data.code || '未知错误')), 'error');
+    return;
+  }
+
+  _ticket = data.ticket || '';
+  try { localStorage.setItem(ACTIVE_KEY, card); } catch (e) {}
+
+  if (data.needsPwd) {
+    setResult(resultEl, '✅ 激活成功，请输入提取码', 'success');
+    document.getElementById('pwdBox').style.display = 'block';
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdResult').textContent = '';
+    document.getElementById('pwdInput').focus();
+  } else {
+    setResult(resultEl, '⏳ 正在获取下载链接…', 'text');
+    await unlockDownload(true);
+  }
+}
+
+async function unlockDownload(silent) {
+  const ticket = _ticket;
+  const resultEl = document.getElementById('pwdResult');
+  if (!ticket) { setResult(resultEl, '❌ 令牌无效，请重新激活', 'error'); return; }
+  const code = document.getElementById('pwdInput') ? document.getElementById('pwdInput').value : '';
+  if (!silent) setResult(resultEl, '⏳ 正在校验提取码…', 'text');
+
+  let data;
+  try {
+    const res = await fetch(API_BASE + '/unlock', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ticket: ticket, code: code })
+    });
+    data = await res.json();
+  } catch (e) {
+    setResult(resultEl, '❌ 无法连接服务器，请检查网络', 'error');
+    return;
+  }
+
+  if (data.ok && data.download) {
+    document.getElementById('downloadLink').href = data.download;
+    setResult(resultEl, '✅ 下载链接已解锁', 'success');
+    showDownload();
+    return;
+  }
+  const msgs = {
+    WRONG_CODE: '❌ 提取码错误，请重新输入',
+    BAD_TICKET: '❌ 链接已过期，请重新激活',
+    NO_DOWNLOAD: '❌ 暂无可用的下载资源',
+    MISSING_FIELDS: '❌ 请填写提取码'
+  };
+  setResult(resultEl, msgs[data.code] || ('❌ 解锁失败：' + (data.code || '未知错误')), 'error');
+}
+
+function hideDownload() {
+  document.getElementById('downloadBtn').style.display = 'none';
+  document.getElementById('pwdBox').style.display = 'none';
+}
+function showDownload() {
+  document.getElementById('downloadBtn').style.display = 'block';
+}
+(function autoActivate() {
+  let card = null;
+  try { card = localStorage.getItem(ACTIVE_KEY); } catch (e) {}
+  if (!card) return;
+  const cardEl = document.getElementById('cardInput');
+  if (cardEl) cardEl.value = card;
+  verifyActivation();
+})();
+
+/* ---------- 下载 / 弹窗 ---------- */
+function showDownloadModal() {
+  document.getElementById('downloadModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function hideDownloadModal() {
+  document.getElementById('downloadModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('downloadModal').addEventListener('click', function (e) {
+  if (e.target === this) hideDownloadModal();
+});
+
+/* ---------- 导航 ---------- */
+const _nav = document.getElementById('nav');
+window.addEventListener('scroll', function () {
+  _nav.classList.toggle('scrolled', window.scrollY > 10);
+});
+document.querySelectorAll('.nav-links a').forEach(function (a) {
+  a.addEventListener('click', function () {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+/* ---------- 滚动揭示 ---------- */
+const _revealEls = document.querySelectorAll('.reveal');
+const _ro = new IntersectionObserver(function (entries) {
+  entries.forEach(function (en) {
+    if (en.isIntersecting) en.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+_revealEls.forEach(function (el) { _ro.observe(el); });
+
+/* ---------- Hero 粒子连线动画（黑金） ---------- */
+(function () {
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const COUNT = 60;
+  const COLORS = ['rgba(212,175,55,0.22)', 'rgba(240,192,0,0.16)', 'rgba(184,147,43,0.14)', 'rgba(255,255,255,0.08)'];
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  function Particle() { this.reset(); }
+  Particle.prototype.reset = function () {
+    this.x = Math.random() * W; this.y = Math.random() * H;
+    this.r = Math.random() * 2.5 + 0.8;
+    this.vx = (Math.random() - 0.5) * 0.35; this.vy = (Math.random() - 0.5) * 0.35;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    this.opacity = Math.random() * 0.5 + 0.3;
+  };
+  Particle.prototype.update = function () {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) this.reset();
+  };
+  Particle.prototype.draw = function () {
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity; ctx.fill();
+  };
+  function init() { resize(); particles = []; for (let i = 0; i < COUNT; i++) particles.push(new Particle()); }
+  function drawLines() {
+    ctx.globalAlpha = 0.05; ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 0.5;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 140) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  function loop() {
+    ctx.clearRect(0, 0, W, H); ctx.globalAlpha = 1;
+    particles.forEach(function (p) { p.update(); p.draw(); });
+    drawLines(); ctx.globalAlpha = 1;
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('resize', resize);
+  init(); loop();
+})();
+
+/* ---------- 高亮 mock 波形 ---------- */
+(function () {
+  const w = document.getElementById('mockWave');
+  if (!w) return;
+  const bars = 22;
+  for (let i = 0; i < bars; i++) {
+    const b = document.createElement('div');
+    b.className = 'mock-bar';
+    b.style.height = (8 + Math.abs(Math.sin(i * 0.7)) * 34) + 'px';
+    w.appendChild(b);
+  }
+})();
+</script>
+
+</body>
+</html>

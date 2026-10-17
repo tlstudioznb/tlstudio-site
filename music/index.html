@@ -70,6 +70,56 @@ a { text-decoration: none; color: inherit; }
   transition: color 0.2s; position: relative;
 }
 .nav-links a:hover { color: var(--accent); }
+
+/* ===== 醒目入口：会员 / 测试版 ===== */
+.nav-links { align-items: center; }
+.nav-links a.nav-cta,
+.nav-links a.nav-cta-test {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 16px; border-radius: 999px;
+  font-size: 0.85rem; font-weight: 800; letter-spacing: 0.2px;
+  border: 1px solid transparent; white-space: nowrap;
+  transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s, background 0.25s;
+}
+.nav-links a.nav-cta {
+  color: #241704;
+  background: linear-gradient(135deg, #ffe08a 0%, #f5a623 55%, #e38a0c 100%);
+  box-shadow: 0 3px 12px rgba(245,166,35,0.40), inset 0 1px 0 rgba(255,255,255,0.55);
+}
+.nav-links a.nav-cta:hover {
+  color: #241704; transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(245,166,35,0.55), inset 0 1px 0 rgba(255,255,255,0.65);
+}
+.nav-links a.nav-cta-test {
+  color: #eaf9ff;
+  background: linear-gradient(135deg, rgba(87,230,255,0.22), rgba(122,107,255,0.30));
+  border-color: rgba(87,230,255,0.55);
+  animation: ctaPulse 2.6s ease-out infinite;
+}
+.nav-links a.nav-cta-test:hover {
+  color: #fff; transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(87,230,255,0.34), rgba(122,107,255,0.44));
+  box-shadow: 0 6px 20px rgba(87,230,255,0.35);
+}
+.nav-links .cta-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #34d399; box-shadow: 0 0 8px #34d399;
+  animation: ctaBlink 1.8s ease-in-out infinite;
+}
+.nav-links .cta-tag {
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.6px;
+  padding: 1px 5px; border-radius: 4px;
+  background: rgba(87,230,255,0.92); color: #04202b;
+}
+@keyframes ctaPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(87,230,255,0.45); }
+  70%  { box-shadow: 0 0 0 10px rgba(87,230,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(87,230,255,0); }
+}
+@keyframes ctaBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a.nav-cta-test, .nav-links .cta-dot { animation: none; }
+}
 .nav-hamburger {
   display: none; flex-direction: column; gap: 5px;
   cursor: pointer; padding: 4px;
@@ -144,6 +194,51 @@ a { text-decoration: none; color: inherit; }
 }
 .btn-primary:active { transform: translateY(0); }
 .btn-primary svg { width: 18px; height: 18px; }
+
+/* ===== Hero 双入口 ===== */
+.hero-actions {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+}
+.btn-entry {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 15px 28px; border-radius: 12px;
+  font-size: 1rem; font-weight: 700;
+  border: 1px solid transparent; cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+  position: relative;
+}
+.btn-entry-gold {
+  color: #2a1a04;
+  background: linear-gradient(135deg, #ffe08a 0%, #f5a623 55%, #e38a0c 100%);
+  box-shadow: 0 6px 22px rgba(245,166,35,0.32), inset 0 1px 0 rgba(255,255,255,0.55);
+}
+.btn-entry-gold:hover {
+  color: #2a1a04; transform: translateY(-2px);
+  background: linear-gradient(135deg, #fff0bb, #ffb733 55%, #f09010);
+  box-shadow: 0 12px 32px rgba(245,166,35,0.55), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+.btn-entry-cyan {
+  color: #e8fbff;
+  border-color: rgba(87,230,255,0.62);
+  background: linear-gradient(135deg, rgba(87,230,255,0.26), rgba(122,107,255,0.30));
+  box-shadow: 0 6px 22px rgba(87,230,255,0.20), inset 0 1px 0 rgba(255,255,255,0.14);
+}
+.btn-entry-cyan:hover {
+  color: #fff; transform: translateY(-2px);
+  background: linear-gradient(135deg, rgba(87,230,255,0.36), rgba(122,107,255,0.44));
+  box-shadow: 0 10px 28px rgba(87,230,255,0.35);
+}
+.btn-entry .dot-live {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #34d399; box-shadow: 0 0 8px #34d399;
+  animation: ctaBlink 1.8s ease-in-out infinite;
+}
+.btn-entry .entry-tag {
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.6px;
+  padding: 1px 5px; border-radius: 4px;
+  background: rgba(87,230,255,0.92); color: #04202b;
+}
 
 /* ========== Section Common ========== */
 section { padding: 100px 0; }
@@ -414,6 +509,11 @@ section { padding: 100px 0; }
     padding: 16px 24px; gap: 16px;
     border-bottom: 1px solid var(--border);
   }
+  .nav-links.open a.nav-cta,
+  .nav-links.open a.nav-cta-test { justify-content: center; padding: 10px 16px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-entry { justify-content: center; }
   .nav-hamburger { display: flex; }
   .features-grid { grid-template-columns: 1fr; }
   .tech-grid { grid-template-columns: 1fr; }
@@ -435,8 +535,8 @@ section { padding: 100px 0; }
          <a href="#features">功能特色</a>
       <a href="#highlights">下载</a>
       <a href="#tech">关于</a>
-      <a href="/vip/">会员入口</a>
-      <a href="/neice/">测试版本入口</a>
+      <a href="/vip/" class="nav-cta">👑 会员入口</a>
+      <a href="/neice/" class="nav-cta-test"><i class="cta-dot"></i>测试版入口 <span class="cta-tag">BETA</span></a>
     </div>
     <div class="nav-hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
       <span></span><span></span><span></span>
@@ -452,10 +552,14 @@ section { padding: 100px 0; }
       <span class="hero-badge">🆓 完全免费 · 本地运行</span>
     <h1>AI 音乐分离<br>一键提取人声与伴奏</h1>
     <p>免费、离线、无需显卡 — 把任意歌曲拆成人声、鼓、贝斯、伴奏四条独立音轨</p>
-    <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      免费下载
-    </a>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary" onclick="showDownloadModal();return false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        免费下载
+      </a>
+      <a href="/vip/" class="btn-entry btn-entry-gold">👑 会员入口</a>
+      <a href="/neice/" class="btn-entry btn-entry-cyan"><i class="dot-live"></i>测试版本入口 <span class="entry-tag">BETA</span></a>
+    </div>
   </div>
 </section>
 

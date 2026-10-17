@@ -352,7 +352,7 @@ section { padding: 100px 0; }
   font-size: 0.85rem; color: var(--text-secondary);
   text-align: center; margin-bottom: 28px;
 }
-.download-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.download-options { display: grid; grid-template-columns: 1fr; gap: 10px; }
 .download-option {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 16px; border-radius: 14px;
@@ -380,6 +380,38 @@ section { padding: 100px 0; }
 .download-option .dl-code { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
 .download-option .dl-icon svg { width: 22px; height: 22px; }
 .download-option .dl-arrow { color: var(--text-secondary); font-size: 0.9rem; }
+
+/* ========== Version Chooser ========== */
+.versions { background: var(--panel); }
+.ver-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.ver-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 16px; padding: 32px 26px; text-align: left;
+  position: relative; overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ver-card:hover {
+  transform: translateY(-6px); border-color: rgba(87,230,255,0.25);
+  box-shadow: 0 12px 32px rgba(255,255,255,0.07);
+}
+.ver-card.best { border-color: rgba(87,230,255,0.45); }
+.ver-badge {
+  position: absolute; top: 14px; right: 14px;
+  padding: 3px 12px; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 700;
+  background: linear-gradient(135deg, #57e6ff, #7a6bff); color: #0a0a0e;
+}
+.ver-code {
+  font-size: 1.9rem; font-weight: 800; letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 2px;
+}
+.ver-name { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+.ver-meta { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.ver-meta li { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+.ver-meta b { color: var(--text); font-weight: 600; }
+@media (max-width: 900px) { .ver-grid { grid-template-columns: 1fr; } }
 
 /* ========== Footer ========== */
 .footer {
@@ -436,6 +468,7 @@ section { padding: 100px 0; }
          <a href="#features">内测新特性</a>
       <a href="#highlights">参与方式</a>
       <a href="#tech">测试规格</a>
+      <a href="#versions">选版本</a>
       <a href="/vip/">会员入口</a>
       <a href="/neice/">测试版本入口</a>
     </div>
@@ -552,6 +585,8 @@ section { padding: 100px 0; }
     <p class="section-desc reveal">搭载最新优化模型，内测版在精度与速度上均有显著提升</p>
     <div class="tech-tags reveal">
       <span class="tech-tag accent">HTDemucs v4.1+</span>
+      <span class="tech-tag accent">BS-Roformer</span>
+      <span class="tech-tag accent">GPU 加速</span>
       <span class="tech-tag accent">PyTorch 2.0</span>
       <span class="tech-tag accent">FFmpeg</span>
       <span class="tech-tag">MP3 输入</span>
@@ -571,6 +606,48 @@ section { padding: 100px 0; }
       <div class="tech-item">
         <h4>内测名额</h4>
         <p>限量开放</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Version Chooser -->
+<section class="versions" id="versions">
+  <div class="container text-center">
+    <span class="section-label reveal">三个演示版</span>
+    <h2 class="section-title reveal">按你的显卡挑一个</h2>
+    <p class="section-desc reveal">都是绿色版，解压后双击就用；三个版本都带完整的调试面板</p>
+    <div class="ver-grid">
+      <div class="ver-card reveal">
+        <div class="ver-code">C 版</div>
+        <div class="ver-name">CPU 通用版</div>
+        <ul class="ver-meta">
+          <li><b>没显卡也能跑</b>，老机器/笔记本通用</li>
+          <li>带 Roformer 录音级音质档</li>
+          <li>体积约 1.4 GB</li>
+          <li>速度慢：1 分钟歌约需 10 分钟</li>
+        </ul>
+      </div>
+      <div class="ver-card reveal">
+        <div class="ver-code">A 版</div>
+        <div class="ver-name">GPU 加速版</div>
+        <ul class="ver-meta">
+          <li><b>NVIDIA 显卡加速</b>，快很多</li>
+          <li>htdemucs 快速 / 高 / 极致三档</li>
+          <li>体积约 2.5 GB</li>
+          <li>速度快：1 分钟歌约 10~20 秒</li>
+        </ul>
+      </div>
+      <div class="ver-card best reveal">
+        <span class="ver-badge">推荐</span>
+        <div class="ver-code">B 版</div>
+        <div class="ver-name">GPU + Roformer 完整版</div>
+        <ul class="ver-meta">
+          <li><b>全部音质档都有</b>，含录音级人声</li>
+          <li>调试项最全，适合压测找参数</li>
+          <li>体积约 3 GB</li>
+          <li>建议显存 4 GB 以上</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -597,8 +674,8 @@ section { padding: 100px 0; }
 <div class="modal-overlay" id="downloadModal">
   <div class="modal-dialog">
     <button class="modal-close" onclick="hideDownloadModal()">&times;</button>
-    <div class="modal-title">🧪 选择内测获取方式</div>
-    <div class="modal-subtitle">TL内测版 v3.0-beta · Windows 内测安装包</div>
+    <div class="modal-title">🧪 内测演示版下载</div>
+    <div class="modal-subtitle">A / B / C 三个版本任选 · Windows 绿色版 · 解压即用</div>
     <div id="gateBox" style="text-align:center;margin-bottom:16px;">
       <div style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:10px;">请输入您的 <b style="color:var(--accent);">QQ 号</b> 以解锁内测下载</div>
       <input id="gateCode" type="text" inputmode="numeric" placeholder="请输入您的QQ号" autocomplete="off" style="width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,0.15);border-radius:10px;background:#0d0f15;color:#fff;font-size:1rem;text-align:center;letter-spacing:2px;outline:none;" onkeydown="if(event.key==='Enter')checkDownloadCode()">
@@ -606,32 +683,16 @@ section { padding: 100px 0; }
       <div id="gateMsg" style="margin-top:8px;font-size:0.85rem;font-weight:600;min-height:1.3em;"></div>
     </div>
     <div class="download-options" id="dlOptions" style="display:none;">
-      <a href="https://pan.baidu.com/s/5_sN_C1WK8djj3G6QOjS-cg" target="_blank" class="download-option">
-        <div class="dl-icon" style="background:linear-gradient(135deg,#3385ff,#2468e0)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 19"/><polyline points="9 16 12 19 15 16"/></svg></div>
+      <a href="https://4000126973.share.123pan.cn/123pan/jl9UMh-xaduv" target="_blank" class="download-option">
+        <div class="dl-icon" style="background:linear-gradient(135deg,#00a0ff,#0070c0)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 19"/><polyline points="9 16 12 19 15 16"/></svg></div>
         <div class="dl-info">
-          <div class="dl-name">百度网盘</div>
-        </div>
-        <span class="dl-arrow"></span>
-      </a>
-      <a href="https://pan.quark.cn/s/402f89d504c8" target="_blank" class="download-option">
-        <div class="dl-icon" style="background:linear-gradient(135deg,#1677ff,#0958d9)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="22"/><line x1="2" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="22" y2="12"/></svg></div>
-        <div class="dl-info">
-          <div class="dl-name">夸克网盘</div>
-        </div>
-        <span class="dl-arrow"></span>
-      </a>
-      <a href="https://pan.xunlei.com/s/VOzH6oVKNqtOqzD_9YNXGRtJA1?pwd=6739#" target="_blank" class="download-option">
-        <div class="dl-icon" style="background:linear-gradient(135deg,#1a1a2e,#16213e)"><svg viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-        <div class="dl-info">
-          <div class="dl-name">迅雷网盘</div>
+          <div class="dl-name">123云盘</div>
+          <div class="dl-code">A / B / C 三个演示版都在里面</div>
         </div>
         <span class="dl-arrow"></span>
       </a>
     </div>
-  </div>
-</div>
-
-<!-- Footer -->
+er -->
 <footer class="footer">
   <div class="container">
     <p>TL 工作室 &copy; 2026版权所有 · 内测版仅供测试用途</p>

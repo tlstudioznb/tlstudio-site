@@ -838,6 +838,10 @@ async function verifyActivation() {
 
   hideDownload();
   if (!card) { setResult(resultEl, '❌ 请输入卡密', 'error'); return; }
+  if (!/^TLPRO-/.test(card)) {
+    setResult(resultEl, '❌ 这是普通 VIP 卡，不能用于 VIPPRO，请使用 TLPRO- 开头的卡密', 'error');
+    return;
+  }
 
   setResult(resultEl, '⏳ 正在验证卡密…', 'text');
   let data;
@@ -845,7 +849,7 @@ async function verifyActivation() {
     const res = await fetch(API_BASE + '/activate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ card: card, device: getDeviceId() })
+      body: JSON.stringify({ card: card, device: getDeviceId(), product: 'vippro' })
     });
     data = await res.json();
   } catch (e) {
@@ -857,6 +861,7 @@ async function verifyActivation() {
     const msgs = {
       INVALID_CARD: '❌ 卡密无效，请检查后重试',
       CARD_BOUND: '❌ 该卡密已绑定其他设备',
+      WRONG_PRODUCT: '❌ 这是普通 VIP 卡，不能用于 VIPPRO，请使用 TLPRO- 卡',
       MISSING_FIELDS: '❌ 请填写卡密',
       BAD_DEVICE: '❌ 设备标识异常',
       BAD_REQUEST: '❌ 请求格式错误',

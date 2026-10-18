@@ -4295,6 +4295,30 @@ html[data-theme="dark"] .menu-panel {
   transition: color 0.2s var(--ease);
 }
 .footer__extra-col a:hover { color: var(--accent); }
+
+/* ── 左上角「旧版」入口 ───────────────────────────── */
+.nav__old {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 14px;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.nav__old:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+@media (max-width: 640px) {
+  .nav__old { display: none; }
+}
 </style></head>
 <body>
 <a class="skip" href="#main">跳到主要内容</a>
@@ -4306,6 +4330,7 @@ html[data-theme="dark"] .menu-panel {
       <span class="brand__mark">TL</span>
       <span class="brand__name">STUDIO</span>
     </a>
+    <a class="nav__old" href="/classic.html" title="切换到旧版官网">旧版 ↗</a>
     <nav class="nav__links" aria-label="主导航">
       <a class="nav__link" href="#works">工具索引</a>
       <a class="nav__link" href="#flagship">干声分离器</a>

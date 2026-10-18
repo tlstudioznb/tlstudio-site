@@ -4239,7 +4239,63 @@ html[data-theme="dark"] .menu-panel {
 
 </style>
 <style>/* 关闭跟随光标的悬浮小球 */
-.fx-cursor,.fx-puck,.fx-bars,.fx-arrow,.fx-ring{display:none!important}</style></head>
+.fx-cursor,.fx-puck,.fx-bars,.fx-arrow,.fx-ring{display:none!important}
+/* ── 兴趣栏目 / 友情链接 ─────────────────────────────── */
+.footer__extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.footer__extra-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 240px;
+  flex: 1 1 260px;
+}
+.footer__extra-col > .mono {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.footer__extra-lead {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-3);
+  margin: 0;
+  max-width: 34ch;
+}
+.footer__wx {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.footer__wx b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--paper-raise);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 3px 8px;
+}
+.footer__extra-col a {
+  font-size: 14px;
+  color: var(--ink-2);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.footer__extra-col a:hover { color: var(--accent); }
+</style></head>
 <body>
 <a class="skip" href="#main">跳到主要内容</a>
 
@@ -4865,6 +4921,23 @@ html[data-theme="dark"] .menu-panel {
   </div>
   <div class="shell">
     <div class="footer__wordmark" aria-hidden="true">TL<em>/</em>STUDIO</div>
+  </div>
+  <div class="shell">
+    <div class="footer__extra">
+      <div class="footer__extra-col">
+        <span class="mono">兴趣栏目 / JOIN US</span>
+        <p class="footer__extra-lead">想一起做点东西？欢迎加入我们、投稿作品，或者直接找面试官聊聊。</p>
+        <span class="footer__wx">面试官微信
+          <b>wx13302455794</b>
+          <button class="btn btn--sm btn--ghost" type="button" onclick="var b=this;navigator.clipboard.writeText('wx13302455794').then(function(){b.textContent='已复制';setTimeout(function(){b.textContent='复制';},1600);});">复制</button>
+        </span>
+      </div>
+      <div class="footer__extra-col">
+        <span class="mono">友情链接 / FRIENDS</span>
+        <a href="https://tldoublerstudio.cn" target="_blank" rel="noopener">TL Doubler Studio ↗</a>
+        <a href="https://tlbs.top" target="_blank" rel="noopener">tlbs.top ↗</a>
+      </div>
+    </div>
   </div>
   <div class="shell footer__bottom">
     <span>© <span data-year>2026</span> TL 工作室 · 版权所有</span>

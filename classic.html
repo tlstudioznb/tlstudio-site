@@ -154,6 +154,15 @@
         footer{padding:54px 28px;text-align:center}
         footer .logo{margin-bottom:16px}
         footer p{color:var(--dim);font-size:12px;letter-spacing:4px}
+        .friend-links{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 14px;margin-top:26px}
+        .friend-links .fl-title{color:var(--dim);font-size:12px;letter-spacing:4px;margin-right:2px}
+        .fl-btn{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border:1px solid var(--line-2);border-radius:999px;background:var(--surface);text-decoration:none;transition:.35s}
+        .fl-btn:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 12px 34px rgba(87,230,255,.18)}
+        .fl-btn .fl-ico{font-size:16px;line-height:1}
+        .fl-btn .fl-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1.35}
+        .fl-btn .fl-txt b{color:var(--text);font-size:13px;font-weight:600;letter-spacing:1px}
+        .fl-btn .fl-txt i{color:var(--dim);font-size:11px;font-style:normal;letter-spacing:1px}
+        .fl-btn:hover .fl-txt i{color:var(--accent)}
 
         /* 动画 */
         .reveal{opacity:0;transform:translateY(40px);transition:opacity 1s cubic-bezier(.22,.61,.36,1),transform 1s cubic-bezier(.22,.61,.36,1)}
@@ -433,9 +442,17 @@
         <div class="logo">TL STUDIO</div>
         <p>专注青少年机器人竞赛</p>
         <p>© 2026 TL工作室 · 版权所有</p>
-        <p>友情链接 tlbs.top tldoublerstudio.cn</p>
-            <div class="dl-modal-tools">
-                <a href="/music/" target="_blank" rel="noopener" class="dl-tool-btn">
+        <div class="friend-links">
+            <span class="fl-title">友情链接</span>
+            <a class="fl-btn" href="https://tlbs.top" target="_blank" rel="noopener">
+                <span class="fl-ico">🏁</span>
+                <span class="fl-txt"><b>辣条杯 · 天外来物</b><i>tlbs.top</i></span>
+            </a>
+            <a class="fl-btn" href="https://tldoublerstudio.cn" target="_blank" rel="noopener">
+                <span class="fl-ico">💠</span>
+                <span class="fl-txt"><b>TL Doubler Studio</b><i>tldoublerstudio.cn</i></span>
+            </a>
+        </div>
     </footer>
 
     <!-- 下载弹窗 -->

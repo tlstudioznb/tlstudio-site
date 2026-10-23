@@ -5982,5 +5982,98 @@ html[data-theme="dark"] .menu-panel {
 })();
 </script>
 
+
+<script>
+/* ===== 单文件路由：把 #/xxx/ 渲染到 .tl-layer 的 iframe ===== */
+(function () {
+  "use strict";
+  var layer, frame, titleEl, backBtn, DATA = null;
+
+  function data() {
+    if (!DATA) {
+      var el = document.getElementById("tl-pages");
+      DATA = el ? JSON.parse(el.textContent) : { pages: {}, titles: {} };
+    }
+    return DATA;
+  }
+
+  function norm(route) {
+    var r = String(route || "/").split("?")[0].split("#")[0];
+    if (!r) r = "/";
+    if (r.charAt(0) !== "/") r = "/" + r;
+    r = r.replace(/\/index\.html$/, "/");
+    if (r.length > 1 && r.charAt(r.length - 1) !== "/") r += "/";
+    return r;
+  }
+
+  function open(route, setHash) {
+    var d = data(), key = norm(route), html = d.pages[key];
+    if (!html) { return false; }
+    frame.setAttribute("srcdoc", html);
+    titleEl.textContent = (d.titles && d.titles[key]) || key;
+    layer.classList.add("is-open");
+    layer.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    if (setHash !== false) {
+      var h = "#" + key;
+      if (location.hash !== h) {
+        try { history.replaceState(null, "", location.pathname + location.search + h); }
+        catch (e) { location.hash = h; }
+      }
+    }
+    window.scrollTo(0, 0);
+    return true;
+  }
+
+  function close() {
+    if (!layer) return;
+    layer.classList.remove("is-open");
+    layer.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    frame.removeAttribute("srcdoc");
+    try { history.replaceState(null, "", location.pathname + location.search); }
+    catch (e) { /* ignore */ }
+  }
+
+  function route() {
+    var h = location.hash || "";
+    if (h.indexOf("#/") === 0 && h.length > 2) {
+      if (!open(h.slice(1), false)) { close(); }
+    } else {
+      close();
+    }
+  }
+
+  function boot() {
+    layer = document.getElementById("tlLayer");
+    frame = document.getElementById("tlFrame");
+    titleEl = document.getElementById("tlTitle");
+    backBtn = document.getElementById("tlBack");
+    if (!layer || !frame || !titleEl) return;
+
+    if (backBtn) backBtn.addEventListener("click", close);
+
+    /* iframe 内的链接（内嵌页面的 TL_ROUTER_BRIDGE 会 postMessage 上来） */
+    window.addEventListener("message", function (e) {
+      var d = e.data;
+      if (d && d.type === "tl:navigate" && d.route) { open(d.route, true); }
+    });
+
+    window.addEventListener("hashchange", route);
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && layer.classList.contains("is-open")) close();
+    });
+
+    route();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
 </body>
 </html>

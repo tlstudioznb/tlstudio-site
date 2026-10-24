@@ -8,7 +8,7 @@
 <meta name="description" content="TL 早读打卡 PRO，把每天早读变成一条连续记录：一键打卡、连续天数、月度日历、朗读时长统计与班级看板。免费版本地打卡，PRO 卡密解锁云端同步与数据导出。">
 <meta name="keywords" content="早读打卡,打卡工具,连续打卡,早读记录,朗读时长,班级看板,卡密,TL早读打卡 PRO,zaodu,tlstudio">
 <meta name="author" content="TL工作室">
-<meta name="theme-color" content="#f1ede4">
+<meta name="theme-color" content="#14120a">
 <meta property="og:type" content="website">
 <meta property="og:title" content="TL 早读打卡 PRO - 每天早读，连成一条线">
 <meta property="og:description" content="一键打卡 · 连续天数 · 月度日历 · 班级看板。卡密 TLFHWSY-XXXX-XXXX-XXXX，一卡一机。">
@@ -3771,6 +3771,124 @@ table.compare {
 </style>
 <!-- site.js inlined at the end of <body> -->
 <style>
+  /* --- dark hero --- */
+  .page-hero--dark {
+    background: var(--ink); color: var(--paper-raise);
+    border-bottom: 1px solid var(--ink);
+  }
+  .page-hero--dark .crumbs { color: rgba(248, 245, 238, 0.45); border-bottom-color: rgba(248, 245, 238, 0.16); }
+  .page-hero--dark .crumbs .cur { color: var(--paper-raise); }
+  .page-hero--dark .crumbs .sep { color: rgba(248, 245, 238, 0.28); }
+  .page-hero--dark .crumbs a:hover { color: var(--accent); }
+  .page-hero--dark .page-lede { color: rgba(248, 245, 238, 0.66); }
+  .page-hero--dark .page-lede b { color: var(--paper-raise); }
+  .page-hero--dark .page-title .thin { color: rgba(248, 245, 238, 0.44); }
+  .page-hero--dark .kicker { color: rgba(248, 245, 238, 0.52); }
+  .page-hero--dark .chip { border-color: rgba(248, 245, 238, 0.24); color: rgba(248, 245, 238, 0.72); }
+  .page-hero--dark .chip--accent { border-color: var(--accent); color: var(--accent); }
+  .page-hero--dark .chip--dot::before { background: var(--accent); }
+  .page-hero--dark .btn { --btn-bg: var(--paper-raise); --btn-fg: var(--ink); --btn-bd: var(--paper-raise); }
+  .page-hero--dark .btn:hover { --btn-bg: var(--accent); --btn-bd: var(--accent); --btn-fg: var(--paper-raise); }
+  .page-hero--dark .btn--ghost { --btn-bg: transparent; --btn-fg: var(--paper-raise); --btn-bd: rgba(248, 245, 238, 0.34); }
+  .page-hero--dark .btn--ghost:hover { --btn-bg: var(--paper-raise); --btn-fg: var(--ink); --btn-bd: var(--paper-raise); }
+  .page-hero--dark .link-arrow { color: var(--paper-raise); border-color: rgba(248, 245, 238, 0.32); }
+  .page-hero--dark .link-arrow:hover { color: var(--accent); border-color: var(--accent); }
+  .page-hero--dark .spec-bar { border-top-color: rgba(248, 245, 238, 0.16); }
+  .page-hero--dark .spec-bar__item { border-left-color: rgba(248, 245, 238, 0.16); }
+  .page-hero--dark .spec-bar__label { color: rgba(248, 245, 238, 0.42); }
+  .page-hero--dark .spec-bar__value { color: var(--paper-raise); }
+
+  /* dark nav for this page */
+  .nav--ink { background: rgba(20, 18, 10, 0.5); }
+  .nav--ink.is-scrolled { background: rgba(20, 18, 10, 0.92); border-bottom-color: rgba(248, 245, 238, 0.14); }
+  .nav--ink .brand__mark { background: var(--paper-raise); color: var(--ink); }
+  .nav--ink .brand:hover .brand__mark { background: var(--accent); color: var(--paper-raise); }
+  .nav--ink .brand__name { color: var(--paper-raise); }
+  .nav--ink .nav__link { color: rgba(248, 245, 238, 0.66); }
+  .nav--ink .nav__link:hover, .nav--ink .nav__link[aria-current="page"] { color: var(--paper-raise); }
+  .nav--ink .nav__divider { background: rgba(248, 245, 238, 0.18); }
+  .nav--ink .nav__product { color: rgba(248, 245, 238, 0.5); }
+  .nav--ink .btn { --btn-bg: var(--paper-raise); --btn-fg: var(--ink); --btn-bd: var(--paper-raise); }
+  .nav--ink .btn:hover { --btn-bg: var(--accent); --btn-bd: var(--accent); --btn-fg: var(--paper-raise); }
+  .nav--ink .btn--ghost { --btn-bg: transparent; --btn-fg: var(--paper-raise); --btn-bd: rgba(248, 245, 238, 0.3); }
+  .nav--ink .btn--ghost:hover { --btn-bg: var(--paper-raise); --btn-fg: var(--ink); --btn-bd: var(--paper-raise); }
+  .nav--ink .menu-btn { border-color: rgba(248, 245, 238, 0.3); }
+  .nav--ink .menu-btn span { background: var(--paper-raise); }
+
+  /* dark specimen + fusion diagram */
+  .specimen--ink { background: #1b1811; border-color: rgba(248, 245, 238, 0.22); box-shadow: 14px 14px 0 rgba(0, 0, 0, 0.28); }
+  .specimen--ink .specimen__bar { background: #14120a; border-bottom-color: rgba(248, 245, 238, 0.12); }
+  .specimen--ink .specimen__bar .dot { background: rgba(248, 245, 238, 0.24); }
+  .specimen--ink .specimen__bar .dot:first-child { background: var(--accent); }
+  .specimen--ink .specimen__bar .label { color: rgba(248, 245, 238, 0.44); }
+  .specimen--ink .specimen__caption { color: rgba(248, 245, 238, 0.3); }
+  .fusion-panel { padding: 6px 0; }
+  .fusion-node {
+    display: grid; grid-template-columns: 96px minmax(0, 1fr) 64px;
+    gap: 14px; align-items: center; padding: 13px 22px;
+  }
+  .fusion-node__name { display: flex; flex-direction: column; line-height: 1.2; }
+  .fusion-node__name b { font-size: 13px; color: var(--paper-raise); font-weight: 600; }
+  .fusion-node__name em { font-style: normal; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.14em; color: rgba(248, 245, 238, 0.4); margin-top: 3px; }
+  .fusion-node canvas { width: 100%; height: 28px; display: block; opacity: 0.55; }
+  .fusion-node__band { font-family: var(--font-mono); font-size: 8.5px; color: rgba(248, 245, 238, 0.4); text-align: right; }
+  .fusion-op {
+    display: flex; align-items: center; gap: 12px; padding: 6px 22px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .fusion-op::before, .fusion-op::after { content: ""; flex: 1; height: 1px; background: rgba(248, 245, 238, 0.16); }
+  .fusion-result {
+    margin: 6px 22px 14px; padding: 16px 18px;
+    border: 1px solid rgba(248, 245, 238, 0.18); background: rgba(238, 74, 31, 0.06);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .fusion-result b { font-size: 14px; color: var(--paper-raise); font-weight: 600; }
+  .fusion-result span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent); }
+  .hero-stamp--ink {
+    position: absolute; right: -22px; top: -28px; width: 84px; height: 84px;
+    border-radius: 50%; border: 1px solid var(--accent); color: var(--accent);
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--font-mono); font-size: 8.5px; line-height: 1.5;
+    letter-spacing: 0.1em; text-transform: uppercase; background: #14120a;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); transform: rotate(8deg); z-index: 3;
+  }
+  .hero-stamp--ink b { display: block; font-size: 13px; letter-spacing: 0.02em; }
+
+  /* highlights list */
+  .hl-list { border-top: 1px solid var(--ink); }
+  .hl-item {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 6px 16px;
+    padding: 20px 0; border-bottom: 1px solid var(--line);
+  }
+  .hl-item__no { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: 0.08em; padding-top: 4px; }
+  .hl-item h4 { font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .hl-item h4 .tag { color: var(--accent); border-color: var(--accent); }
+  .hl-item p { grid-column: 2; font-size: 13px; line-height: 1.75; color: var(--muted); }
+  .compare-note { font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.7; }
+
+  /* activation modal bits */
+  .activation-box { border: 1px dashed var(--line-2); padding: 16px; background: var(--paper); }
+  .activation-box__label {
+    font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); text-align: center; margin-bottom: 9px;
+  }
+  .dl-final {
+    display: none; margin-top: 14px; padding: 14px 16px;
+    border: 1px solid var(--line-2); background: var(--paper);
+    justify-content: space-between; align-items: center; gap: 14px;
+  }
+  .dl-final.is-show { display: flex; }
+  .dl-final a { font-size: 14px; font-weight: 600; }
+  .dl-final a:hover { color: var(--accent); }
+  .menu-panel__cta-note { color: var(--muted); font-size: 11.5px; }
+
+  @media (max-width: 760px) {
+    .fusion-node { grid-template-columns: 76px minmax(0, 1fr) 46px; padding-inline: 14px; gap: 10px; }
+    .fusion-result { margin-inline: 14px; }
+    .hero-stamp--ink { right: 4px; bottom: -22px; }
+  }
+
 
   /* ==========================================================================
      早读打卡 PRO — page-local styles (sits on top of the TL design system)
@@ -4135,24 +4253,104 @@ table.compare {
     .zd-stat:last-child { border-bottom: 0; }
   }
 
-  /* --- 永久卡：单档布局 ------------------------------------------------ */
-  .pricing-grid--single {
-    grid-template-columns: minmax(0, 560px);
-    justify-content: center;
+  /* --- 兑换后解锁的下载入口 ---------------------------------------------- */
+  .zd-dl {
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid var(--accent);
+    background: var(--accent-ghost);
+    animation: zd-dl-in 0.36s var(--ease) both;
   }
-  .pricing-grid--single .price-card {
-    border-color: var(--accent);
+  .zd-dl[hidden] { display: none; }
+  .zd-dl__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
   }
-  /* 打卡面板里的「永久有效」提示 */
+  .zd-dl__head i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+    box-shadow: 0 0 0 3px var(--accent-ghost);
+  }
+  .zd-dl__note {
+    margin-top: 10px;
+    font-size: 11.5px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .zd-dl__note b { color: var(--ink); }
+  @keyframes zd-dl-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* --- 打卡面板里的「永久有效」提示 ------------------------------------ */
   .zd-forever {
     color: var(--accent);
     font-weight: 600;
     letter-spacing: .01em;
   }
-  @media (max-width: 720px) {
-    .pricing-grid--single { grid-template-columns: minmax(0, 1fr); }
+
+  /* ==========================================================================
+     DARK SPECIMEN — 首页大图里的深色日历（沿用 VIPPRO 的黑金视觉）
+     ========================================================================== */
+  .specimen--ink .zd-cal {
+    border-color: rgba(248, 245, 238, 0.14);
+    background: transparent;
+    padding: 12px 12px 10px;
   }
-  </style>
+  .specimen--ink .zd-cal__head { margin-bottom: 10px; }
+  .specimen--ink .zd-cal__title,
+  .specimen--ink .zd-cal__meta { color: rgba(248, 245, 238, 0.44); }
+  .specimen--ink .zd-cal__meta b { color: var(--accent); }
+  .specimen--ink .zd-day {
+    border-color: rgba(248, 245, 238, 0.13);
+    color: rgba(248, 245, 238, 0.4);
+  }
+  .specimen--ink .zd-day.is-on {
+    background: rgba(248, 245, 238, 0.86);
+    border-color: rgba(248, 245, 238, 0.86);
+    color: #14120a;
+  }
+  .specimen--ink .zd-day.is-miss {
+    border-color: rgba(248, 245, 238, 0.2);
+    border-style: dashed;
+    color: rgba(248, 245, 238, 0.22);
+  }
+  .specimen--ink .zd-day.is-today {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+    color: #f3efe5;
+  }
+  .specimen--ink .zd-cal__legend {
+    border-top-color: rgba(248, 245, 238, 0.14);
+    color: rgba(248, 245, 238, 0.42);
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .specimen--ink .zd-cal__legend i { border-color: rgba(248, 245, 238, 0.3); }
+  .specimen--ink .zd-cal__legend i.on { background: rgba(248, 245, 238, 0.86); border-color: rgba(248, 245, 238, 0.86); }
+  .specimen--ink .zd-streak {
+    border-top-color: rgba(248, 245, 238, 0.14);
+    padding: 12px 12px 4px;
+  }
+  .specimen--ink .zd-streak b { color: #f3efe5; font-size: 34px; }
+  .specimen--ink .zd-streak span { color: rgba(248, 245, 238, 0.42); }
+
+  /* 窄屏：正文先出现，日历图放后面（VIPPRO 默认把图 order:-1，这里产品页更适合先给标题和按钮） */
+  @media (max-width: 760px) {
+    .page-hero--dark .page-hero__visual { order: 0; }
+  }
+</style>
 <style>
 /* ==========================================================================
    TL STUDIO — DARK THEME (manual opt-in, loaded after page-local styles)
@@ -4583,7 +4781,7 @@ html[data-theme="dark"] .menu-panel {
 <body>
 <a class="skip" href="#main">跳到主要内容</a>
 
-<header class="nav" id="nav">
+<header class="nav nav--ink" id="nav">
   <div class="shell nav__inner">
     <a class="brand" href="../index.html" aria-label="TL STUDIO 首页">
       <img class="brand__logo" src="data:image/png;base64,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" width="30" height="30" alt="TL STUDIO" decoding="async">
@@ -4593,10 +4791,11 @@ html[data-theme="dark"] .menu-panel {
     <span class="nav__product">TL 早读打卡 · PRO</span>
     <nav class="nav__links" aria-label="本页导航">
       <a class="nav__link" href="#features">功能</a>
+      <a class="nav__link" href="#rules">规则</a>
       <a class="nav__link" href="#activate">兑换</a>
       <a class="nav__link" href="#board">打卡</a>
+      <a class="nav__link" href="#compare">对比</a>
       <a class="nav__link" href="#faq">问答</a>
-      <a class="nav__link" href="#pricing">价格</a>
     </nav>
     <div class="nav__actions">
       <a class="btn btn--sm btn--ghost" href="../index.html">全部工具</a>
@@ -4616,9 +4815,11 @@ html[data-theme="dark"] .menu-panel {
 <div class="menu-panel" aria-label="移动端导航">
   <div class="menu-panel__links">
     <a class="menu-panel__link" href="#features"><span>核心能力</span><span class="mono">01 / FEATURES</span></a>
-    <a class="menu-panel__link" href="#activate"><span>卡密兑换</span><span class="mono">02 / REDEEM</span></a>
-    <a class="menu-panel__link" href="#board"><span>打卡面板</span><span class="mono">03 / BOARD</span></a>
-    <a class="menu-panel__link" href="#pricing"><span>价格</span><span class="mono">05 / PRICING</span></a>
+    <a class="menu-panel__link" href="#rules"><span>计算规则</span><span class="mono">02 / RULES</span></a>
+    <a class="menu-panel__link" href="#activate"><span>卡密兑换</span><span class="mono">03 / REDEEM</span></a>
+    <a class="menu-panel__link" href="#board"><span>打卡面板</span><span class="mono">04 / BOARD</span></a>
+    <a class="menu-panel__link" href="#compare"><span>版本对比</span><span class="mono">05 / COMPARE</span></a>
+    <a class="menu-panel__link" href="#faq"><span>常见问题</span><span class="mono">07 / FAQ</span></a>
     <a class="menu-panel__link" href="../index.html"><span>全部工具</span><span class="mono">←</span></a>
   </div>
   <div class="menu-panel__foot">
@@ -4628,25 +4829,25 @@ html[data-theme="dark"] .menu-panel {
 </div>
 
 <main id="main">
-  <!-- HERO -->
-  <section class="page-hero">
+  <!-- HERO (dark) -->
+  <section class="page-hero page-hero--dark">
     <div class="shell">
       <div class="crumbs">
         <a href="../index.html">TL STUDIO</a><span class="sep">/</span>
         <span>工具</span><span class="sep">/</span>
-        <span class="cur">早读打卡 PRO</span>
+        <span class="cur">TL 早读打卡 PRO</span>
         <span class="sep" style="margin-left:auto">TL-ZAODU-PRO · 2026</span>
       </div>
       <div class="page-hero__grid">
         <div>
-          <span class="kicker">早读打卡 / CHECK-IN PRO</span>
+          <span class="kicker">长期主义 / DAILY CHECK-IN</span>
           <h1 class="page-title">
-            早读打卡<br>PRO
-            <span class="thin">TL Zaodu — v1.0 — Web / Windows</span>
+            TL 早读打卡<br>PRO
+            <span class="thin">PRO Edition — v1.0 — Web / Windows</span>
           </h1>
           <p class="page-lede">
-            早读最难的不是读，是<b>连续</b>。早读打卡 PRO 把每天那十分钟变成一条看得见的记录：
-            一键打卡、连续天数、月度日历、朗读时长统计。免费版在本地打卡，
+            早读最难的不是读，是<b>连续</b>。把每天那十分钟变成一条看得见的记录 &mdash;&mdash;
+            一键打卡、连续天数、月度日历、朗读时长统计；
             <b>PRO 卡密</b>解锁云端同步、班级看板与数据导出，换设备也能接着记。
           </p>
           <div class="chips mt-3">
@@ -4654,22 +4855,22 @@ html[data-theme="dark"] .menu-panel {
             <span class="chip chip--dot">连续天数</span>
             <span class="chip">月度日历</span>
             <span class="chip">班级看板</span>
-            <span class="chip">数据导出</span>
+            <span class="chip">云端同步</span>
           </div>
           <div class="page-actions">
             <a class="btn btn--lg" href="#activate">卡密兑换 / 立即激活 <span class="btn__arrow">↗</span></a>
             <a class="btn btn--ghost" href="#board">打开打卡面板</a>
-            <a class="link-arrow" href="#faq">先看常见问题 <span>↗</span></a>
+            <a class="link-arrow" href="#compare">看看 PRO 多了什么 <span>↗</span></a>
           </div>
         </div>
         <div class="page-hero__visual">
-          <div class="specimen specimen--vip">
+          <div class="specimen specimen--ink">
             <div class="specimen__bar">
               <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-              <span class="label">TL ZAODU PRO — 30 DAYS</span>
+              <span class="label">CHECK-IN GRID — 30 DAYS</span>
             </div>
-            <div class="specimen__body" style="padding:14px 14px 0">
-              <div class="zd-cal">
+            <div class="specimen__body" style="padding:12px 12px 0">
+              <div class="zd-cal zd-cal--ink">
                 <div class="zd-cal__head">
                   <span class="zd-cal__title">本月打卡 / THIS MONTH</span>
                   <span class="zd-cal__meta"><b>21</b> / 24 天</span>
@@ -4687,15 +4888,15 @@ html[data-theme="dark"] .menu-panel {
               </div>
             </div>
             <span class="specimen__caption">FIG.01 — MONTH GRID</span>
-            <span class="hero-stamp"><span><b>PRO</b>v1.0<br>CARD KEY</span></span>
+            <span class="hero-stamp--ink"><span><b>PRO</b>v1.0<br>CARD KEY</span></span>
           </div>
         </div>
       </div>
 
       <div class="spec-bar">
-        <div class="spec-bar__item"><span class="spec-bar__label">版本 / VERSION</span><span class="spec-bar__value">v1.0</span></div>
+        <div class="spec-bar__item"><span class="spec-bar__label">版本 / VERSION</span><span class="spec-bar__value">v1.0 卡密版</span></div>
         <div class="spec-bar__item"><span class="spec-bar__label">平台 / PLATFORM</span><span class="spec-bar__value">网页 · Windows</span></div>
-        <div class="spec-bar__item"><span class="spec-bar__label">记录 / RECORDS</span><span class="spec-bar__value">30 天日历 · 历史留存</span></div>
+        <div class="spec-bar__item"><span class="spec-bar__label">记录 / RECORDS</span><span class="spec-bar__value">月度日历 · 云端留存</span></div>
         <div class="spec-bar__item"><span class="spec-bar__label">授权 / LICENSE</span><span class="spec-bar__value">卡密 · 一卡一机</span></div>
       </div>
     </div>
@@ -4723,7 +4924,7 @@ html[data-theme="dark"] .menu-panel {
         <div class="feat-item">
           <span class="feat-item__no">03</span>
           <h3>月度日历</h3>
-          <p>整月 30 格一目了然，今天用高亮框标出来，缺哪几天一眼就看见。</p>
+          <p>整月格子一目了然，今天用高亮框标出来，缺哪几天一眼就看见。</p>
         </div>
         <div class="feat-item">
           <span class="feat-item__no">04</span>
@@ -4744,13 +4945,84 @@ html[data-theme="dark"] .menu-panel {
     </div>
   </section>
 
-  <!-- ACTIVATE -->
-  <section class="section section--raise" id="activate">
+  <!-- RULES -->
+  <section class="section section--raise" id="rules">
     <div class="shell">
       <div class="section-head">
-        <div class="section-head__idx"><b>02</b><span>卡密兑换<br>REDEEM</span></div>
+        <div class="section-head__idx"><b>02</b><span>计算规则<br>RULES</span></div>
+        <h2 class="section-head__title">连续天数，<br>是怎么算的。</h2>
+        <p class="section-head__desc">每天只记一条，按自然日计算 &mdash;&mdash; 规则写死，不给自己找台阶。</p>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <span class="step__no">01</span>
+          <h3>一天一条</h3>
+          <p>同一天重复打卡只算一次，避免连续天数被刷。</p>
+        </div>
+        <div class="step">
+          <span class="step__no">02</span>
+          <h3>断签归零</h3>
+          <p>中间缺一天，连续天数从 1 重新开始 &mdash;&mdash; 这是它可信的原因。</p>
+        </div>
+        <div class="step">
+          <span class="step__no">03</span>
+          <h3>最长留存</h3>
+          <p>历史最长连续单独保存，归零也不会把最好成绩抹掉。</p>
+        </div>
+      </div>
+      <div class="grid-2 mt-4">
+        <div class="reveal">
+          <span class="kicker">为什么是 PRO</span>
+          <div class="hl-list mt-2">
+            <div class="hl-item">
+              <span class="hl-item__no">01</span>
+              <h4>云端记录，换设备接着记 <span class="tag">PRO</span></h4>
+              <p>记录写在服务端，清缓存、换电脑都不丢，凭卡密就能恢复。</p>
+            </div>
+            <div class="hl-item">
+              <span class="hl-item__no">02</span>
+              <h4>永久有效，不按月扣费 <span class="tag">PRO</span></h4>
+              <p>一卡一机、一次买断，不限天数、不会到期，不存在续费。</p>
+            </div>
+            <div class="hl-item">
+              <span class="hl-item__no">03</span>
+              <h4>班级看板，讲评有据 <span class="tag">PRO</span></h4>
+              <p>名单一次导入，全勤 / 缺勤 / 请假分色，早读讲评不用凭印象。</p>
+            </div>
+            <div class="hl-item">
+              <span class="hl-item__no">04</span>
+              <h4>数据导出，学期总结直接用</h4>
+              <p>CSV / Excel 导出，交给老师或存档，不用一格格抄。</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal reveal-d1">
+          <div class="notice">
+            <b>免费版与 PRO 的差别：</b>免费版把记录存在当前浏览器本地，清缓存就丢；
+            PRO 版写入云端，支持跨设备恢复、班级看板与数据导出。打卡本身两步就完成，
+            没有多余的注册流程。
+          </div>
+          <div class="chips mt-3">
+            <span class="chip chip--accent">云端同步</span>
+            <span class="chip">一卡一机</span>
+            <span class="chip">永久有效</span>
+            <span class="chip">月度日历</span>
+            <span class="chip">CSV / Excel</span>
+            <span class="chip">班级看板</span>
+          </div>
+          <a class="btn mt-3" href="#compare">查看版本对比 <span class="btn__arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVATE -->
+  <section class="section" id="activate">
+    <div class="shell">
+      <div class="section-head">
+        <div class="section-head__idx"><b>03</b><span>卡密兑换<br>REDEEM</span></div>
         <h2 class="section-head__title">输入卡密，<br>绑定这一台设备。</h2>
-        <p class="section-head__desc">卡密格式 <code>TLFHWSY-XXXX-XXXX-XXXX</code>，一卡一机；换机请微信联系解绑。</p>
+        <p class="section-head__desc">卡密格式 <code>TLFHWSY-XXXX-XXXX-XXXX</code>，一卡一机，永久有效；换机请微信联系解绑。</p>
       </div>
 
       <div class="zd-panel">
@@ -4764,7 +5036,7 @@ html[data-theme="dark"] .menu-panel {
             <div class="step">
               <span class="step__no">02</span>
               <h3>输入兑换</h3>
-              <p>在右侧输入框粘贴卡密，点「兑换并激活」。服务端校验后把你的账号绑到当前设备。</p>
+              <p>在右侧输入框粘贴卡密，点「兑换并激活」。服务端校验后把账号绑到当前设备。</p>
             </div>
             <div class="step">
               <span class="step__no">03</span>
@@ -4795,6 +5067,14 @@ html[data-theme="dark"] .menu-panel {
           <button class="btn btn--block" type="button" id="redeemBtn">兑换并激活 <span class="btn__arrow">↗</span></button>
           <div class="zd-result" id="redeemResult"></div>
 
+          <!-- 兑换成功后出现的下载入口（地址由卡密服务验证后再跳转，页面源码里没有） -->
+          <div class="zd-dl" id="dlBox" hidden>
+            <div class="zd-dl__head"><i></i>下载入口已解锁 / UNLOCKED</div>
+            <a class="btn btn--block btn--accent" id="dlLink" href="#"
+               target="_blank" rel="noopener noreferrer">打开安装包下载页 <span class="btn__arrow">↗</span></a>
+            <p class="zd-dl__note">点击后会先经过卡密服务校验，再跳转到安装包下载页。链接失效或需要提取码，微信 <b>tzr19127101909</b> 直接找我们要。</p>
+          </div>
+
           <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between">
             <span class="zd-badge" id="svcBadge"><i></i><span id="svcText">检测服务…</span></span>
             <button class="link-underline" type="button" data-copy="tzr19127101909" style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-mono)">复制微信 ⧉</button>
@@ -4805,10 +5085,10 @@ html[data-theme="dark"] .menu-panel {
   </section>
 
   <!-- BOARD -->
-  <section class="section" id="board">
+  <section class="section section--raise" id="board">
     <div class="shell">
       <div class="section-head">
-        <div class="section-head__idx"><b>03</b><span>打卡面板<br>BOARD</span></div>
+        <div class="section-head__idx"><b>04</b><span>打卡面板<br>BOARD</span></div>
         <h2 class="section-head__title">今天的早读，<br>打上了吗？</h2>
         <p class="section-head__desc">激活卡密后可在这里直接打卡。记录存在云端，换设备用同一张卡即可恢复。</p>
       </div>
@@ -4858,31 +5138,75 @@ html[data-theme="dark"] .menu-panel {
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section class="section section--raise" id="pricing">
+  <!-- COMPARE -->
+  <section class="section" id="compare">
     <div class="shell">
       <div class="section-head">
-        <div class="section-head__idx"><b>04</b><span>价格<br>PRICING</span></div>
-        <h2 class="section-head__title">一卡一机，<br>一次买断，永久用。</h2>
-        <p class="section-head__desc">只有永久卡一种。不限天数、不按月扣费、永远不会到期。</p>
+        <div class="section-head__idx"><b>05</b><span>版本对比<br>COMPARE</span></div>
+        <h2 class="section-head__title">免费版 /<br>PRO 卡密版。</h2>
+        <p class="section-head__desc">PRO 在本地打卡之上，多出云端同步、班级看板与数据导出。</p>
       </div>
+      <div class="compare-wrap reveal">
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>能力 / CAPABILITY</th>
+              <th>免费版</th>
+              <th class="col-pro">PRO 卡密版</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>一键打卡 · 每日一条</td><td class="yes">✓</td><td class="yes pro">✓</td></tr>
+            <tr><td>连续天数 · 断签归零</td><td class="yes">✓</td><td class="yes pro">✓</td></tr>
+            <tr><td>月度日历 · 今天高亮</td><td class="yes">✓</td><td class="yes pro">✓</td></tr>
+            <tr><td>朗读时长统计</td><td class="yes">✓</td><td class="yes pro">✓</td></tr>
+            <tr><td>云端保存 · 换设备恢复</td><td class="no">—</td><td class="yes pro">✓</td></tr>
+            <tr><td>班级看板（名单 · 全勤统计）</td><td class="no">—</td><td class="yes pro">✓</td></tr>
+            <tr><td>数据导出 CSV / Excel</td><td class="no">—</td><td class="yes pro">✓</td></tr>
+            <tr><td>卡密一卡一机 · 永久有效</td><td class="no">—</td><td class="yes pro">✓</td></tr>
+            <tr><td>随时可用 · 无需注册账号</td><td class="yes">✓</td><td class="yes pro">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note reveal">只有永久卡一种：一次买断、不限天数、不会到期。班级批量授权请微信联系 <b>tzr19127101909</b>，价格以微信报价为准。</p>
+    </div>
+  </section>
 
-      <div class="pricing-grid pricing-grid--single">
-        <div class="price-card price-card--featured reveal">
-          <span class="price-card__tag">永久有效 · 不限天数</span>
-          <h3>永久卡</h3>
-          <div class="price-card__price">一次买断<small>／ 永久</small></div>
-          <ul>
-            <li>不限天数，不会到期</li>
-            <li>云端同步 · 跨设备恢复</li>
-            <li>月度日历 · 朗读时长统计</li>
-            <li>一卡一机 · 换机凭卡密找回</li>
-          </ul>
-          <a class="btn btn--paper" href="#activate">去兑换 <span class="btn__arrow">↗</span></a>
+  <!-- SPECS -->
+  <section class="section section--raise" id="specs">
+    <div class="shell">
+      <div class="section-head">
+        <div class="section-head__idx"><b>06</b><span>技术规格<br>SPECS</span></div>
+        <h2 class="section-head__title">卡密与<br>记录规格。</h2>
+        <p class="section-head__desc">打卡数据存在云端，浏览器打开就能用，不需要装客户端。</p>
+      </div>
+      <div class="grid-2">
+        <dl class="spec-table reveal">
+          <div class="spec-row"><dt>版本</dt><dd>TL 早读打卡 PRO v1.0</dd></div>
+          <div class="spec-row"><dt>平台</dt><dd>网页（浏览器） · Windows</dd></div>
+          <div class="spec-row"><dt>卡密格式</dt><dd>TLFHWSY-XXXX-XXXX-XXXX</dd></div>
+          <div class="spec-row"><dt>授权方式</dt><dd>一卡一机 · 永久有效</dd></div>
+          <div class="spec-row"><dt>记录存储</dt><dd>云端（按卡密隔离）</dd></div>
+          <div class="spec-row"><dt>联网要求</dt><dd>卡密校验与打卡写入需联网</dd></div>
+        </dl>
+        <div class="reveal">
+          <div class="notice">
+            <b>版本信息：</b>TL 早读打卡 PRO v1.0 · 卡密版 · 网页 / Windows。
+            卡密兑换与打卡需要联网，记录按卡密隔离存储，同卡同机可反复校验。
+          </div>
+          <div class="chips mt-3">
+            <span class="chip chip--accent">卡密版</span>
+            <span class="chip">一卡一机</span>
+            <span class="chip">永久有效</span>
+            <span class="chip">云端记录</span>
+            <span class="chip">无需注册</span>
+          </div>
+          <div class="btn-row mt-3">
+            <a class="btn" href="#activate">兑换并激活 <span class="btn__arrow">↗</span></a>
+            <a class="btn btn--ghost" href="#compare">查看对比</a>
+          </div>
         </div>
       </div>
-
-      <p class="small mt-3">价格以微信报价为准，班级批量授权请联系 <b>tzr19127101909</b>。</p>
     </div>
   </section>
 
@@ -4890,7 +5214,7 @@ html[data-theme="dark"] .menu-panel {
   <section class="section" id="faq">
     <div class="shell">
       <div class="section-head">
-        <div class="section-head__idx"><b>05</b><span>常见问题<br>FAQ</span></div>
+        <div class="section-head__idx"><b>07</b><span>常见问题<br>FAQ</span></div>
         <h2 class="section-head__title">兑换前，<br>你可能想问。</h2>
         <p class="section-head__desc">还有别的问题直接微信问，比看文档快。</p>
       </div>
@@ -4910,7 +5234,7 @@ html[data-theme="dark"] .menu-panel {
         </div>
         <div class="zd-faq__item">
           <button class="zd-faq__q" type="button"><span>04</span><span>免费版和 PRO 差在哪？</span><i>+</i></button>
-          <div class="zd-faq__a">免费版打卡记录只存在当前浏览器本地，清缓存就会丢；PRO 版把记录存到云端，支持跨设备恢复、班级看板与数据导出。</div>
+          <div class="zd-faq__a">免费版打卡记录只存在当前浏览器本地，清缓存就会丢；PRO 版把记录存到云端，支持跨设备恢复、班级看板与数据导出。完整对照见 <a class="link-underline" href="#compare">版本对比</a>。</div>
         </div>
         <div class="zd-faq__item">
           <button class="zd-faq__q" type="button"><span>05</span><span>断网还能打卡吗？</span><i>+</i></button>
@@ -4943,8 +5267,8 @@ html[data-theme="dark"] .menu-panel {
   <section class="section section--tight">
     <div class="shell">
       <div class="section-head">
-        <div class="section-head__idx"><b>06</b><span>相关工具<br>RELATED</span></div>
-        <h2 class="section-head__title">你可能也用得上。</h2>
+        <div class="section-head__idx"><b>08</b><span>相关工具<br>RELATED</span></div>
+        <h2 class="section-head__title">继续<br>往下走。</h2>
         <p class="section-head__desc">都是 TL 自己做的，免费下载，不捆绑不弹广告。</p>
       </div>
       <div class="related reveal">
@@ -4958,15 +5282,15 @@ html[data-theme="dark"] .menu-panel {
           <b>手机回收检测器</b>
           <span>回收前先查一查 ↗</span>
         </a>
+        <a class="related-card" href="../music/index.html">
+          <small>FREE</small>
+          <b>TL 免费干声</b>
+          <span>四轨分离，完全免费 ↗</span>
+        </a>
         <a class="related-card" href="../free/index.html">
           <small>FREE KEYS</small>
           <b>每日免费卡密</b>
           <span>每天 5 张免费激活卡 ↗</span>
-        </a>
-        <a class="related-card" href="../index.html">
-          <small>INDEX</small>
-          <b>全部工具</b>
-          <span>回到工具索引 ↗</span>
         </a>
       </div>
     </div>
@@ -4986,9 +5310,10 @@ html[data-theme="dark"] .menu-panel {
       <div class="footer__col">
         <span class="mono">本页 / THIS TOOL</span>
         <a href="#features">核心能力</a>
+        <a href="#rules">计算规则</a>
         <a href="#activate">卡密兑换</a>
         <a href="#board">打卡面板</a>
-        <a href="#pricing">价格</a>
+        <a href="#compare">版本对比</a>
         <a href="#faq">常见问题</a>
       </div>
       <div class="footer__col">
@@ -5083,6 +5408,33 @@ html[data-theme="dark"] .menu-panel {
     if (!el) return;
     el.textContent = text;
     el.className = "zd-result is-show" + (type === "ok" ? " is-ok" : type === "err" ? " is-err" : "");
+  }
+
+  /* ------------------------------------------------ 下载入口（兑换后解锁） */
+
+  var dlBox = $("dlBox");
+  var dlLink = $("dlLink");
+
+  /* 下载地址由 Worker 校验票据后 302 跳转，页面里不出现真链接 */
+  function dlUrl() {
+    return state.ticket ? API + "/api/dl?t=" + encodeURIComponent(state.ticket) : "";
+  }
+
+  function showDownload(scrollTo) {
+    if (!dlBox) return;
+    var u = dlUrl();
+    if (!u) { dlBox.hidden = true; return; }
+    if (dlLink) dlLink.setAttribute("href", u);
+    dlBox.hidden = false;
+    if (scrollTo) {
+      try { dlBox.scrollIntoView({ behavior: "smooth", block: "nearest" }); }
+      catch (e) { dlBox.scrollIntoView(); }
+    }
+  }
+
+  function hideDownload() {
+    if (dlBox) dlBox.hidden = true;
+    if (dlLink) dlLink.setAttribute("href", "#");
   }
 
   /* ------------------------------------------------------- card input UX */
@@ -5180,6 +5532,7 @@ html[data-theme="dark"] .menu-panel {
           "兑换成功 · " + (d.planLabel || d.plan) +
           (d.expireAt ? "，有效期至 " + String(d.expireAt).slice(0, 10) : "，永久有效不限天数") +
           (d.firstBind ? "（本机已绑定）" : "（本机已授权）"), "ok");
+        showDownload(true);
         refreshAuth(true);
       })
       .catch(function (d) {
@@ -5300,11 +5653,13 @@ html[data-theme="dark"] .menu-panel {
             checkinBtn.disabled = false;
             checkinBtn.textContent = "今天打卡";
           }
+          showDownload(false);
           loadRecords();
         } else {
           state.authed = false;
           dropTicket();
           state.ticket = "";
+          hideDownload();
           if (checkinBtn) {
             checkinBtn.disabled = true;
             checkinBtn.textContent = "请先在上方兑换卡密";

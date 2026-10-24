@@ -5425,22 +5425,64 @@ html[data-theme="dark"] .menu-panel {
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
   function ymd(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
 
+  /* 设备标识：一卡一机靠它。官网用 iframe srcdoc 渲染页面（不透明源），
+     iOS Safari / 微信内置浏览器会拒绝 localStorage，所以要多级兜底：
+     localStorage -> cookie -> 浏览器指纹（同一台手机每次刷新结果一致）。 */
+  var K_DEV = "tl_zd_device";
+
+  function fp() {
+    var ua = "", scr = "", tz = "", lang = "";
+    try { ua = navigator.userAgent || ""; } catch (e) {}
+    try { scr = screen.width + "x" + screen.height + "x" + (window.devicePixelRatio || 1); } catch (e) {}
+    try { tz = String(new Date().getTimezoneOffset()); } catch (e) {}
+    try { lang = (navigator.language || navigator.browserLanguage || ""); } catch (e) {}
+    var s = ua + "|" + scr + "|" + tz + "|" + lang;
+    var h1 = 0, h2 = 0, i;
+    for (i = 0; i < s.length; i++) { h1 = ((h1 << 5) - h1 + s.charCodeAt(i)) | 0; }
+    for (i = 0; i < s.length; i += 7) { h2 = ((h2 << 5) - h2 + s.charCodeAt(i)) | 0; }
+    return "fp-" + (h1 >>> 0).toString(36) + (h2 >>> 0).toString(36);
+  }
+
+  function store(key, val) {
+    try { localStorage.setItem(key, val); } catch (e) {}
+    try {
+      var d = new Date(); d.setTime(d.getTime() + 3650 * 86400000);
+      document.cookie = key + "=" + encodeURIComponent(val) +
+        ";expires=" + d.toUTCString() + ";path=/;SameSite=Lax";
+    } catch (e) {}
+  }
+
+  function load(key) {
+    var v = "";
+    try { v = localStorage.getItem(key) || ""; } catch (e) {}
+    if (v) return v;
+    try {
+      var m = document.cookie.match(new RegExp("(?:^|; )" + key + "=([^;]*)"));
+      if (m) v = decodeURIComponent(m[1]);
+    } catch (e) {}
+    return v || "";
+  }
+
   function devId() {
-    var id = null;
-    try { id = localStorage.getItem(K_DEV); } catch (e) {}
+    var id = load(K_DEV);
+    if (id && id.length >= 8) return id;
+    id = fp();
     if (!id || id.length < 8) {
       var arr = new Uint32Array(4);
       if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(arr);
       else for (var i = 0; i < 4; i++) arr[i] = Math.floor(Math.random() * 0xffffffff);
       id = "dev-" + Array.prototype.map.call(arr, function (n) { return n.toString(36); }).join("");
-      try { localStorage.setItem(K_DEV, id); } catch (e) {}
     }
+    store(K_DEV, id);
     return id;
   }
 
-  function readTicket() { try { return localStorage.getItem(K_TICKET) || ""; } catch (e) { return ""; } }
-  function saveTicket(t) { try { localStorage.setItem(K_TICKET, t); } catch (e) {} }
-  function dropTicket() { try { localStorage.removeItem(K_TICKET); } catch (e) {} }
+  function readTicket() { return load(K_TICKET); }
+  function saveTicket(t) { store(K_TICKET, t); }
+  function dropTicket() {
+    try { localStorage.removeItem(K_TICKET); } catch (e) {}
+    try { document.cookie = K_TICKET + ";expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/"; } catch (e) {}
+  }
 
   function api(path, body, ms) {
     var ctl = window.AbortController ? new AbortController() : null;

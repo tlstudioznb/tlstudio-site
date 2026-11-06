@@ -1155,22 +1155,7 @@ html[data-theme="dark"] .theme-toggle.is-spinning svg{stroke:#fff}
   transform:translateX(-101%);will-change:transform,opacity}
 .theme-curtain.is-dark{background:#12100a}
 .nav{z-index:340}.nav__progress{z-index:341}
-/* 页脚背景音乐播放器 */
-.footer__player{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px 0;border-top:1px solid var(--line)}
-.footer__player iframe{display:block;border:0;width:298px;height:52px;max-width:100%}
-.footer__player .mono{color:var(--muted)}
-@media (max-width:520px){
-  .footer__player{gap:10px;padding:14px 0}
-  .footer__player iframe{width:100%;height:86px}
-}
-/* 书脊播放器：快速下载上方，297×52 等比缩到栏宽 */
-.rail-player{display:none}
 @media (min-width:981px){
-  .rail-player{display:block;width:100%;margin-bottom:12px}
-  .rail-player .mono{display:block;margin-bottom:6px;font-size:8px;color:var(--muted);letter-spacing:.14em}
-  .rail-player__frame{position:relative;width:100%;height:42px;overflow:hidden;background:#fff;border:1px solid var(--line)}
-  .rail-player iframe{position:absolute;top:0;left:0;width:298px;height:52px;border:0;
-    transform:scale(.738);transform-origin:top left;display:block}
   .nav .shell{overflow-y:auto;overflow-x:hidden}
 }</style>
 </head>
@@ -1194,12 +1179,6 @@ html[data-theme="dark"] .theme-toggle.is-spinning svg{stroke:#fff}
     </nav>
     <div class="nav__actions">
       <a class="btn btn--sm btn--ghost" href="#/tools">全部工具</a>
-      <div class="rail-player">
-        <span class="mono">NOW PLAYING / 背景音乐</span>
-        <div class="rail-player__frame">
-          <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="298" height="52" src="https://music.163.com/outchain/player?type=2&id=1427619702&auto=1&height=32" title="网易云音乐 · TL 工作室背景音乐" loading="lazy" allow="autoplay"></iframe>
-        </div>
-      </div>
       <button class="btn btn--sm" type="button" data-dl="quick">快速下载 <span class="btn__arrow" aria-hidden="true">↗</span></button>
       <button class="theme-toggle" type="button" id="themeToggle" aria-label="切换深色模式" aria-pressed="false">
         <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>

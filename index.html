@@ -1246,7 +1246,7 @@ textarea.field{min-height:150px;resize:vertical}
     features: [["速度 +40%", "大文件也能更快处理。"], ["精度增强", "减少人声残留，分离更干净。"], ["参数可调", "开放高级参数，自定义分离效果。"], ["实验功能", "抢先体验未公开的音轨处理能力。"]],
     steps: [["登记", "通过 QQ 号登记内测资格。"], ["获取内测包", "登记后解锁网盘下载。"], ["反馈", "问题直接反馈给开发团队。"]],
     specs: [["模型", "HTDemucs v4.1+"], ["速度", "较正式版 +40%"], ["名额", "限量招募"], ["平台", "Windows"]],
-    downloads: [{ name: "123 网盘", note: "内测安装包 · Windows · v3.0-beta", url: "https://4000126973.share.123pan.cn/123pan/jl9UMh-B9YUv" }],
+    downloads: [],
     related: ["music", "vip", "keys"]
   },
   {
@@ -1708,6 +1708,77 @@ textarea.field{min-height:150px;resize:vertical}
     '</div></section>';
   }
 
+  var BETA_DL = "https://4000126973.share.123pan.cn/123pan/jl9UMh-B9YUv";
+
+  function betaSection() {
+    return '<section class="psec" id="specialBox"><div class="shell">' +
+      '<header class="psec-head"><span class="psec-no tnum">00</span><h2 class="psec-title">内测资格</h2></header>' +
+      '<div class="activate">' +
+        '<div class="activate-status" id="betaStatus"><i></i><span>BETA ACCESS / 输入 QQ 号解锁</span></div>' +
+        '<label class="field-label" for="betaQQ">QQ 号</label>' +
+        '<div class="activate-row">' +
+          '<input class="field" id="betaQQ" type="text" inputmode="numeric" autocomplete="off" placeholder="5–11 位数字，不以 0 开头">' +
+          '<button class="btn-primary" id="betaBtn" type="button">登记并解锁' + ICO_GO + '</button>' +
+        '</div>' +
+        '<a class="btn-primary" id="betaDownload" href="#" target="_blank" rel="noopener" hidden>下载内测包' + ICO_GO + '</a>' +
+        '<p class="form-note" id="betaNote">内测版通过 QQ 号登记解锁网盘下载，登记信息仅用于内测资格统计。</p>' +
+      '</div>' +
+    '</div></section>';
+  }
+
+  function initBeta() {
+    var input = document.getElementById("betaQQ");
+    var btn = document.getElementById("betaBtn");
+    var status = document.getElementById("betaStatus");
+    var dl = document.getElementById("betaDownload");
+    var note = document.getElementById("betaNote");
+    if (!input || !btn) return;
+    var busy = false;
+
+    try {
+      var saved = localStorage.getItem("tl_beta_qq");
+      if (saved) input.value = saved;
+    } catch (e) {}
+
+    function setStatus(text, kind) {
+      status.className = "activate-status" + (kind ? " is-" + kind : "");
+      status.querySelector("span").textContent = text;
+    }
+
+    function unlock(qq) {
+      try { localStorage.setItem("tl_beta_qq", qq); } catch (e) {}
+      dl.href = BETA_DL;
+      dl.hidden = false;
+      setStatus("已登记 · QQ " + qq.slice(0, 3) + "****" + qq.slice(-2) + "，下载入口已解锁", "ok");
+      note.textContent = "登记只用于内测资格统计，不对外公开。遇到问题直接找微信 tzr19127101909。";
+    }
+
+    var v = input.value.trim();
+    if (/^[1-9][0-9]{4,10}$/.test(v)) unlock(v);
+
+    btn.addEventListener("click", function () {
+      if (busy) return;
+      var qq = input.value.trim();
+      if (!/^[1-9][0-9]{4,10}$/.test(qq)) {
+        input.focus();
+        setStatus("ERROR / QQ 号为 5–11 位数字，且不能以 0 开头", "err");
+        return;
+      }
+      busy = true;
+      btn.disabled = true;
+      setStatus("CHECKING / 正在登记内测资格…", "busy");
+      setTimeout(function () {
+        busy = false;
+        btn.disabled = false;
+        unlock(qq);
+      }, 900);
+    });
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") btn.click();
+    });
+  }
+
   function keysSection() {
     return '<section class="psec" id="specialBox"><div class="shell">' +
       '<header class="psec-head"><span class="psec-no tnum">00</span><h2 class="psec-title">今日卡密</h2></header>' +
@@ -1982,7 +2053,8 @@ textarea.field{min-height:150px;resize:vertical}
     var isCard = p.id === "vip" || p.id === "vippro";
     var isZaodu = p.id === "zaodu";
     var isKeys = p.id === "keys";
-    var special = isCard ? activationSection(p) : (isZaodu ? zaoduSection() : (isKeys ? keysSection() : ""));
+    var isBeta = p.id === "beta";
+    var special = isCard ? activationSection(p) : (isZaodu ? zaoduSection() : (isKeys ? keysSection() : (isBeta ? betaSection() : "")));
 
     var dl = p.downloads || [];
     var dlHtml = dl.length
@@ -2015,9 +2087,9 @@ textarea.field{min-height:150px;resize:vertical}
     }).join("");
 
     var primary = "";
-    if (isCard || isKeys || isZaodu) {
+    if (isCard || isKeys || isZaodu || isBeta) {
       primary = '<button class="btn-primary" type="button" data-goto="specialBox">' +
-        (isKeys ? "领取今日卡密" : "激活并下载") + ICO_GO + "</button>";
+        (isKeys ? "领取今日卡密" : (isBeta ? "输入 QQ 解锁" : "激活并下载")) + ICO_GO + "</button>";
     } else if (dl.length) {
       primary = '<a class="btn-primary" href="' + esc(dl[0].url) + '" target="_blank" rel="noopener">下载安装包' + ICO_GO + "</a>";
     } else {
@@ -2082,6 +2154,7 @@ textarea.field{min-height:150px;resize:vertical}
     if (isCard) initActivation(p);
     if (isZaodu) initZaodu();
     if (isKeys) initKeysWidget();
+    if (isBeta) initBeta();
   }
 
   function showProject(id) {

@@ -1,14 +1,79 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>页面已合并 · 正在跳转…</title>
-<link rel="canonical" href="https://tlstudio.cn//#/sponsor">
-<meta name="robots" content="noindex,follow">
-<meta http-equiv="refresh" content="0; url=/#/sponsor">
-<script>location.replace("/#/sponsor" + (location.search || ""));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>赞助 TL STUDIO — 工作室需要运营</title>
+<meta name="description" content="赞助 TL 工作室：域名、服务器、工具开发和机器人赛事都靠这个。支付宝 / 微信扫码，金额随意。">
+<meta name="theme-color" content="#ffffff">
+<style>
+:root{--l0:#fff;--l1:#fcfcfc;--ink:#171717;--ink-2:#555;--ink-3:#8a8a8a;--ink-4:#b5b5b5;--line:rgba(23,23,23,.075);--line-2:rgba(23,23,23,.14)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--l0);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+.shell{max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
+header{display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid var(--line)}
+.brand{font-size:15px;font-weight:500;letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+.brand span{color:var(--ink-4);margin:0 1px}
+header a.back{font-size:13px;color:var(--ink-3);text-decoration:none}
+header a.back:hover{color:var(--ink)}
+main{padding:clamp(60px,9vh,110px) 0 0}
+.code{font-size:12px;letter-spacing:.18em;color:var(--ink-4);text-transform:uppercase}
+h1{font-size:clamp(1.9rem,5vw,3.1rem);font-weight:420;letter-spacing:-.03em;line-height:1.2;margin:18px 0 0}
+p.lede{margin:18px 0 0;font-size:15px;line-height:1.9;color:var(--ink-2);max-width:52ch;text-wrap:pretty}
+section{padding:clamp(32px,5vw,52px) 0;border-top:1px solid var(--line);margin-top:clamp(40px,6vw,64px)}
+h2{font-size:clamp(1.05rem,1.7vw,1.25rem);font-weight:440;letter-spacing:-.01em;margin:0 0 clamp(20px,3vw,30px);display:grid;grid-template-columns:56px minmax(0,1fr);align-items:baseline;gap:16px}
+h2 i{font-size:12px;color:var(--ink-4);font-style:normal;font-variant-numeric:tabular-nums}
+.qr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;max-width:600px;align-items:start}
+.qr-card{border:1px solid var(--line-2);border-radius:16px;background:var(--l0);padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;transition:border-color .4s,transform .5s}
+.qr-card:hover{border-color:rgba(23,23,23,.22);transform:translateY(-2px)}
+.qr-card img{display:block;width:100%;max-width:236px;height:auto;aspect-ratio:1/1;object-fit:contain;border-radius:10px;background:#fff}
+.qr-card b{font-size:14.5px;font-weight:500;letter-spacing:-.01em}
+.qr-card small{font-size:12px;color:var(--ink-3);letter-spacing:.02em}
+.note{margin-top:18px;font-size:12.5px;color:var(--ink-4);line-height:1.8}
+.flist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,4vw,56px)}
+.f{padding:16px 0;border-top:1px solid var(--line)}
+.f b{display:block;font-size:14.5px;font-weight:500}
+.f p{margin:4px 0 0;font-size:13px;line-height:1.75;color:var(--ink-3)}
+footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:12.5px;color:var(--ink-4);margin-top:clamp(40px,6vw,64px)}
+footer a{color:var(--ink-3);text-decoration:none;margin-left:14px}
+footer a:hover{color:var(--ink)}
+@media (max-width:640px){.qr-grid{grid-template-columns:1fr;max-width:300px}.flist{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.qr-card,.qr-card:hover{transform:none}}
+</style>
 </head>
-<body style="font:15px/1.7 system-ui,'Microsoft YaHei',sans-serif;padding:40px;color:#333;background:#fff">
-<p>这个页面已合并进首页，正在跳转到 <a href="/#/sponsor">tlstudio.cn 首页</a>…</p>
+<body>
+<header><div class="shell" style="display:flex;align-items:center;justify-content:space-between;width:100%">
+  <a class="brand" href="/">TL<span>/</span>STUDIO</a>
+  <a class="back" href="/">回首页</a>
+</div></header>
+<main><div class="shell">
+  <p class="code">支持 · Support</p>
+  <h1>金主爸爸给点赞助吧</h1>
+  <p class="lede">工作室得养：域名、服务器、证书，还有凌晨那杯咖啡。每一份支持都直接用在工具开发和赛事上，不拿去投广告。</p>
+
+  <section>
+    <h2><i>01</i>扫码支持</h2>
+    <div class="qr-grid">
+      <div class="qr-card"><img src="data:image/png;base64,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" alt="支付宝收款码" width="480" height="480" decoding="async"><b>支付宝</b><small>保存图片后扫一扫</small></div>
+      <div class="qr-card"><img src="data:image/png;base64,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" alt="微信收款码" width="480" height="480" decoding="async"><b>微信支付</b><small>长按识别或保存后扫</small></div>
+    </div>
+    <p class="note">金额随意，一分也是心意。赞助后想留名、想要个感谢位，加微信 tzr19127101909 说一声就行。</p>
+  </section>
+
+  <section>
+    <h2><i>02</i>钱花在哪</h2>
+    <div class="flist">
+      <div class="f"><b>服务器与域名</b><p>域名、证书、对象存储，十来块钱一个月也是钱。</p></div>
+      <div class="f"><b>工具开发</b><p>测试机、打包签名、网盘会员，都从这儿出。</p></div>
+      <div class="f"><b>赛事与培训</b><p>耗材、场地、参赛报名，队伍出去比赛要花的都在里面。</p></div>
+      <div class="f"><b>不掺水的免费档</b><p>赞助进账，免费工具才敢一直免费、一直不挂广告。</p></div>
+    </div>
+  </section>
+</div></main>
+<footer><div class="shell">
+  © 2026 TL 工作室 · 免费也能用，好用才付费
+  <a href="https://tlbs.top" target="_blank" rel="noopener">tlbs.top</a>
+</div></footer>
 </body>
 </html>

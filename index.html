@@ -1709,6 +1709,7 @@ textarea.field{min-height:150px;resize:vertical}
   }
 
   var BETA_DL = "https://4000126973.share.123pan.cn/123pan/jl9UMh-B9YUv";
+  var BETA_COLLECT = "https://api.tlstudio.cn/collect";
 
   function betaSection() {
     return '<section class="psec" id="specialBox"><div class="shell">' +
@@ -1745,16 +1746,29 @@ textarea.field{min-height:150px;resize:vertical}
       status.querySelector("span").textContent = text;
     }
 
-    function unlock(qq) {
+    /* 和旧 /neice/ 页一致：把 QQ 上报到 api.tlstudio.cn/collect 登记名单 */
+    function reportQQ(qq) {
+      try {
+        fetch(BETA_COLLECT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ qq: qq, ref: "neice" }),
+          keepalive: true
+        }).catch(function () {});
+      } catch (e) {}
+    }
+
+    function unlock(qq, report) {
       try { localStorage.setItem("tl_beta_qq", qq); } catch (e) {}
       dl.href = BETA_DL;
       dl.hidden = false;
       setStatus("已登记 · QQ " + qq.slice(0, 3) + "****" + qq.slice(-2) + "，下载入口已解锁", "ok");
       note.textContent = "登记只用于内测资格统计，不对外公开。遇到问题直接找微信 tzr19127101909。";
+      if (report) reportQQ(qq);
     }
 
     var v = input.value.trim();
-    if (/^[1-9][0-9]{4,10}$/.test(v)) unlock(v);
+    if (/^[1-9][0-9]{4,10}$/.test(v)) unlock(v, false);
 
     btn.addEventListener("click", function () {
       if (busy) return;
@@ -1770,7 +1784,7 @@ textarea.field{min-height:150px;resize:vertical}
       setTimeout(function () {
         busy = false;
         btn.disabled = false;
-        unlock(qq);
+        unlock(qq, true);
       }, 900);
     });
 
